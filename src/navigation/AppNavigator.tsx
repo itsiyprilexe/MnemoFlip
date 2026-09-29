@@ -43,11 +43,6 @@ export const AppNavigator = () => {
         {user ? (
           <>
             <Stack.Screen
-              name="Onboarding"
-              getComponent={lazyScreen(() => require('../screens/OnboardingScreen'), 'OnboardingScreen')}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="Main"
               getComponent={lazyScreen(() => require('./MainTabs'), 'MainTabs')}
               options={{ headerShown: false }}
@@ -85,6 +80,11 @@ export const AppNavigator = () => {
           </>
         ) : (
           <>
+            <Stack.Screen
+              name="Onboarding"
+              getComponent={lazyScreen(() => require('../screens/OnboardingScreen'), 'OnboardingScreen')}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="Login"
               getComponent={lazyScreen(() => require('../screens/LoginScreen'), 'LoginScreen')}
