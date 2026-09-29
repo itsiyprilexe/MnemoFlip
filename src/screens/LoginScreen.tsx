@@ -88,5 +88,5 @@ const styles = StyleSheet.create({
   error: { color: '#DC2626', fontSize: 14, marginBottom: spacing.sm },
   switchRow: { flexDirection: 'row', justifyContent: 'center', marginTop: spacing.lg },
   switchText: { fontSize: 15, color: colors.muted },
-  link: { fontSize: 15, fontWeight: '700', color: colors.primary },
+  link: { fontSize: 15, fontWeight: '700', color: 'black' },
 });
