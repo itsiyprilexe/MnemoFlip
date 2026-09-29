@@ -7,11 +7,13 @@ type Mode = 'light' | 'dark';
 
 const THEME_KEY = '@flashcards/theme';
 
-// Dark palette: starts from your light colors and overrides the main ones.
-// If your theme.ts has other color keys (card, border, etc.), add dark versions here.
+// Dark palette: starts from your light colors and overrides the ones that need to change.
+// If your theme.ts has other color keys, add dark versions of them here.
 const darkColors: Palette = {
   ...lightColors,
   bg: '#0F172A',
+  card: '#1E293B',
+  border: '#334155',
   heading: '#F8FAFC',
   muted: '#94A3B8',
 };
