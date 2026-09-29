@@ -83,11 +83,6 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
       },
     ]);
 
-  const shareDeck = () => {
-    const body = deck.cards.map((c, i) => `${i + 1}. ${c.question} — ${c.answer}`).join('\n');
-    Share.share({ message: `${deck.title}\n\n${body || 'No cards yet.'}` });
-  };
-
   const confirmDeleteCard = (cardId: string) =>
     Alert.alert('Delete card', 'Remove this card from the deck?', [
       { text: 'Cancel', style: 'cancel' },
@@ -118,12 +113,6 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
               <Ionicons name="play" size={30} color="#fff" />
             </View>
             <Text style={styles.actionLabel}>Study</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.action} onPress={() => needCards(() => navigation.navigate('Quiz', { deckId }))}>
-            <View style={[styles.circle, { backgroundColor: colors.heading }]}>
-              <Ionicons name="help" size={32} color="#fff" />
-            </View>
-            <Text style={styles.actionLabel}>Edit</Text>
           </TouchableOpacity>
         </View>
 
@@ -169,7 +158,6 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
               label="Add Cards"
               onPress={() => later(() => navigation.navigate('AddCards', { deckId }))}
             />
-            <SheetItem icon="people-outline" label="Share Deck" onPress={() => later(shareDeck)} />
             <SheetItem icon="trash-outline" label="Delete Deck" danger onPress={() => later(confirmDelete)} />
           </Pressable>
         </Pressable>
