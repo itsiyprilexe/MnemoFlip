@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   list: { padding: spacing.md, paddingBottom: spacing.xl },
   header: { marginBottom: spacing.sm },
   topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  heading: { fontSize: 28, fontWeight: '800', color: colors.heading, lineHeight: 34, marginTop: 30 },
+  heading: { fontSize: 28, fontWeight: '900', color: colors.heading, lineHeight: 34, marginTop: 30 },
   topActions: { flexDirection: 'row', gap: 10 },
   roundBtn: {
     width: 42,
