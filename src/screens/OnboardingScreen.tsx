@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
   hero: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   stack: { width: 170, height: 150, marginBottom: spacing.xl },
   layer: { position: 'absolute', width: 110, height: 110, borderRadius: radius.lg },
-  layerBack: { backgroundColor: '#B9B0FA', left: 46, top: 0, transform: [{ rotate: '10deg' }] },
-  layerMid: { backgroundColor: '#8F82F5', left: 10, top: 14, transform: [{ rotate: '-8deg' }] },
+  layerBack: { backgroundColor: '#91bdff', left: 46, top: 0, transform: [{ rotate: '10deg' }] },
+  layerMid: { backgroundColor: 'rgb(82, 151, 255)', left: 10, top: 14, transform: [{ rotate: '-8deg' }] },
   layerFront: {
     backgroundColor: '#FFFFFF',
     left: 30,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...shadow,
   },
-  title: { fontSize: 36, fontWeight: '800', color: colors.primary, marginBottom: spacing.sm },
+  title: { fontSize: 50, fontWeight: '900', marginBottom: spacing.sm },
   subtitle: {
     fontSize: 16,
     color: colors.muted,
