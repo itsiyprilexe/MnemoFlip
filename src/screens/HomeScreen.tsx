@@ -53,14 +53,7 @@ export const HomeScreen = () => {
               </View>
             </View>
 
-            <View style={styles.banner}>
-              <Text style={styles.bannerTitle}>Keep Learning</Text>
-              <Text style={styles.bannerText}>
-                {decks.length} {decks.length === 1 ? 'deck' : 'decks'} · {totalCards}{' '}
-                {totalCards === 1 ? 'card' : 'cards'}. Take quizzes and improve your knowledge every day.
-              </Text>
-            </View>
-
+            
             <View style={styles.searchWrap}>
               <Ionicons name="search" size={18} color={colors.muted} />
               <TextInput
@@ -70,6 +63,14 @@ export const HomeScreen = () => {
                 placeholder="Search decks..."
                 placeholderTextColor={colors.muted}
               />
+            </View>
+
+            <View style={styles.banner}>
+              <Text style={styles.bannerTitle}>Keep Learning</Text>
+              <Text style={styles.bannerText}>
+                {decks.length} {decks.length === 1 ? 'deck' : 'decks'} · {totalCards}{' '}
+                {totalCards === 1 ? 'card' : 'cards'}. Take quizzes and improve your knowledge every day.
+              </Text>
             </View>
 
             <Text style={styles.section}>My Decks</Text>
@@ -139,7 +140,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     paddingHorizontal: spacing.md,
     marginTop: spacing.md,
-    marginBottom: spacing.md,
   },
   searchInput: { flex: 1, paddingVertical: 12, fontSize: 15, color: colors.text },
   banner: {
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   },
   bannerTitle: { fontSize: 22, fontWeight: '800', color: '#fff', marginBottom: 6, marginTop: 2},
   bannerText: { fontSize: 13, color: '#E4E0FF', lineHeight: 19 },
-  section: { fontSize: 18, fontWeight: '800', color: colors.heading },
+  section: { fontSize: 18, fontWeight: '800', color: colors.heading, marginTop: 30 },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
