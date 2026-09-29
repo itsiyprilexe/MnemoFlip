@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Deck, HighScore } from '../types';
+import { useAuth } from './AuthContext';
 
 const DECKS_KEY = '@flashcards/decks';
 const SCORES_KEY = '@flashcards/highScores';
@@ -64,36 +65,51 @@ export const DeckProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [highScores, setHighScores] = useState<HighScore[]>(INITIAL_HIGH_SCORES);
   const [isLoading, setIsLoading] = useState(true);
   const hydrated = useRef(false);
+  const { user } = useAuth();
+  const uid = user?.id ?? 'guest';
+  const decksKey = `${DECKS_KEY}:${uid}`;
+  const scoresKey = `${SCORES_KEY}:${uid}`;
 
-  // Load saved data on startup
+  // Load this account's saved data (runs again when a different user logs in)
   useEffect(() => {
+    let cancelled = false;
+    hydrated.current = false;
+    setIsLoading(true);
+    setDecks(INITIAL_DECKS);
+    setHighScores(INITIAL_HIGH_SCORES);
     (async () => {
       try {
         const [savedDecks, savedScores] = await Promise.all([
-          AsyncStorage.getItem(DECKS_KEY),
-          AsyncStorage.getItem(SCORES_KEY),
+          AsyncStorage.getItem(decksKey),
+          AsyncStorage.getItem(scoresKey),
         ]);
+        if (cancelled) return;
         if (savedDecks) setDecks(JSON.parse(savedDecks));
         if (savedScores) setHighScores(JSON.parse(savedScores));
       } catch (e) {
         console.warn('Failed to load saved data', e);
       } finally {
-        hydrated.current = true;
-        setIsLoading(false);
+        if (!cancelled) {
+          hydrated.current = true;
+          setIsLoading(false);
+        }
       }
     })();
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [decksKey, scoresKey]);
 
   // Persist on change (only after initial load so we don't overwrite saved data)
   useEffect(() => {
     if (!hydrated.current) return;
-    AsyncStorage.setItem(DECKS_KEY, JSON.stringify(decks)).catch(() => {});
-  }, [decks]);
+    AsyncStorage.setItem(decksKey, JSON.stringify(decks)).catch(() => {});
+  }, [decks, decksKey]);
 
   useEffect(() => {
     if (!hydrated.current) return;
-    AsyncStorage.setItem(SCORES_KEY, JSON.stringify(highScores)).catch(() => {});
-  }, [highScores]);
+    AsyncStorage.setItem(scoresKey, JSON.stringify(highScores)).catch(() => {});
+  }, [highScores, scoresKey]);
 
   const getDeck = useCallback((deckId: string) => decks.find((d) => d.id === deckId), [decks]);
 

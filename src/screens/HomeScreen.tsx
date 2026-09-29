@@ -1,13 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   View,
   Text,
   FlatList,
   StyleSheet,
   Alert,
-  Modal,
-  KeyboardAvoidingView,
-  Platform,
   TextInput,
   TouchableOpacity,
   SafeAreaView,
@@ -16,19 +13,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
-import { PrimaryButton } from '../components/PrimaryButton';
-import { StyledTextInput } from '../components/StyledTextInput';
 import { useDecks } from '../context/DeckContext';
-import { colors, radius, spacing, shadow, accents } from '../theme';
+import { colors, radius, spacing, accents } from '../theme';
 
 const ICONS = ['school', 'flask', 'calculator', 'book', 'leaf', 'color-palette'] as const;
 
 export const HomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { decks, createDeck, deleteDeck } = useDecks();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const { decks, deleteDeck } = useDecks();
   const [query, setQuery] = useState('');
 
   const totalCards = useMemo(() => decks.reduce((sum, d) => sum + d.cards.length, 0), [decks]);
@@ -37,20 +29,6 @@ export const HomeScreen = () => {
     const q = query.trim().toLowerCase();
     return q ? decks.filter((d) => d.title.toLowerCase().includes(q)) : decks;
   }, [decks, query]);
-
-  const closeModal = useCallback(() => {
-    setTitle('');
-    setDescription('');
-    setModalVisible(false);
-  }, []);
-
-  const handleCreateDeck = () => {
-    if (!title.trim()) {
-      return Alert.alert('Validation Error', 'Deck title is required');
-    }
-    createDeck(title.trim(), description.trim());
-    closeModal();
-  };
 
   const handleDeleteDeck = (id: string, name: string) => {
     Alert.alert('Delete Deck', `Delete "${name}" and all its cards?`, [
@@ -70,20 +48,8 @@ export const HomeScreen = () => {
         ListHeaderComponent={
           <View style={styles.header}>
             <View style={styles.topRow}>
-              <Text style={styles.heading}>Hello,{'\n'}Student!</Text>
+              <Text style={styles.heading}>Hello, Student!</Text>
               <View style={styles.topActions}>
-                <TouchableOpacity
-                  style={styles.roundBtn}
-                  onPress={() => navigation.navigate('Main', { screen: 'ProfileTab' })}
-                >
-                  <Ionicons name="trophy-outline" size={20} color={colors.primary} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.roundBtn, { backgroundColor: colors.primary }]}
-                  onPress={() => setModalVisible(true)}
-                >
-                  <Ionicons name="add" size={26} color="#fff" />
-                </TouchableOpacity>
               </View>
             </View>
 
@@ -136,7 +102,7 @@ export const HomeScreen = () => {
             <Ionicons name="library-outline" size={48} color={colors.muted} style={{ marginBottom: spacing.sm }} />
             <Text style={styles.emptyTitle}>{query ? 'No matches' : 'No decks yet'}</Text>
             <Text style={styles.emptyText}>
-              {query ? 'Try a different search.' : 'Tap + to create your first study set.'}
+              {query ? 'Try a different search.' : 'Go to the Decks tab to create your first study set.'}
             </Text>
           </View>
         }
@@ -144,38 +110,6 @@ export const HomeScreen = () => {
           decks.length > 0 ? <Text style={styles.tip}>Tip: long-press a deck to delete it.</Text> : null
         }
       />
-
-      <Modal visible={modalVisible} animationType="slide" transparent onRequestClose={closeModal}>
-        <KeyboardAvoidingView
-          style={styles.modalOverlay}
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        >
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Create Deck</Text>
-            <StyledTextInput
-              label="Deck Title"
-              value={title}
-              onChangeText={setTitle}
-              placeholder="e.g. Biology Basics"
-            />
-            <StyledTextInput
-              label="Description (Optional)"
-              value={description}
-              onChangeText={setDescription}
-              placeholder="Short description..."
-            />
-            <View style={styles.modalButtons}>
-              <PrimaryButton
-                title="Cancel"
-                onPress={closeModal}
-                variant="secondary"
-                style={{ flex: 1, marginRight: 8 }}
-              />
-              <PrimaryButton title="Create Deck" onPress={handleCreateDeck} style={{ flex: 1 }} />
-            </View>
-          </View>
-        </KeyboardAvoidingView>
-      </Modal>
     </SafeAreaView>
   );
 };
@@ -235,8 +169,4 @@ const styles = StyleSheet.create({
   empty: { alignItems: 'center', marginTop: 40 },
   emptyTitle: { fontSize: 18, fontWeight: '700', color: colors.heading },
   emptyText: { color: colors.muted, marginTop: 4, textAlign: 'center' },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(30,27,75,0.5)', justifyContent: 'center', padding: 20 },
-  modalContent: { backgroundColor: colors.card, borderRadius: radius.lg, padding: 20, ...shadow },
-  modalTitle: { fontSize: 20, fontWeight: '800', color: colors.heading, marginBottom: 12 },
-  modalButtons: { flexDirection: 'row', marginTop: 12 },
 });
