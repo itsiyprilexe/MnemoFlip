@@ -92,6 +92,11 @@ export const AppNavigator = () => {
               getComponent={lazyScreen(() => require('../screens/QuizScreen'), 'QuizScreen')}
               options={{ title: 'Quiz Mode', gestureEnabled: false }}
             />
+            <Stack.Screen
+              name="QuizEditor"
+              getComponent={lazyScreen(() => require('../screens/QuizEditorScreen'), 'QuizEditorScreen')}
+              options={{ title: 'Edit Quiz' }}
+            />
           </>
         ) : (
           <>
