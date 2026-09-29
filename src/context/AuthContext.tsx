@@ -84,7 +84,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       await AsyncStorage.setItem(SESSION_KEY, created.id);
       setUser(publicUser(created));
       return null;
-    } catch {
+    } catch (e) {
+      console.warn('signUp failed', e);
       return 'Could not create the account. Please try again.';
     }
   }, []);
@@ -93,14 +94,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const cleanEmail = email.trim().toLowerCase();
       const users = await loadUsers();
-      const found = users.find((u) => u.email === cleanEmail);
-      if (!found || (await hashPassword(found.salt, password)) !== found.hash) {
-        return 'Incorrect email or password.';
+      let found = users.find((u) => u.email === cleanEmail);
+
+      // Prototype mode: if the account doesn't exist, create it on the spot
+      if (!found) {
+        const salt = makeId();
+        found = {
+          id: makeId(),
+          name: cleanEmail.split('@')[0] || 'Guest',
+          email: cleanEmail,
+          salt,
+          hash: await hashPassword(salt, password),
+        };
+        await AsyncStorage.setItem(USERS_KEY, JSON.stringify([...users, found]));
       }
+
+      // Prototype mode: the password is not checked
       await AsyncStorage.setItem(SESSION_KEY, found.id);
       setUser(publicUser(found));
       return null;
-    } catch {
+    } catch (e) {
+      console.warn('logIn failed', e);
       return 'Could not log in. Please try again.';
     }
   }, []);
@@ -120,6 +134,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within AuthProvider');
+  if (!context) throw new Error('Useauth must be used within AuthProvider');
   return context;
 };
