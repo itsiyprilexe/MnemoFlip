@@ -42,14 +42,14 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.safe}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
-          <Text style={styles.title}>Welcome back</Text>
+          <Text style={styles.title}>Log In</Text>
           <Text style={styles.subtitle}>Log in to your flashcards.</Text>
 
           <AuthField
             label="Email"
             value={email}
             onChangeText={setEmail}
-            placeholder="you@example.com"
+            placeholder="Email"
             keyboardType="email-address"
             autoComplete="email"
           />
@@ -83,8 +83,8 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.bg },
   body: { padding: spacing.lg, paddingTop: spacing.xl },
-  title: { fontSize: 32, fontWeight: '800', color: colors.heading },
-  subtitle: { fontSize: 16, color: colors.muted, marginTop: 6, marginBottom: spacing.lg },
+  title: { fontSize: 50, fontWeight: '900', color: colors.heading, marginTop: 160, textAlign: 'center' },
+  subtitle: { fontSize: 16, color: colors.muted, marginTop: 6, marginBottom: spacing.lg, textAlign: 'center' },
   error: { color: '#DC2626', fontSize: 14, marginBottom: spacing.sm },
   switchRow: { flexDirection: 'row', justifyContent: 'center', marginTop: spacing.lg },
   switchText: { fontSize: 15, color: colors.muted },
