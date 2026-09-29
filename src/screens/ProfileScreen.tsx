@@ -1,15 +1,26 @@
 import React, { useMemo } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDecks } from '../context/DeckContext';
+import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { SettingsSection } from '../components/SettingsSection';
-import { radius, spacing, scoreColor, scoreSoft } from '../theme';
+import { radius, spacing, shadow } from '../theme';
 
 const pctOf = (score: number, total: number) => (total > 0 ? Math.round((score / total) * 100) : 0);
 
+const initialsOf = (name?: string) => {
+  const parts = (name ?? '').trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'S';
+  return parts
+    .slice(0, 2)
+    .map((p) => p[0].toUpperCase())
+    .join('');
+};
+
 export const ProfileScreen = () => {
   const { decks, highScores } = useDecks();
+  const { user } = useAuth();
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
@@ -23,76 +34,53 @@ export const ProfileScreen = () => {
     };
   }, [highScores]);
 
+  const statItems = [
+    { icon: 'document-text', label: 'Quizzes', value: `${stats.quizzes}`, color: colors.primary },
+    { icon: 'trophy', label: 'Best', value: `${stats.best}%`, color: colors.success },
+    { icon: 'stats-chart', label: 'Average', value: `${stats.avg}%`, color: '#F59E0B' },
+  ];
+
   return (
     <View style={styles.container}>
-      <FlatList
-        data={highScores}
-        keyExtractor={(item, index) => `${item.deckId}-${item.date}-${index}`}
-        contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          <View>
-            <View style={styles.profileRow}>
-              <View style={styles.avatar}>
-                <Ionicons name="person" size={34} color={colors.primary} />
-              </View>
-              <View>
-                <Text style={styles.name}>Student</Text>
-                <Text style={styles.sub}>
-                  {decks.length} {decks.length === 1 ? 'deck' : 'decks'}
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.statsRow}>
-              <View style={styles.statCard}>
-                <Text style={styles.statValue}>{stats.quizzes}</Text>
-                <Text style={styles.statLabel}>Quizzes</Text>
-              </View>
-              <View style={styles.statCard}>
-                <Text style={[styles.statValue, { color: colors.success }]}>{stats.best}%</Text>
-                <Text style={styles.statLabel}>High Score</Text>
-              </View>
-              <View style={styles.statCard}>
-                <Text style={[styles.statValue, { color: colors.primary }]}>{stats.avg}%</Text>
-                <Text style={styles.statLabel}>Average</Text>
-              </View>
-            </View>
-
-            <SettingsSection />
-
-            <Text style={[styles.sectionHeader, { marginTop: spacing.md }]}>Quiz History</Text>
+      <ScrollView contentContainerStyle={styles.list} showsVerticalScrollIndicator={false}>
+        {/* Header card */}
+        <View style={styles.hero}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>{initialsOf(user?.name)}</Text>
           </View>
-        }
-        renderItem={({ item }) => {
-          const pct = pctOf(item.score, item.totalQuestions);
-          return (
-            <View style={styles.scoreRow}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.deckName} numberOfLines={1}>
-                  {item.deckTitle}
-                </Text>
-                <Text style={styles.scoreDate}>{item.date}</Text>
-              </View>
-              <View style={styles.scoreRight}>
-                <Text style={styles.scoreVal}>
-                  {item.score} / {item.totalQuestions}
-                </Text>
-                <View style={[styles.pctBadge, { backgroundColor: scoreSoft(pct) }]}>
-                  <Text style={[styles.pctText, { color: scoreColor(pct) }]}>{pct}%</Text>
-                </View>
-              </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.name} numberOfLines={1}>
+              {user?.name || 'Student'}
+            </Text>
+            {!!user?.email && (
+              <Text style={styles.email} numberOfLines={1}>
+                {user.email}
+              </Text>
+            )}
+            <View style={styles.pill}>
+              <Ionicons name="layers" size={13} color="#FFFFFF" />
+              <Text style={styles.pillText}>
+                {decks.length} {decks.length === 1 ? 'deck' : 'decks'}
+              </Text>
             </View>
-          );
-        }}
-        ListEmptyComponent={
-          <View style={styles.empty}>
-            <Ionicons name="trophy-outline" size={48} color={colors.muted} style={{ marginBottom: spacing.sm }} />
-            <Text style={styles.emptyTitle}>No scores yet</Text>
-            <Text style={styles.emptyText}>Finish a quiz and your results will show up here.</Text>
           </View>
-        }
-      />
+        </View>
+
+        {/* Stats */}
+        <View style={styles.statsRow}>
+          {statItems.map((s) => (
+            <View key={s.label} style={styles.statCard}>
+              <View style={[styles.statIcon, { backgroundColor: s.color + '22' }]}>
+                <Ionicons name={s.icon as any} size={18} color={s.color} />
+              </View>
+              <Text style={styles.statValue}>{s.value}</Text>
+              <Text style={styles.statLabel}>{s.label}</Text>
+            </View>
+          ))}
+        </View>
+
+        <SettingsSection />
+      </ScrollView>
     </View>
   );
 };
@@ -103,45 +91,61 @@ const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.bg },
     list: { padding: spacing.md, paddingBottom: spacing.xl },
-    profileRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginBottom: spacing.lg },
+
+    hero: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.primary,
+      borderRadius: radius.lg,
+      padding: spacing.lg,
+      marginBottom: spacing.md,
+      gap: spacing.md,
+      ...shadow,
+    },
     avatar: {
-      width: 68,
-      height: 68,
-      borderRadius: 34,
-      backgroundColor: colors.primarySoft,
+      width: 72,
+      height: 72,
+      borderRadius: 36,
+      backgroundColor: 'rgba(255,255,255,0.22)',
+      borderWidth: 2,
+      borderColor: 'rgba(255,255,255,0.6)',
       alignItems: 'center',
       justifyContent: 'center',
     },
-    name: { fontSize: 20, fontWeight: '800', color: colors.heading },
-    sub: { fontSize: 14, color: colors.muted, marginTop: 2 },
-    statsRow: {
-      flexDirection: 'row',
-      backgroundColor: colors.inputBg,
-      borderRadius: radius.lg,
-      paddingVertical: spacing.md,
-      marginBottom: spacing.sm,
-    },
-    statCard: { flex: 1, alignItems: 'center' },
-    statValue: { fontSize: 24, fontWeight: '800', color: colors.heading },
-    statLabel: { fontSize: 12, color: colors.muted, marginTop: 2, fontWeight: '600' },
-    sectionHeader: { fontSize: 18, fontWeight: '800', color: colors.heading, marginBottom: spacing.sm },
-    scoreRow: {
+    avatarText: { fontSize: 26, fontWeight: '800', color: '#FFFFFF' },
+    name: { fontSize: 22, fontWeight: '800', color: '#FFFFFF' },
+    email: { fontSize: 13, color: 'rgba(255,255,255,0.8)', marginTop: 2 },
+    pill: {
       flexDirection: 'row',
       alignItems: 'center',
+      alignSelf: 'flex-start',
+      gap: 5,
+      backgroundColor: 'rgba(255,255,255,0.22)',
+      paddingHorizontal: 10,
+      paddingVertical: 4,
+      borderRadius: radius.pill,
+      marginTop: spacing.sm,
+    },
+    pillText: { fontSize: 12, fontWeight: '700', color: '#FFFFFF' },
+
+    statsRow: { flexDirection: 'row', gap: spacing.sm },
+    statCard: {
+      flex: 1,
+      alignItems: 'center',
       backgroundColor: colors.card,
-      padding: spacing.md,
-      borderRadius: radius.md,
+      borderRadius: radius.lg,
       borderWidth: 1,
       borderColor: colors.border,
-      marginBottom: spacing.sm,
+      paddingVertical: spacing.md,
     },
-    deckName: { fontSize: 15, fontWeight: '700', color: colors.heading },
-    scoreDate: { fontSize: 12, color: colors.muted, marginTop: 2 },
-    scoreRight: { alignItems: 'flex-end', gap: 4 },
-    scoreVal: { fontSize: 16, fontWeight: '700', color: colors.heading },
-    pctBadge: { paddingHorizontal: 10, paddingVertical: 2, borderRadius: radius.pill },
-    pctText: { fontSize: 12, fontWeight: '800' },
-    empty: { alignItems: 'center', marginTop: 40 },
-    emptyTitle: { fontSize: 18, fontWeight: '700', color: colors.heading },
-    emptyText: { color: colors.muted, marginTop: 4, textAlign: 'center' },
+    statIcon: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 6,
+    },
+    statValue: { fontSize: 22, fontWeight: '800', color: colors.heading },
+    statLabel: { fontSize: 12, color: colors.muted, marginTop: 2, fontWeight: '600' },
   });
