@@ -5,7 +5,6 @@ import HomeScreen from '../screens/HomeScreen';
 import DecksScreen from '../screens/DecksScreen';
 import QuizPickerScreen from '../screens/QuizPickerScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 import { useTheme } from '../context/ThemeContext';
 import { TabParamList } from '../types';
 
@@ -16,7 +15,6 @@ const ICONS: Record<keyof TabParamList, [string, string]> = {
   DecksTab: ['layers', 'layers-outline'],
   QuizTab: ['document-text', 'document-text-outline'],
   ProfileTab: ['person', 'person-outline'],
-  SettingsTab: ['settings', 'settings-outline'],
 };
 
 export const MainTabs = () => {
@@ -52,7 +50,6 @@ export const MainTabs = () => {
       <Tab.Screen name="DecksTab" component={DecksScreen} options={{ title: 'Decks', headerTitle: 'My Decks' }} />
       <Tab.Screen name="QuizTab" component={QuizPickerScreen} options={{ title: 'Quiz', headerTitle: 'Choose a Quiz' }} />
       <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ title: 'Profile', headerTitle: 'Profile' }} />
-      <Tab.Screen name="SettingsTab" component={SettingsScreen} options={{ title: 'Settings', headerShown: false }} />
     </Tab.Navigator>
   );
 };
