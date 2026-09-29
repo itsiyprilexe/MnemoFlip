@@ -26,7 +26,7 @@ export const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
           </Text>
         </View>
 
-        <PrimaryButton title="Get Started" onPress={() => navigation.replace('Main')} />
+        <PrimaryButton title="Get Started" onPress={() => navigation.navigate('Login')} />
       </View>
     </SafeAreaView>
   );
