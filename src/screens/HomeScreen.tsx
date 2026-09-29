@@ -157,13 +157,6 @@ export const HomeScreen = () => {
             {/* Learning Banner */}
             <View style={styles.banner}>
               <View style={styles.bannerContent}>
-                <View style={styles.bannerIcon}>
-                  <Ionicons
-                    name="sparkles"
-                    size={22}
-                    color="#FFFFFF"
-                  />
-                </View>
 
                 <Text style={styles.bannerLabel}>
                   KEEP LEARNING
