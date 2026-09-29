@@ -53,6 +53,14 @@ export const HomeScreen = () => {
               </View>
             </View>
 
+            <View style={styles.banner}>
+              <Text style={styles.bannerTitle}>Keep Learning</Text>
+              <Text style={styles.bannerText}>
+                {decks.length} {decks.length === 1 ? 'deck' : 'decks'} · {totalCards}{' '}
+                {totalCards === 1 ? 'card' : 'cards'}. Take quizzes and improve your knowledge every day.
+              </Text>
+            </View>
+
             <View style={styles.searchWrap}>
               <Ionicons name="search" size={18} color={colors.muted} />
               <TextInput
@@ -62,14 +70,6 @@ export const HomeScreen = () => {
                 placeholder="Search decks..."
                 placeholderTextColor={colors.muted}
               />
-            </View>
-
-            <View style={styles.banner}>
-              <Text style={styles.bannerTitle}>Keep Learning</Text>
-              <Text style={styles.bannerText}>
-                {decks.length} {decks.length === 1 ? 'deck' : 'decks'} · {totalCards}{' '}
-                {totalCards === 1 ? 'card' : 'cards'}. Take quizzes and improve your knowledge every day.
-              </Text>
             </View>
 
             <Text style={styles.section}>My Decks</Text>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   list: { padding: spacing.md, paddingBottom: spacing.xl },
   header: { marginBottom: spacing.sm },
   topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  heading: { fontSize: 28, fontWeight: '800', color: colors.heading, lineHeight: 34 },
+  heading: { fontSize: 28, fontWeight: '800', color: colors.heading, lineHeight: 34, marginTop: 30 },
   topActions: { flexDirection: 'row', gap: 10 },
   roundBtn: {
     width: 42,
@@ -146,9 +146,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: radius.lg,
     padding: spacing.lg,
-    marginBottom: spacing.lg,
+    marginTop: 20,
   },
-  bannerTitle: { fontSize: 22, fontWeight: '800', color: '#fff', marginBottom: 6 },
+  bannerTitle: { fontSize: 22, fontWeight: '800', color: '#fff', marginBottom: 6, marginTop: 2},
   bannerText: { fontSize: 13, color: '#E4E0FF', lineHeight: 19 },
   section: { fontSize: 18, fontWeight: '800', color: colors.heading },
   row: {
