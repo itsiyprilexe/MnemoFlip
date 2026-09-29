@@ -64,7 +64,7 @@ export const SignUpScreen: React.FC<Props> = ({ navigation }) => {
             label="Email"
             value={email}
             onChangeText={setEmail}
-            placeholder="you@example.com"
+            placeholder="Email"
             keyboardType="email-address"
             autoComplete="email"
           />
@@ -109,8 +109,8 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.bg },
   body: { padding: spacing.lg, paddingTop: spacing.xl },
-  title: { fontSize: 32, fontWeight: '800', color: colors.heading },
-  subtitle: { fontSize: 16, color: colors.muted, marginTop: 6, marginBottom: spacing.lg },
+  title: { fontSize: 40, fontWeight: '900', color: colors.heading, marginTop: 100, textAlign: 'center' },
+  subtitle: { fontSize: 16, color: colors.muted, marginTop: 6, marginBottom: spacing.lg, textAlign: 'center' },
   error: { color: '#DC2626', fontSize: 14, marginBottom: spacing.sm },
   switchRow: { flexDirection: 'row', justifyContent: 'center', marginTop: spacing.lg },
   switchText: { fontSize: 15, color: colors.muted },
