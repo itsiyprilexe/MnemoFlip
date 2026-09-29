@@ -16,6 +16,10 @@ const DECKS_KEY = '@flashcards/decks';
 const SCORES_KEY = '@flashcards/highScores';
 const MAX_SCORES = 50;
 
+// Prototype switch: while false, the app starts from the sample data below and
+// never reads or writes AsyncStorage. Set to true to bring saving back.
+const USE_STORAGE = false;
+
 const INITIAL_DECKS: Deck[] = [
   {
     id: '1',
@@ -24,6 +28,8 @@ const INITIAL_DECKS: Deck[] = [
     cards: [
       { id: '101', question: 'What component is used for flex box layouts?', answer: 'View' },
       { id: '102', question: 'How do you accept user text input?', answer: 'TextInput' },
+      { id: '103', question: 'Which component renders long scrollable lists efficiently?', answer: 'FlatList' },
+      { id: '104', question: 'Which hook stores local component state?', answer: 'useState' },
     ],
   },
   {
@@ -32,12 +38,40 @@ const INITIAL_DECKS: Deck[] = [
     description: 'Types, interfaces, and generics',
     cards: [
       { id: '201', question: 'What keyword defines an object structure?', answer: 'interface or type' },
+      { id: '202', question: 'How do you make a property optional?', answer: 'Add a ? after the name' },
+      { id: '203', question: 'What does the "unknown" type mean?', answer: 'A value of any type that must be checked before use' },
     ],
+  },
+  {
+    id: '3',
+    title: 'Spanish Vocabulary',
+    description: 'Everyday words and phrases',
+    cards: [
+      { id: '301', question: 'Hello', answer: 'Hola' },
+      { id: '302', question: 'Thank you', answer: 'Gracias' },
+      { id: '303', question: 'Good night', answer: 'Buenas noches' },
+      { id: '304', question: 'Water', answer: 'Agua' },
+      { id: '305', question: 'Where is the bathroom?', answer: '¿Dónde está el baño?' },
+    ],
+  },
+  {
+    id: '4',
+    title: 'World History',
+    description: 'Major events and dates',
+    cards: [{ id: '401', question: 'In what year did World War II end?', answer: '1945' }],
+  },
+  {
+    id: '5',
+    title: 'Environmental Science',
+    description: '',
+    cards: [], // shows the empty-deck state
   },
 ];
 
 const INITIAL_HIGH_SCORES: HighScore[] = [
-  { deckId: '1', deckTitle: 'React Native Basics', score: 2, totalQuestions: 2, date: '2026-09-28' },
+  { deckId: '1', deckTitle: 'React Native Basics', score: 4, totalQuestions: 4, date: '2026-09-28' },
+  { deckId: '2', deckTitle: 'TypeScript Fundamentals', score: 2, totalQuestions: 3, date: '2026-09-27' },
+  { deckId: '3', deckTitle: 'Spanish Vocabulary', score: 4, totalQuestions: 5, date: '2026-09-26' },
 ];
 
 // Collision-safe IDs (Date.now() alone can repeat within the same millisecond)
@@ -63,7 +97,7 @@ const DeckContext = createContext<DeckContextType | undefined>(undefined);
 export const DeckProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [decks, setDecks] = useState<Deck[]>(INITIAL_DECKS);
   const [highScores, setHighScores] = useState<HighScore[]>(INITIAL_HIGH_SCORES);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(USE_STORAGE);
   const hydrated = useRef(false);
   const { user } = useAuth();
   const uid = user?.id ?? 'guest';
@@ -72,6 +106,7 @@ export const DeckProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Load this account's saved data (runs again when a different user logs in)
   useEffect(() => {
+    if (!USE_STORAGE) return; // prototype: keep the sample data
     let cancelled = false;
     hydrated.current = false;
     setIsLoading(true);
@@ -100,7 +135,8 @@ export const DeckProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   }, [decksKey, scoresKey]);
 
-  // Persist on change (only after initial load so we don't overwrite saved data)
+  // Persist on change (only after initial load so we don't overwrite saved data).
+  // With USE_STORAGE off, hydrated never becomes true, so nothing is written.
   useEffect(() => {
     if (!hydrated.current) return;
     AsyncStorage.setItem(decksKey, JSON.stringify(decks)).catch(() => {});
