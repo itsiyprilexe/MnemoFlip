@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
-import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { useAuth } from '../context/AuthContext';
@@ -34,11 +34,10 @@ export const AppNavigator = () => {
     );
   }
 
-  const base = isDark ? DarkTheme : DefaultTheme;
   const navTheme = {
-    ...base,
+    ...DefaultTheme,
     colors: {
-      ...base.colors,
+      ...DefaultTheme.colors,
       background: colors.bg,
       card: colors.card,
       text: colors.heading,
@@ -65,26 +64,6 @@ export const AppNavigator = () => {
             <Stack.Screen
               name="Deck"
               getComponent={lazyScreen(() => require('../screens/DeckScreen'), 'DeckScreen')}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="AddCards"
-              getComponent={lazyScreen(() => require('../screens/AddCardsScreen'), 'AddCardsScreen')}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="AddCard"
-              getComponent={lazyScreen(() => require('../screens/AddCardScreen'), 'AddCardScreen')}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ImportCards"
-              getComponent={lazyScreen(() => require('../screens/ImportCardsScreen'), 'ImportCardsScreen')}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Study"
-              getComponent={lazyScreen(() => require('../screens/StudyScreen'), 'StudyScreen')}
               options={{ headerShown: false }}
             />
             <Stack.Screen

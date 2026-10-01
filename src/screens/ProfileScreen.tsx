@@ -5,14 +5,14 @@ import {
   ScrollView,
   StyleSheet,
   Pressable,
+  Alert,
+  TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useDecks } from '../context/DeckContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { SettingsSection } from '../components/SettingsSection';
 
 type TabKey = 'activity' | 'settings';
 
@@ -34,8 +34,9 @@ const initialsOf = (name?: string) => {
 };
 
 export const ProfileScreen = () => {
-  const { decks, highScores } = useDecks();
-  const { user } = useAuth();
+  const decks: any[] = [];
+  const highScores: any[] = [];
+  const { user, logOut } = useAuth();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -45,6 +46,13 @@ export const ProfileScreen = () => {
     () => createStyles(colors),
     [colors]
   );
+
+  const confirmLogout = () => {
+    Alert.alert('Log out', 'Are you sure you want to log out?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Log out', style: 'destructive', onPress: () => logOut() },
+    ]);
+  };
 
   const { stats, feed } = useMemo(() => {
     const percentages = highScores.map((item) =>
@@ -131,6 +139,15 @@ export const ProfileScreen = () => {
                 </Text>
               </View>
             </View>
+
+            {/* Logout Button */}
+            <TouchableOpacity
+              style={styles.logoutBtn}
+              onPress={confirmLogout}
+              hitSlop={8}
+            >
+              <Ionicons name="log-out-outline" size={24} color="#DC2626" />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -370,7 +387,7 @@ export const ProfileScreen = () => {
           </View>
         ) : (
           <View style={styles.settingsContent}>
-            <SettingsSection />
+            <Text style={{color: colors.muted}}>Settings have been disabled.</Text>
           </View>
         )}
       </ScrollView>
@@ -430,6 +447,16 @@ const createStyles = (
       fontSize: 13,
       color: colors.muted,
       marginTop: 3,
+    },
+
+    logoutBtn: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: '#FEE2E2',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: 12,
     },
 
     studentBadge: {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, LayoutChangeEvent, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -27,13 +28,13 @@ const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) =
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [innerWidth, setInnerWidth] = useState(0);
-  const translateX = useRef(new Animated.Value(0)).current;
+  const translateX = useRef(new Animated.Value(0));
 
   const tabWidth = innerWidth / state.routes.length;
 
   useEffect(() => {
     if (!tabWidth) return;
-    Animated.spring(translateX, {
+    Animated.spring(translateX.current, {
       toValue: state.index * tabWidth,
       useNativeDriver: true,
       damping: 18,
@@ -68,7 +69,7 @@ const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) =
                 {
                   width: tabWidth,
                   backgroundColor: colors.primary + '22',
-                  transform: [{ translateX }],
+                  transform: [{ translateX: translateX.current }],
                 },
               ]}
             />

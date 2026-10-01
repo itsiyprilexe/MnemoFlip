@@ -1,56 +1,25 @@
-import React, { createContext, useContext, useEffect, useMemo, useState, ReactNode } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useMemo, ReactNode } from 'react';
 import { colors as lightColors } from '../theme';
 
 type Palette = typeof lightColors;
-type Mode = 'light' | 'dark';
-
-const THEME_KEY = '@flashcards/theme';
-
-// Dark palette: starts from your light colors and overrides the ones that need to change.
-// If your theme.ts has other color keys, add dark versions of them here.
-const darkColors: Palette = {
-  ...lightColors,
-  bg: '#0F172A',
-  card: '#1E293B',
-  border: '#334155',
-  heading: '#F8FAFC',
-  muted: '#94A3B8',
-};
+type Mode = 'light';
 
 interface ThemeContextType {
   mode: Mode;
   isDark: boolean;
   colors: Palette;
-  setMode: (mode: Mode) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [mode, setModeState] = useState<Mode>('light');
-
-  useEffect(() => {
-    AsyncStorage.getItem(THEME_KEY)
-      .then((saved) => {
-        if (saved === 'light' || saved === 'dark') setModeState(saved);
-      })
-      .catch((e) => console.warn('Failed to load theme', e));
-  }, []);
-
-  const setMode = (next: Mode) => {
-    setModeState(next);
-    AsyncStorage.setItem(THEME_KEY, next).catch((e) => console.warn('Failed to save theme', e));
-  };
-
   const value = useMemo(
     () => ({
-      mode,
-      isDark: mode === 'dark',
-      colors: mode === 'dark' ? darkColors : lightColors,
-      setMode,
+      mode: 'light' as Mode,
+      isDark: false,
+      colors: lightColors,
     }),
-    [mode],
+    [],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

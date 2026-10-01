@@ -15,7 +15,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { StyledTextInput } from '../components/StyledTextInput';
-import { useDecks } from '../context/DeckContext';
 import { colors, radius, spacing, shadow } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Deck'>;
@@ -27,13 +26,11 @@ const DANGER = '#DC2626';
 export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
   const { deckId } = route.params;
 
-  const {
-    decks,
-    highScores,
-    updateDeck,
-    deleteDeck,
-    deleteCard,
-  } = useDecks();
+  const decks: any[] = [];
+  const highScores: any[] = [];
+  const updateDeck = (id: string, data: any) => {};
+  const deleteDeck = (id: string) => {};
+  const deleteCard = (deckId: string, cardId: string) => {};
 
   const deck = decks.find((d) => d.id === deckId);
 
@@ -191,16 +188,7 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
         </Text>
 
         <View style={styles.actions}>
-          <TouchableOpacity
-            style={styles.action}
-            onPress={() =>
-              needCards(() =>
-                navigation.navigate('Study', {
-                  deckId,
-                })
-              )
-            }
-          >
+          <View style={styles.action}>
             <View style={styles.circle}>
               <Ionicons
                 name="play"
@@ -212,7 +200,7 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
             <Text style={styles.actionLabel}>
               Study
             </Text>
-          </TouchableOpacity>
+          </View>
         </View>
 
         <TouchableOpacity
@@ -257,7 +245,7 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
                 No cards yet. Open the ••• menu and tap Add Cards.
               </Text>
             ) : (
-              deck.cards.map((c) => (
+              deck.cards.map((c: any) => (
                 <View
                   key={c.id}
                   style={styles.cardItem}
@@ -323,18 +311,7 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
               }
             />
 
-            <SheetItem
-              icon="add"
-              label="Add Cards"
-              onPress={() =>
-                later(() =>
-                  navigation.navigate(
-                    'AddCards',
-                    { deckId }
-                  )
-                )
-              }
-            />
+
 
             <SheetItem
               icon="trash-outline"

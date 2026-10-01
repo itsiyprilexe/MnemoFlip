@@ -23,7 +23,6 @@ import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { StyledTextInput } from '../components/StyledTextInput';
 import { useTheme } from '../context/ThemeContext';
-import { useQuizzes } from '../context/QuizContext';
 import { radius, spacing } from '../theme';
 
 const BLUE = '#4990E3';
@@ -49,11 +48,9 @@ export const QuizPickerScreen = () => {
     [colors]
   );
 
-  const {
-    quizzes,
-    createQuiz,
-    deleteQuiz,
-  } = useQuizzes();
+  const quizzes: any[] = [];
+  const createQuiz = (title: string, desc: string) => '123';
+  const deleteQuiz = (id: string) => {};
 
   const [modalVisible, setModalVisible] =
     useState(false);
@@ -319,7 +316,7 @@ export const QuizPickerScreen = () => {
             <Text
               style={styles.emptyText}
             >
-              Tap "New quiz" to make
+              Tap &quot;New quiz&quot; to make
               your first one.
             </Text>
           </View>

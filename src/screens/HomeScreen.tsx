@@ -14,7 +14,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { RootStackParamList } from '../types';
-import { useDecks } from '../context/DeckContext';
 import { useTheme } from '../context/ThemeContext';
 import { radius, spacing, accents } from '../theme';
 
@@ -35,7 +34,8 @@ export const HomeScreen = () => {
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
-  const { decks, deleteDeck } = useDecks();
+  const decks: any[] = [];
+  const deleteDeck = (id: string) => {};
 
   const [query, setQuery] = useState('');
 
@@ -115,12 +115,17 @@ export const HomeScreen = () => {
                 </Text>
               </View>
 
-              <View style={styles.profile}>
-                <Ionicons
+              <View style={styles.profile} >
+                <TouchableOpacity
+                  onPress = {() => alert("Need to link waray ka set")}
+                >
+                   <Ionicons
                   name="person"
                   size={20}
                   color={colors.primary}
                 />
+                </TouchableOpacity>
+
               </View>
             </View>
 
@@ -255,7 +260,7 @@ export const HomeScreen = () => {
                 <TouchableOpacity
                   style={styles.viewAllBtn}
                   onPress={() =>
-                    navigation.navigate('Decks')
+                    (navigation as any).navigate('DecksTab')
                   }
                   activeOpacity={0.7}
                 >
@@ -404,7 +409,7 @@ export const HomeScreen = () => {
               <TouchableOpacity
                 style={styles.emptyButton}
                 onPress={() =>
-                  navigation.navigate('Decks')
+                  (navigation as any).navigate('DecksTab')
                 }
               >
                 <Ionicons

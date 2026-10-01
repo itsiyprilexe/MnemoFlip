@@ -4,8 +4,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
-import { CardFlip } from '../components/CardFlip';
-import { useDecks } from '../context/DeckContext';
 import { colors, radius, spacing, scoreColor, scoreSoft } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Quiz'>;
@@ -18,7 +16,9 @@ const verdict = (pct: number) =>
 
 export const QuizScreen: React.FC<Props> = ({ route, navigation }) => {
   const { deckId } = route.params;
-  const { decks, highScores, saveHighScore } = useDecks();
+  const decks: any[] = [];
+  const highScores: any[] = [];
+  const saveHighScore = (id: string, title: string, score: number, total: number) => {};
 
   const deck = decks.find((d) => d.id === deckId);
 
@@ -115,11 +115,14 @@ export const QuizScreen: React.FC<Props> = ({ route, navigation }) => {
       </View>
 
       <View style={styles.cardWrap}>
-        <CardFlip
-          key={`${round}-${currentCard.id}`}
-          question={currentCard.question}
-          answer={currentCard.answer}
-        />
+        <View style={{ padding: 20, backgroundColor: colors.card, borderRadius: radius.md }}>
+          <Text style={{ fontSize: 18, color: colors.heading }}>
+            {currentCard.question}
+          </Text>
+          <Text style={{ fontSize: 16, color: colors.muted, marginTop: 10 }}>
+            {currentCard.answer}
+          </Text>
+        </View>
         <View style={styles.hintPill}>
           <Text style={styles.hint}>Tap to flip</Text>
         </View>
