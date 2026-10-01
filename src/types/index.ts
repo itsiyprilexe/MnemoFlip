@@ -1,3 +1,5 @@
+
+// my gin change sa declaration san function didi (debuging)
 export type Flashcard = {
   id: string;
   question: string;
