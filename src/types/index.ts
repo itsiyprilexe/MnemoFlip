@@ -1,17 +1,17 @@
-export interface Flashcard {
+export type Flashcard = {
   id: string;
   question: string;
   answer: string;
 }
 
-export interface Deck {
+export type Deck = {
   id: string;
   title: string;
   description: string;
   cards: Flashcard[];
 }
 
-export interface HighScore {
+export type HighScore ={
   deckId: string;
   deckTitle: string;
   score: number;
