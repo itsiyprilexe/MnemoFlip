@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
   hero: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   stack: { width: 170, height: 150, marginBottom: spacing.xl },
   layer: { position: 'absolute', width: 110, height: 110, borderRadius: radius.lg },
-  layerBack: { backgroundColor: '#DBEAFE', left: 46, top: 0, transform: [{ rotate: '10deg' }] },
-  layerMid: { backgroundColor: '#93C5FD', left: 10, top: 14, transform: [{ rotate: '-8deg' }] },
+  layerBack: { backgroundColor: colors.primarySoft, left: 46, top: 0, transform: [{ rotate: '10deg' }] },
+  layerMid: { backgroundColor: '#C084FC', left: 10, top: 14, transform: [{ rotate: '-8deg' }] },
   layerFront: {
     backgroundColor: colors.card,
     left: 30,

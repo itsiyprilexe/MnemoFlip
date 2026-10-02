@@ -22,7 +22,6 @@ import { useTheme } from '../context/ThemeContext';
 import { useStorage } from '../context/StorageContext';
 import { radius, spacing } from '../theme';
 
-const BLUE = '#4990E3';
 
 const ICONS = [
   'school',
@@ -174,7 +173,7 @@ export const QuizPickerScreen = () => {
                 <Ionicons
                   name={ICONS[index % ICONS.length]}
                   size={22}
-                  color={BLUE}
+                  color={colors.primary}
                 />
               </View>
 
@@ -199,7 +198,7 @@ export const QuizPickerScreen = () => {
                 hitSlop={6}
                 accessibilityLabel={`Edit ${item.title}`}
               >
-                <Ionicons name="create-outline" size={18} color={BLUE} />
+                <Ionicons name="create-outline" size={18} color={colors.primary} />
               </TouchableOpacity>
 
               {/* Delete */}
@@ -230,7 +229,7 @@ export const QuizPickerScreen = () => {
                 <Ionicons
                   name={isEmpty ? 'add' : 'play'}
                   size={isEmpty ? 20 : 16}
-                  color={isEmpty ? BLUE : '#FFFFFF'}
+                  color={isEmpty ? colors.primary : '#FFFFFF'}
                   style={isEmpty ? undefined : { marginLeft: 2 }}
                 />
               </TouchableOpacity>
@@ -244,7 +243,7 @@ export const QuizPickerScreen = () => {
             <Ionicons
               name="document-text-outline"
               size={48}
-              color={BLUE}
+              color={colors.primary}
               style={{ marginBottom: spacing.sm }}
             />
             <Text style={styles.emptyTitle}>No quizzes yet</Text>
@@ -403,7 +402,7 @@ const createStyles = (
       flexDirection: 'row',
       alignItems: 'center',
       gap: 4,
-      backgroundColor: BLUE,
+      backgroundColor: colors.primary,
       paddingLeft: 12,
       paddingRight: 16,
       paddingVertical: 10,
@@ -436,7 +435,7 @@ const createStyles = (
       borderRadius: 22,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#EAF4FF',
+      backgroundColor: colors.primarySoft,
     },
 
     body: {
@@ -487,13 +486,13 @@ const createStyles = (
     },
 
     playBtnActive: {
-      backgroundColor: BLUE,
+      backgroundColor: colors.primary,
     },
 
     playBtnEmpty: {
       borderWidth: 1,
-      borderColor: BLUE,
-      backgroundColor: '#EAF4FF',
+      borderColor: colors.primary,
+      backgroundColor: colors.primarySoft,
     },
 
     // ── EMPTY STATE ──────────────────────────────────────────────────────────────
@@ -536,7 +535,7 @@ const createStyles = (
       width: 40,
       height: 4,
       borderRadius: 2,
-      backgroundColor: BLUE,
+      backgroundColor: colors.primary,
       marginBottom: 14,
     },
 

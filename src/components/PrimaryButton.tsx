@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
 
 interface PrimaryButtonProps {
   title: string;
@@ -16,10 +17,24 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   style,
   textStyle,
 }) => {
+  const { colors } = useTheme();
+
+  const getBackgroundColor = () => {
+    switch (variant) {
+      case 'secondary':
+        return colors.muted;
+      case 'danger':
+        return colors.danger;
+      case 'primary':
+      default:
+        return colors.primary;
+    }
+  };
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      style={[styles.button, styles[variant], style]}
+      style={[styles.button, { backgroundColor: getBackgroundColor() }, style]}
       onPress={onPress}
     >
       <Text style={[styles.text, textStyle]}>{title}</Text>
@@ -36,15 +51,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 6,
     flexDirection: 'row',
-  },
-  primary: {
-    backgroundColor: '#4A90E2',
-  },
-  secondary: {
-    backgroundColor: '#6C757D',
-  },
-  danger: {
-    backgroundColor: '#E74C3C',
   },
   text: {
     color: '#FFFFFF',

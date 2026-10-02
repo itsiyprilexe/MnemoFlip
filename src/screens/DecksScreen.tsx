@@ -149,7 +149,8 @@ export const DecksScreen = () => {
             <TouchableOpacity
               style={styles.row}
               activeOpacity={0.7}
-              onPress={() => navigation.navigate('Deck', { deckId: item.id })}
+              // onPress={() => navigation.navigate('Deck', { deckId: item.id })}
+              onPress={() => alert("not yet implemented")}
             >
               {/* Icon Tile */}
               <View

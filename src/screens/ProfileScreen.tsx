@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  Pressable,
   Alert,
   TouchableOpacity,
 } from 'react-native';
@@ -34,8 +33,6 @@ const initialsOf = (name?: string) => {
 };
 
 export const ProfileScreen = () => {
-  const decks: any[] = [];
-  const highScores: any[] = [];
   const { user, logOut } = useAuth();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -54,41 +51,7 @@ export const ProfileScreen = () => {
     ]);
   };
 
-  const { stats, feed } = useMemo(() => {
-    const percentages = highScores.map((item) =>
-      pctOf(item.score, item.totalQuestions)
-    );
 
-    const total = highScores.length;
-
-    return {
-      stats: {
-        quizzes: total,
-        average: total
-          ? Math.round(
-              percentages.reduce(
-                (sum, value) => sum + value,
-                0
-              ) / total
-            )
-          : 0,
-      },
-
-      feed: [...highScores]
-        .reverse()
-        .map((item, index) => ({
-          number: total - index,
-          score: item.score,
-          total: item.totalQuestions,
-          percentage: pctOf(
-            item.score,
-            item.totalQuestions
-          ),
-        })),
-    };
-  }, [highScores]);
-
-  const hasQuizzes = stats.quizzes > 0;
 
   return (
     <View style={styles.container}>
@@ -131,7 +94,7 @@ export const ProfileScreen = () => {
                 <Ionicons
                   name="school"
                   size={14}
-                  color="#2563EB"
+                  color={colors.primary}
                 />
 
                 <Text style={styles.studentText}>
@@ -159,13 +122,13 @@ export const ProfileScreen = () => {
               <Ionicons
                 name="albums-outline"
                 size={20}
-                color="#3B82F6"
+                color={colors.primary}
               />
             </View>
 
             <View>
               <Text style={styles.statValue}>
-                {decks.length}
+                0
               </Text>
 
               <Text style={styles.statLabel}>
@@ -182,13 +145,13 @@ export const ProfileScreen = () => {
               <Ionicons
                 name="document-text-outline"
                 size={20}
-                color="#7C6CF2"
+                color={colors.primary}
               />
             </View>
 
             <View>
               <Text style={styles.statValue}>
-                {stats.quizzes}
+                0
               </Text>
 
               <Text style={styles.statLabel}>
@@ -211,9 +174,7 @@ export const ProfileScreen = () => {
 
             <View>
               <Text style={styles.statValue}>
-                {hasQuizzes
-                  ? `${stats.average}%`
-                  : '—'}
+                0
               </Text>
 
               <Text style={styles.statLabel}>
@@ -223,149 +184,15 @@ export const ProfileScreen = () => {
           </View>
         </View>
 
-        {/* TABS */}
-        <View style={styles.tabs}>
-          <Pressable
-            style={[
-              styles.tabButton,
-              tab === 'activity' &&
-                styles.activeTabButton,
-            ]}
-            onPress={() => setTab('activity')}
-          >
-            <Ionicons
-              name="stats-chart"
-              size={17}
-              color={
-                tab === 'activity'
-                  ? '#FFFFFF'
-                  : colors.muted
-              }
-            />
-
-            <Text
-              style={[
-                styles.tabText,
-                tab === 'activity' &&
-                  styles.activeTabText,
-              ]}
-            >
-              Activity
-            </Text>
-          </Pressable>
-
-          <Pressable
-            style={[
-              styles.tabButton,
-              tab === 'settings' &&
-                styles.activeTabButton,
-            ]}
-            onPress={() => setTab('settings')}
-          >
-            <Ionicons
-              name="settings-outline"
-              size={18}
-              color={
-                tab === 'settings'
-                  ? '#FFFFFF'
-                  : colors.muted
-              }
-            />
-
-            <Text
-              style={[
-                styles.tabText,
-                tab === 'settings' &&
-                  styles.activeTabText,
-              ]}
-            >
-              Settings
-            </Text>
-          </Pressable>
-        </View>
+    
 
         {/* ACTIVITY */}
-        {tab === 'activity' ? (
           <View style={styles.content}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>
                 Recent Quizzes
               </Text>
-
-              {hasQuizzes && (
-                <Text style={styles.seeAll}>
-                  {stats.quizzes} completed
-                </Text>
-              )}
             </View>
-
-            {hasQuizzes ? (
-              <View style={styles.quizList}>
-                {feed.map((item) => (
-                  <View
-                    key={item.number}
-                    style={styles.quizCard}
-                  >
-                    {/* Quiz Icon */}
-                    <View style={styles.quizIcon}>
-                      <Ionicons
-                        name="document-text-outline"
-                        size={21}
-                        color="#3B82F6"
-                      />
-                    </View>
-
-                    {/* Quiz Information */}
-                    <View style={styles.quizInfo}>
-                      <Text style={styles.quizTitle}>
-                        Quiz {item.number}
-                      </Text>
-
-                      <Text
-                        style={styles.quizSubtitle}
-                      >
-                        {item.total}{' '}
-                        {item.total === 1
-                          ? 'question'
-                          : 'questions'}
-                      </Text>
-                    </View>
-
-                    {/* Percentage */}
-                    <View
-                      style={[
-                        styles.percentageCircle,
-                        {
-                          borderColor:
-                            item.percentage >= 80
-                              ? '#22B86B'
-                              : item.percentage >= 60
-                              ? '#F5A623'
-                              : '#EF4D56',
-                        },
-                      ]}
-                    >
-                      <Text
-                        style={styles.percentageText}
-                      >
-                        {item.percentage}%
-                      </Text>
-                    </View>
-
-                    {/* Score */}
-                    <View style={styles.scoreBox}>
-                      <Text style={styles.scoreText}>
-                        {item.score}/{item.total}
-                      </Text>
-
-                      <Text style={styles.correctText}>
-                        correct
-                      </Text>
-                    </View>
-                  </View>
-                ))}
-              </View>
-            ) : (
               <View style={styles.emptyState}>
                 <View style={styles.emptyIcon}>
                   <Ionicons
@@ -383,13 +210,7 @@ export const ProfileScreen = () => {
                   Your quiz results will appear here.
                 </Text>
               </View>
-            )}
           </View>
-        ) : (
-          <View style={styles.settingsContent}>
-            <Text style={{color: colors.muted}}>Settings have been disabled.</Text>
-          </View>
-        )}
       </ScrollView>
     </View>
   );
@@ -421,7 +242,7 @@ const createStyles = (
       width: 72,
       height: 72,
       borderRadius: 36,
-      backgroundColor: '#2F76ED',
+      backgroundColor: colors.primary,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -466,7 +287,7 @@ const createStyles = (
 
       gap: 5,
 
-      backgroundColor: '#E8F2FF',
+      backgroundColor: colors.primarySoft,
 
       paddingHorizontal: 9,
       paddingVertical: 5,
@@ -479,7 +300,7 @@ const createStyles = (
     studentText: {
       fontSize: 12,
       fontWeight: '700',
-      color: '#2563EB',
+      color: colors.primary,
     },
 
     /* STATS */
@@ -517,7 +338,7 @@ const createStyles = (
       height: 35,
       borderRadius: 11,
 
-      backgroundColor: '#E8F2FF',
+      backgroundColor: colors.primarySoft,
 
       alignItems: 'center',
       justifyContent: 'center',
@@ -528,7 +349,7 @@ const createStyles = (
       height: 35,
       borderRadius: 11,
 
-      backgroundColor: '#F0EEFF',
+      backgroundColor: colors.primarySoft,
 
       alignItems: 'center',
       justifyContent: 'center',
@@ -564,47 +385,6 @@ const createStyles = (
     },
 
     /* TABS */
-    tabs: {
-      flexDirection: 'row',
-
-      marginHorizontal: 20,
-      marginTop: 20,
-
-      padding: 3,
-
-      borderRadius: 15,
-
-      backgroundColor: '#EEF2F7',
-    },
-
-    tabButton: {
-      flex: 1,
-      height: 40,
-
-      borderRadius: 12,
-
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-
-      gap: 7,
-    },
-
-    activeTabButton: {
-      backgroundColor: '#2F76ED',
-    },
-
-    tabText: {
-      fontSize: 13,
-      fontWeight: '600',
-      color: colors.muted,
-    },
-
-    activeTabText: {
-      color: '#FFFFFF',
-      fontWeight: '700',
-    },
-
     /* CONTENT */
     content: {
       paddingHorizontal: 20,
@@ -628,7 +408,7 @@ const createStyles = (
     seeAll: {
       fontSize: 11,
       fontWeight: '600',
-      color: '#2F76ED',
+      color: colors.primary,
     },
 
     /* QUIZZES */
@@ -636,89 +416,12 @@ const createStyles = (
       gap: 9,
     },
 
-    quizCard: {
-      minHeight: 74,
 
-      flexDirection: 'row',
-      alignItems: 'center',
 
-      backgroundColor: colors.card,
 
-      borderRadius: 15,
 
-      borderWidth: 1,
-      borderColor: colors.border,
 
-      paddingHorizontal: 12,
-      paddingVertical: 10,
-    },
-
-    quizIcon: {
-      width: 43,
-      height: 43,
-
-      borderRadius: 12,
-
-      backgroundColor: '#E8F2FF',
-
-      alignItems: 'center',
-      justifyContent: 'center',
-
-      marginRight: 11,
-    },
-
-    quizInfo: {
-      flex: 1,
-    },
-
-    quizTitle: {
-      fontSize: 13,
-      fontWeight: '700',
-      color: colors.heading,
-    },
-
-    quizSubtitle: {
-      fontSize: 11,
-      color: colors.muted,
-      marginTop: 3,
-    },
-
-    percentageCircle: {
-      width: 45,
-      height: 45,
-
-      borderRadius: 23,
-
-      borderWidth: 4,
-
-      alignItems: 'center',
-      justifyContent: 'center',
-
-      marginRight: 11,
-    },
-
-    percentageText: {
-      fontSize: 10,
-      fontWeight: '800',
-      color: colors.heading,
-    },
-
-    scoreBox: {
-      minWidth: 44,
-    },
-
-    scoreText: {
-      fontSize: 11,
-      fontWeight: '800',
-      color: colors.heading,
-    },
-
-    correctText: {
-      fontSize: 9,
-      color: colors.muted,
-      marginTop: 2,
-    },
-
+   
     /* EMPTY */
     emptyState: {
       minHeight: 150,

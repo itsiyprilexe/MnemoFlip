@@ -20,9 +20,6 @@ import { useStorage } from '../context/StorageContext';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Deck'>;
 
-const BLUE = '#4990E3';
-const BLUE_SOFT = '#EAF4FF';
-const DANGER = '#DC2626';
 
 export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
   const { deckId } = route.params;
@@ -169,7 +166,7 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
           <Ionicons
             name="layers-outline"
             size={52}
-            color={BLUE}
+            color={colors.primary}
           />
         </View>
 
@@ -207,7 +204,7 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
           <Ionicons
             name="albums-outline"
             size={26}
-            color={BLUE}
+            color={colors.primary}
           />
 
           <View style={{ flex: 1 }}>
@@ -263,7 +260,7 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
                     <Ionicons
                       name="trash-outline"
                       size={20}
-                      color={DANGER}
+                      color={colors.danger}
                     />
                   </TouchableOpacity>
                 </View>
@@ -394,15 +391,15 @@ const SheetItem = ({
       size={24}
       color={
         danger
-          ? DANGER
-          : BLUE
+          ? colors.danger
+          : colors.primary
       }
     />
 
     <Text
       style={[
         styles.sheetLabel,
-        danger && { color: DANGER },
+        danger && { color: colors.danger },
       ]}
     >
       {label}
@@ -444,7 +441,7 @@ const styles = StyleSheet.create({
     width: 108,
     height: 108,
     borderRadius: 28,
-    backgroundColor: BLUE_SOFT,
+    backgroundColor: colors.primarySoft,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: spacing.sm,
@@ -482,13 +479,13 @@ const styles = StyleSheet.create({
     borderRadius: 33,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: BLUE,
+    backgroundColor: colors.primary,
   },
 
   actionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: BLUE,
+    color: colors.primary,
   },
 
   row: {
@@ -562,7 +559,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 5,
     borderRadius: 3,
-    backgroundColor: BLUE_SOFT,
+    backgroundColor: colors.primarySoft,
     marginBottom: spacing.md,
   },
 
