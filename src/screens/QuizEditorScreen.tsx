@@ -15,6 +15,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { useTheme } from '../context/ThemeContext';
+import { useStorage } from '../context/StorageContext';
 import { radius, spacing } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'QuizEditor'>;
@@ -23,9 +24,7 @@ const LETTERS = ['A', 'B', 'C', 'D'];
 
 export const QuizEditorScreen: React.FC<Props> = ({ route, navigation }) => {
   const { quizId } = route.params;
-  const quizzes: any[] = [];
-  const addQuestion = (quizId: string, q: string, opts: string[], correct: number) => {};
-  const deleteQuestion = (quizId: string, qId: string) => {};
+  const { quizzes, addQuestion, deleteQuestion } = useStorage();
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
 

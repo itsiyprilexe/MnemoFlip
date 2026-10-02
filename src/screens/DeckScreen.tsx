@@ -16,6 +16,7 @@ import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { StyledTextInput } from '../components/StyledTextInput';
 import { colors, radius, spacing, shadow } from '../theme';
+import { useStorage } from '../context/StorageContext';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Deck'>;
 
@@ -26,11 +27,7 @@ const DANGER = '#DC2626';
 export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
   const { deckId } = route.params;
 
-  const decks: any[] = [];
-  const highScores: any[] = [];
-  const updateDeck = (id: string, data: any) => {};
-  const deleteDeck = (id: string) => {};
-  const deleteCard = (deckId: string, cardId: string) => {};
+  const { decks, highScores, renameDeck, deleteDeck, deleteCard } = useStorage();
 
   const deck = decks.find((d) => d.id === deckId);
 
@@ -95,10 +92,7 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
       );
     }
 
-    updateDeck(deck.id, {
-      title,
-      description,
-    });
+    renameDeck(deck.id, title.trim(), (description ?? '').trim());
 
     setEditOpen(false);
   };

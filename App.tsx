@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { AuthProvider } from './src/context/AuthContext';
 import { ThemeProvider } from './src/context/ThemeContext';
+import { StorageProvider } from './src/context/StorageContext';
 
 const AppContent = () => {
   return (
@@ -19,7 +20,9 @@ export default function App() {
     <SafeAreaProvider>
       <ThemeProvider>
         <AuthProvider>
-          <AppContent />
+          <StorageProvider>
+            <AppContent />
+          </StorageProvider>
         </AuthProvider>
       </ThemeProvider>
     </SafeAreaProvider>

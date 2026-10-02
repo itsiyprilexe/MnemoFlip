@@ -20,6 +20,7 @@ import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { StyledTextInput } from '../components/StyledTextInput';
 import { useTheme } from '../context/ThemeContext';
+import { useStorage } from '../context/StorageContext';
 import { radius, spacing, accents } from '../theme';
 
 const ICONS = [
@@ -39,69 +40,74 @@ export const DecksScreen = () => {
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
-  const decks: any[] = [];
-  const createDeck = (title: string, desc: string) => '123';
-  const deleteDeck = (id: string) => {};
+  const { decks, createDeck, renameDeck, deleteDeck } = useStorage();
 
-  const [modalVisible, setModalVisible] = useState(false);
+  // ── Create Modal ────────────────────────────────────────────────────────────
+  const [createModalVisible, setCreateModalVisible] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  // Close and reset modal
-  const closeModal = useCallback(() => {
+  const closeCreateModal = useCallback(() => {
     setTitle('');
     setDescription('');
-    setModalVisible(false);
+    setCreateModalVisible(false);
   }, []);
 
-  // Create new deck
   const handleCreateDeck = () => {
     if (!title.trim()) {
-      return Alert.alert(
-        'Validation Error',
-        'Deck title is required'
-      );
+      return Alert.alert('Validation Error', 'Deck title is required');
     }
-
-    const id = createDeck(
-      title.trim(),
-      description.trim()
-    );
-
-    closeModal();
-
+    const id = createDeck(title.trim(), description.trim());
+    closeCreateModal();
     if (id) {
-      navigation.navigate('Deck', {
-        deckId: id,
-      });
+      navigation.navigate('Deck', { deckId: id });
     }
   };
 
-  // Delete deck
-  const handleDeleteDeck = (
-    id: string,
-    name: string
-  ) => {
-    Alert.alert(
-      'Delete deck',
-      `Delete "${name}" and all its cards?`,
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => deleteDeck(id),
-        },
-      ]
-    );
+  // ── Edit Modal ──────────────────────────────────────────────────────────────
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editId, setEditId] = useState('');
+  const [editTitle, setEditTitle] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+
+  const openEditModal = useCallback(
+    (id: string, currentTitle: string, currentDesc: string) => {
+      setEditId(id);
+      setEditTitle(currentTitle);
+      setEditDescription(currentDesc);
+      setEditModalVisible(true);
+    },
+    [],
+  );
+
+  const closeEditModal = useCallback(() => {
+    setEditId('');
+    setEditTitle('');
+    setEditDescription('');
+    setEditModalVisible(false);
+  }, []);
+
+  const handleSaveEdit = () => {
+    if (!editTitle.trim()) {
+      return Alert.alert('Validation Error', 'Deck title is required');
+    }
+    renameDeck(editId, editTitle.trim(), editDescription.trim());
+    closeEditModal();
   };
 
-  const countLabel = `${decks.length} ${
-    decks.length === 1 ? 'deck' : 'decks'
-  }`;
+  // ── Delete ──────────────────────────────────────────────────────────────────
+  const handleDeleteDeck = (id: string, name: string) => {
+    Alert.alert('Delete deck', `Delete "${name}" and all its cards?`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => deleteDeck(id),
+      },
+    ]);
+  };
+
+  const countLabel = `${decks.length} ${decks.length === 1 ? 'deck' : 'decks'}`;
 
   return (
     <View style={styles.container}>
@@ -111,50 +117,31 @@ export const DecksScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.list,
-          {
-            paddingBottom:
-              insets.bottom + 110,
-          },
+          { paddingBottom: insets.bottom + 110 },
         ]}
 
-        // HEADER
+        // ── HEADER ──────────────────────────────────────────────────────────
         ListHeaderComponent={
           <View style={styles.headerRow}>
             <View>
-              <Text style={styles.section}>
-                Your decks
-              </Text>
-
-              <Text style={styles.subtitle}>
-                {countLabel}
-              </Text>
+              <Text style={styles.section}>Your decks</Text>
+              <Text style={styles.subtitle}>{countLabel}</Text>
             </View>
 
             <TouchableOpacity
               style={styles.addBtn}
-              onPress={() =>
-                setModalVisible(true)
-              }
+              onPress={() => setCreateModalVisible(true)}
               activeOpacity={0.8}
             >
-              <Ionicons
-                name="add"
-                size={20}
-                color="#FFFFFF"
-              />
-
-              <Text style={styles.addBtnText}>
-                New deck
-              </Text>
+              <Ionicons name="add" size={20} color="#FFFFFF" />
+              <Text style={styles.addBtnText}>New deck</Text>
             </TouchableOpacity>
           </View>
         }
 
-        // DECK CARDS
+        // ── DECK ROW ─────────────────────────────────────────────────────────
         renderItem={({ item, index }) => {
-          const accent =
-            accents[index % accents.length];
-
+          const accent = accents[index % accents.length];
           const count = item.cards.length;
           const isEmpty = count === 0;
 
@@ -162,174 +149,113 @@ export const DecksScreen = () => {
             <TouchableOpacity
               style={styles.row}
               activeOpacity={0.7}
-              onPress={() =>
-                navigation.navigate('Deck', {
-                  deckId: item.id,
-                })
-              }
-              onLongPress={() =>
-                handleDeleteDeck(
-                  item.id,
-                  item.title
-                )
-              }
+              onPress={() => navigation.navigate('Deck', { deckId: item.id })}
             >
-              {/* Deck Icon */}
+              {/* Icon Tile */}
               <View
-                style={[
-                  styles.tile,
-                  {
-                    backgroundColor:
-                      accent + '26',
-                  },
-                ]}
+                style={[styles.tile, { backgroundColor: accent + '26' }]}
               >
                 <Ionicons
-                  name={
-                    ICONS[
-                      index % ICONS.length
-                    ]
-                  }
+                  name={ICONS[index % ICONS.length]}
                   size={22}
                   color={accent}
                 />
               </View>
 
-              {/* Deck Information */}
+              {/* Deck Info */}
               <View style={styles.body}>
-                <Text
-                  style={styles.title}
-                  numberOfLines={1}
-                >
+                <Text style={styles.title} numberOfLines={1}>
                   {item.title}
                 </Text>
-
                 <Text style={styles.meta}>
                   {isEmpty
                     ? 'No cards yet'
-                    : `${count} ${
-                        count === 1
-                          ? 'card'
-                          : 'cards'
-                      }`}
+                    : `${count} ${count === 1 ? 'card' : 'cards'}`}
                 </Text>
               </View>
+
+              {/* Edit */}
+              <TouchableOpacity
+                style={styles.iconBtn}
+                onPress={() =>
+                  openEditModal(item.id, item.title, item.description)
+                }
+                hitSlop={6}
+                accessibilityLabel={`Edit ${item.title}`}
+              >
+                <Ionicons
+                  name="create-outline"
+                  size={18}
+                  color={colors.primary}
+                />
+              </TouchableOpacity>
 
               {/* Delete */}
               <TouchableOpacity
                 style={styles.iconBtn}
-                onPress={() =>
-                  handleDeleteDeck(
-                    item.id,
-                    item.title
-                  )
-                }
+                onPress={() => handleDeleteDeck(item.id, item.title)}
                 hitSlop={6}
                 accessibilityLabel={`Delete ${item.title}`}
               >
-                <Ionicons
-                  name="trash-outline"
-                  size={18}
-                  color={
-                    colors.danger ??
-                    '#EF4444'
-                  }
-                />
+                <Ionicons name="trash-outline" size={18} color="#EF4444" />
               </TouchableOpacity>
 
-              {/* Open Deck */}
+              {/* Open / Add */}
               <View
                 style={[
                   styles.openBtn,
                   isEmpty
                     ? styles.openBtnEmpty
-                    : {
-                        backgroundColor:
-                          colors.primary,
-                      },
+                    : { backgroundColor: colors.primary },
                 ]}
               >
                 <Ionicons
-                  name={
-                    isEmpty
-                      ? 'add'
-                      : 'chevron-forward'
-                  }
+                  name={isEmpty ? 'add' : 'chevron-forward'}
                   size={isEmpty ? 20 : 18}
-                  color={
-                    isEmpty
-                      ? colors.muted
-                      : '#FFFFFF'
-                  }
+                  color={isEmpty ? colors.muted : '#FFFFFF'}
                 />
               </View>
             </TouchableOpacity>
           );
         }}
 
-        // EMPTY STATE
+        // ── EMPTY STATE ───────────────────────────────────────────────────────
         ListEmptyComponent={
           <View style={styles.empty}>
             <Ionicons
               name="library-outline"
               size={48}
               color={colors.muted}
-              style={{
-                marginBottom: spacing.sm,
-              }}
+              style={{ marginBottom: spacing.sm }}
             />
-
-            <Text style={styles.emptyTitle}>
-              No decks yet
-            </Text>
-
+            <Text style={styles.emptyTitle}>No decks yet</Text>
             <Text style={styles.emptyText}>
-              Tap &quot;New deck&quot; to create your
-              first study set.
+              Tap &quot;New deck&quot; to create your first study set.
             </Text>
           </View>
         }
       />
 
-      {/* CREATE DECK BOTTOM SHEET */}
+      {/* ── CREATE DECK BOTTOM SHEET ───────────────────────────────────────── */}
       <Modal
-        visible={modalVisible}
+        visible={createModalVisible}
         animationType="slide"
         transparent
-        onRequestClose={closeModal}
+        onRequestClose={closeCreateModal}
       >
         <KeyboardAvoidingView
           style={styles.modalOverlay}
-          behavior={
-            Platform.OS === 'ios'
-              ? 'padding'
-              : undefined
-          }
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-          {/* Tap outside to close */}
-          <Pressable
-            style={StyleSheet.absoluteFill}
-            onPress={closeModal}
-          />
-
+          <Pressable style={StyleSheet.absoluteFill} onPress={closeCreateModal} />
           <View
             style={[
               styles.sheet,
-              {
-                paddingBottom:
-                  Math.max(
-                    insets.bottom,
-                    16
-                  ) + 12,
-              },
+              { paddingBottom: Math.max(insets.bottom, 16) + 12 },
             ]}
           >
-            {/* Handle */}
             <View style={styles.handle} />
-
-            <Text style={styles.modalTitle}>
-              New deck
-            </Text>
+            <Text style={styles.modalTitle}>New deck</Text>
 
             <StyledTextInput
               label="Deck Title"
@@ -337,7 +263,6 @@ export const DecksScreen = () => {
               onChangeText={setTitle}
               placeholder="e.g. Biology Basics"
             />
-
             <StyledTextInput
               label="Description (Optional)"
               value={description}
@@ -348,17 +273,64 @@ export const DecksScreen = () => {
             <View style={styles.modalButtons}>
               <PrimaryButton
                 title="Cancel"
-                onPress={closeModal}
+                onPress={closeCreateModal}
                 variant="secondary"
-                style={{
-                  flex: 1,
-                  marginRight: 8,
-                }}
+                style={{ flex: 1, marginRight: 8 }}
               />
-
               <PrimaryButton
                 title="Create deck"
                 onPress={handleCreateDeck}
+                style={{ flex: 1 }}
+              />
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      {/* ── EDIT DECK BOTTOM SHEET ─────────────────────────────────────────── */}
+      <Modal
+        visible={editModalVisible}
+        animationType="slide"
+        transparent
+        onRequestClose={closeEditModal}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalOverlay}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <Pressable style={StyleSheet.absoluteFill} onPress={closeEditModal} />
+          <View
+            style={[
+              styles.sheet,
+              { paddingBottom: Math.max(insets.bottom, 16) + 12 },
+            ]}
+          >
+            <View style={styles.handle} />
+            <Text style={styles.modalTitle}>Edit deck</Text>
+
+            <StyledTextInput
+              label="Deck Title"
+              value={editTitle}
+              onChangeText={setEditTitle}
+              placeholder="e.g. Biology Basics"
+            />
+            <StyledTextInput
+              label="Description (Optional)"
+              value={editDescription}
+              onChangeText={setEditDescription}
+              placeholder="Short description..."
+            />
+
+            <View style={styles.modalButtons}>
+              <PrimaryButton
+                title="Cancel"
+                onPress={closeEditModal}
+                variant="secondary"
+                style={{ flex: 1, marginRight: 8 }}
+              />
+              <PrimaryButton
+                title="Save changes"
+                onPress={handleSaveEdit}
                 style={{ flex: 1 }}
               />
             </View>
@@ -372,9 +344,7 @@ export const DecksScreen = () => {
 export default DecksScreen;
 
 const createStyles = (
-  colors: ReturnType<
-    typeof useTheme
-  >['colors']
+  colors: ReturnType<typeof useTheme>['colors'],
 ) =>
   StyleSheet.create({
     container: {
@@ -386,9 +356,7 @@ const createStyles = (
       padding: spacing.md,
     },
 
-    // =========================
-    // HEADER
-    // =========================
+    // ── HEADER ──────────────────────────────────────────────────────────────
 
     headerRow: {
       flexDirection: 'row',
@@ -429,17 +397,14 @@ const createStyles = (
       fontWeight: '700',
     },
 
-    // =========================
-    // DECK ROW
-    // =========================
+    // ── DECK ROW ─────────────────────────────────────────────────────────────
 
     row: {
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: colors.card,
       borderRadius: radius.lg,
-      borderWidth:
-        StyleSheet.hairlineWidth,
+      borderWidth: StyleSheet.hairlineWidth,
       borderColor: colors.border,
       padding: spacing.sm + 4,
       marginBottom: spacing.sm + 2,
@@ -495,9 +460,7 @@ const createStyles = (
       borderColor: colors.border,
     },
 
-    // =========================
-    // EMPTY STATE
-    // =========================
+    // ── EMPTY STATE ───────────────────────────────────────────────────────────
 
     empty: {
       alignItems: 'center',
@@ -516,14 +479,11 @@ const createStyles = (
       textAlign: 'center',
     },
 
-    // =========================
-    // BOTTOM SHEET
-    // =========================
+    // ── BOTTOM SHEET ──────────────────────────────────────────────────────────
 
     modalOverlay: {
       flex: 1,
-      backgroundColor:
-        'rgba(30,27,75,0.5)',
+      backgroundColor: 'rgba(30,27,75,0.5)',
       justifyContent: 'flex-end',
     },
 
