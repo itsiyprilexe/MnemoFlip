@@ -13,7 +13,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
-type TabKey = 'activity' | 'settings';
 
 const pctOf = (score: number, total: number) =>
   total > 0 ? Math.round((score / total) * 100) : 0;
@@ -37,7 +36,7 @@ export const ProfileScreen = () => {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
-  const [tab, setTab] = useState<TabKey>('activity');
+  // const [tab, setTab] = useState<TabKey>('activity');
 
   const styles = useMemo(
     () => createStyles(colors),

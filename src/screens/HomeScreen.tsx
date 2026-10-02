@@ -17,6 +17,10 @@ import { RootStackParamList } from '../types';
 import { useTheme } from '../context/ThemeContext';
 import { radius, spacing, accents } from '../theme';
 
+// import { useAuth } from '../context/AuthContext'; // para makauha an ngaran san user para sa greeting
+
+// const { user, logOut } = useAuth(); //para sa pag display san Ngaran sa Hello, (Name of user)
+
 const ICONS = [
   'school',
   'flask',
@@ -108,6 +112,7 @@ export const HomeScreen = () => {
               <View>
                 <Text style={styles.greeting}>
                   Hello, Student!
+                  
                 </Text>
 
                 <Text style={styles.greetingSubtitle}>
