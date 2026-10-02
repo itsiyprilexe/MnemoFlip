@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "flashcard-app",
+    "name": "",
     "slug": "flashcard-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/amonlogo.jpg",
+    "icon": "./assets/flashcard-logo.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true
