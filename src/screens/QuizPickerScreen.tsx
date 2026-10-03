@@ -107,22 +107,8 @@ export const QuizPickerScreen = () => {
     ]);
 
   // ── Play / Navigate ───────────────────────────────────────────────────────────
-  const handleRowPress = (quizId: string, count: number) => {
-    if (count === 0) {
-      Alert.alert(
-        'This section is incomplete hehehe',
-        'Add some questions first before starting the quiz.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          {
-            text: 'Add Questions',
-            onPress: () => navigation.navigate('QuizEditor', { quizId }),
-          },
-        ],
-      );
-      return;
-    }
-    navigation.navigate('Quiz', { quizId });
+  const handleRowPress = () => {
+    Alert.alert('Under Construction', 'This feature is coming soon!');
   };
 
   const countLabel = `${quizzes.length} ${
@@ -167,7 +153,7 @@ export const QuizPickerScreen = () => {
             <TouchableOpacity
               style={styles.card}
               activeOpacity={0.7}
-              onPress={() => handleRowPress(item.id, count)}
+              onPress={handleRowPress}
             >
               {/* Left: Icon Circle */}
               <View style={styles.iconCircle}>
@@ -194,7 +180,7 @@ export const QuizPickerScreen = () => {
                   <Text style={styles.startNowLabel}>Start Now</Text>
                   <TouchableOpacity
                     style={styles.startQuizBtn}
-                    onPress={() => handleRowPress(item.id, count)}
+                    onPress={handleRowPress}
                     activeOpacity={0.8}
                   >
                     <Text style={styles.startQuizBtnText}>Start Quiz</Text>
@@ -438,12 +424,14 @@ export const QuizPickerScreen = () => {
                 </Text>
               </TouchableOpacity>
 
-              {/* Add New Quiz */}
+              {/* Add Question */}
               <TouchableOpacity
                 style={styles.menuItem}
                 onPress={() => {
+                  if (!menuQuiz) return;
+                  const q = menuQuiz;
                   setMenuQuiz(null);
-                  setCreateModalVisible(true);
+                  navigation.navigate('QuizEditor', { quizId: q.id });
                 }}
                 activeOpacity={0.7}
               >
@@ -459,7 +447,7 @@ export const QuizPickerScreen = () => {
                     color={colors.primary}
                   />
                 </View>
-                <Text style={styles.menuItemLabel}>Add New Quiz</Text>
+                <Text style={styles.menuItemLabel}>Add Question</Text>
               </TouchableOpacity>
             </View>
 

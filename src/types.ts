@@ -26,7 +26,7 @@ export type HighScore ={
   score: number;
   totalQuestions: number;
   date: string;
-}
+};
 
 export type RootStackParamList = {
   Onboarding: undefined;

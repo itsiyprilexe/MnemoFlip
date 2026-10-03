@@ -169,8 +169,9 @@ export const QuizEditorScreen: React.FC<Props> = ({ route, navigation }) => {
       <View style={styles.footer}>
         <PrimaryButton
           title={count === 0 ? 'Add a question to start' : 'Start Quiz'}
-          onPress={() => (count > 0 ? navigation.replace('Quiz', { quizId }) : undefined)}
-          style={count === 0 ? { opacity: 0.5 } : undefined}
+          onPress={() =>
+            Alert.alert('Not Available', 'This feature is coming soon!')
+          }
         />
       </View>
     </KeyboardAvoidingView>

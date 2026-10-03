@@ -2,11 +2,12 @@ import React, { useMemo, useState } from 'react';
 import {
   View,
   Text,
-  FlatList,
+  ScrollView,
   StyleSheet,
   Alert,
   TextInput,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -15,17 +16,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { RootStackParamList } from '../types';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
+import { useStorage } from '../context/StorageContext';
 import { radius, spacing, accents } from '../theme';
 
-// import { useAuth } from '../context/AuthContext'; // para makauha an ngaran san user para sa greeting
-
-// const { user, logOut } = useAuth(); //para sa pag display san Ngaran sa Hello, (Name of user)
-
 const ICONS = [
+  'book',
   'school',
   'flask',
   'calculator',
-  'book',
   'leaf',
   'color-palette',
 ] as const;
@@ -35,373 +34,254 @@ export const HomeScreen = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const { colors } = useTheme();
+  const { user } = useAuth();
+  const { decks, quizzes } = useStorage();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
-  const decks: any[] = [];
-  const deleteDeck = (id: string) => {};
-
   const [query, setQuery] = useState('');
-
-  // Total number of cards
-  const totalCards = useMemo(
-    () =>
-      decks.reduce(
-        (sum, deck) => sum + deck.cards.length,
-        0
-      ),
-    [decks]
-  );
 
   // Search decks
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-
     return q
-      ? decks.filter((deck) =>
-          deck.title.toLowerCase().includes(q)
-        )
+      ? decks.filter((deck) => deck.title.toLowerCase().includes(q))
       : decks;
   }, [decks, query]);
 
-  // Delete deck
-  const handleDeleteDeck = (
-    id: string,
-    name: string
-  ) => {
-    Alert.alert(
-      'Delete deck',
-      `Delete "${name}" and all its cards?`,
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => deleteDeck(id),
-        },
-      ]
-    );
-  };
+  const greetingName = user?.name ? `Hello, ${user.name}!` : 'Hello, Student!';
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={filtered}
-        keyExtractor={(item) => item.id}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
+      <ScrollView
         contentContainerStyle={[
-          styles.list,
+          styles.scrollContent,
           {
             paddingTop: insets.top + 12,
             paddingBottom: insets.bottom + 110,
           },
         ]}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        {/* =========================
+            GREETING
+        ========================= */}
+        <View style={styles.greetingRow}>
+          <View>
+            <Text style={styles.greeting}>{greetingName}</Text>
+            <Text style={styles.greetingSubtitle}>
+              Ready to study today?
+            </Text>
+          </View>
 
-        // =========================
-        // HOME HEADER
-        // =========================
-        ListHeaderComponent={
-          <View style={styles.header}>
-
-            {/* Greeting */}
-            <View style={styles.greetingRow}>
-              <View>
-                <Text style={styles.greeting}>
-                  Hello, Student!
-                  
-                </Text>
-
-                <Text style={styles.greetingSubtitle}>
-                  Ready to study today?
-                </Text>
-              </View>
-
-              <View style={styles.profile} >
-                <TouchableOpacity
-                  onPress = {() => alert("Need to link waray ka set")}
-                >
-                   <Ionicons
-                  name="person"
-                  size={20}
-                  color={colors.primary}
-                />
-                </TouchableOpacity>
-
-              </View>
-            </View>
-
-            {/* Search */}
-            <View style={styles.searchWrap}>
+          <View style={styles.profile}>
+            <TouchableOpacity
+              onPress={() => (navigation as any).navigate('ProfileTab')}
+              activeOpacity={0.7}
+              accessibilityLabel="View Profile"
+            >
               <Ionicons
-                name="search-outline"
-                size={19}
+                name="person"
+                size={20}
+                color={colors.primary}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* =========================
+            SEARCH
+        ========================= */}
+        <View style={styles.searchWrap}>
+          <Ionicons
+            name="search-outline"
+            size={19}
+            color={colors.muted}
+          />
+
+          <TextInput
+            style={styles.searchInput}
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search your decks..."
+            placeholderTextColor={colors.muted}
+          />
+
+          {query.length > 0 && (
+            <TouchableOpacity
+              onPress={() => setQuery('')}
+              hitSlop={10}
+            >
+              <Ionicons
+                name="close-circle"
+                size={18}
                 color={colors.muted}
               />
-
-              <TextInput
-                style={styles.searchInput}
-                value={query}
-                onChangeText={setQuery}
-                placeholder="Search your decks..."
-                placeholderTextColor={colors.muted}
-              />
-
-              {query.length > 0 && (
-                <TouchableOpacity
-                  onPress={() => setQuery('')}
-                  hitSlop={10}
-                >
-                  <Ionicons
-                    name="close-circle"
-                    size={18}
-                    color={colors.muted}
-                  />
-                </TouchableOpacity>
-              )}
-            </View>
-
-            {/* Learning Banner */}
-            <View style={styles.banner}>
-              <View style={styles.bannerContent}>
-
-                <Text style={styles.bannerLabel}>
-                  KEEP LEARNING
-                </Text>
-
-                <Text style={styles.bannerTitle}>
-                  Build your knowledge
-                </Text>
-
-                <Text style={styles.bannerText}>
-                  Study your flashcards, review your
-                  decks, and test yourself with quizzes.
-                </Text>
-              </View>
-
-              <View style={styles.bannerDecorationOne} />
-              <View style={styles.bannerDecorationTwo} />
-            </View>
-
-            {/* Statistics */}
-            <View style={styles.statsRow}>
-              <View style={styles.statCard}>
-                <View
-                  style={[
-                    styles.statIcon,
-                    {
-                      backgroundColor:
-                        colors.primary + '18',
-                    },
-                  ]}
-                >
-                  <Ionicons
-                    name="library-outline"
-                    size={20}
-                    color={colors.primary}
-                  />
-                </View>
-
-                <View>
-                  <Text style={styles.statNumber}>
-                    {decks.length}
-                  </Text>
-
-                  <Text style={styles.statLabel}>
-                    {decks.length === 1
-                      ? 'Deck'
-                      : 'Decks'}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.statCard}>
-                <View
-                  style={[
-                    styles.statIcon,
-                    {
-                      backgroundColor:
-                        '#F59E0B18',
-                    },
-                  ]}
-                >
-                  <Ionicons
-                    name="albums-outline"
-                    size={20}
-                    color="#F59E0B"
-                  />
-                </View>
-
-                <View>
-                  <Text style={styles.statNumber}>
-                    {totalCards}
-                  </Text>
-
-                  <Text style={styles.statLabel}>
-                    {totalCards === 1
-                      ? 'Card'
-                      : 'Cards'}
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            {/* Deck Section */}
-            <View style={styles.sectionHeader}>
-              <View>
-                <Text style={styles.section}>
-                  My Decks
-                </Text>
-
-                <Text style={styles.sectionSubtitle}>
-                  Continue where you left off
-                </Text>
-              </View>
-
-              {decks.length > 0 && (
-                <TouchableOpacity
-                  style={styles.viewAllBtn}
-                  onPress={() =>
-                    (navigation as any).navigate('DecksTab')
-                  }
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.viewAllText}>
-                    View all
-                  </Text>
-
-                  <Ionicons
-                    name="chevron-forward"
-                    size={15}
-                    color={colors.primary}
-                  />
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-        }
-
-        // =========================
-        // DECKS
-        // =========================
-        renderItem={({ item, index }) => {
-          const accent =
-            accents[index % accents.length];
-
-          const count = item.cards.length;
-          const isEmpty = count === 0;
-
-          return (
-            <TouchableOpacity
-              style={styles.row}
-              activeOpacity={0.7}
-              onPress={() =>
-                navigation.navigate('Deck', {
-                  deckId: item.id,
-                })
-              }
-              onLongPress={() =>
-                handleDeleteDeck(
-                  item.id,
-                  item.title
-                )
-              }
-            >
-              {/* Icon */}
-              <View
-                style={[
-                  styles.tile,
-                  {
-                    backgroundColor:
-                      accent + '26',
-                  },
-                ]}
-              >
-                <Ionicons
-                  name={
-                    ICONS[
-                      index % ICONS.length
-                    ]
-                  }
-                  size={22}
-                  color={accent}
-                />
-              </View>
-
-              {/* Deck Info */}
-              <View style={styles.deckBody}>
-                <Text
-                  style={styles.deckTitle}
-                  numberOfLines={1}
-                >
-                  {item.title}
-                </Text>
-
-                <Text style={styles.deckMeta}>
-                  {isEmpty
-                    ? 'No cards yet'
-                    : `${count} ${
-                        count === 1
-                          ? 'card'
-                          : 'cards'
-                      }`}
-                </Text>
-              </View>
-
-              {/* Open */}
-              <View
-                style={[
-                  styles.openBtn,
-                  isEmpty
-                    ? styles.openBtnEmpty
-                    : {
-                        backgroundColor:
-                          colors.primary,
-                      },
-                ]}
-              >
-                <Ionicons
-                  name={
-                    isEmpty
-                      ? 'add'
-                      : 'chevron-forward'
-                  }
-                  size={isEmpty ? 20 : 17}
-                  color={
-                    isEmpty
-                      ? colors.muted
-                      : '#FFFFFF'
-                  }
-                />
-              </View>
             </TouchableOpacity>
-          );
-        }}
+          )}
+        </View>
 
-        // =========================
-        // EMPTY
-        // =========================
-        ListEmptyComponent={
+        {/* =========================
+            LEARNING BANNER
+        ========================= */}
+        <View style={styles.banner}>
+          <View style={styles.bannerContent}>
+            <Text style={styles.bannerLabel}>KEEP LEARNING</Text>
+            <Text style={styles.bannerTitle}>Build your knowledge</Text>
+            <Text style={styles.bannerText}>
+              Study your flashcards, review your decks, and test yourself with quizzes.
+            </Text>
+          </View>
+        </View>
+
+        {/* =========================
+            STATISTICS
+        ========================= */}
+        <View style={styles.statsRow}>
+          <TouchableOpacity
+            style={styles.statCard}
+            onPress={() => (navigation as any).navigate('DecksTab')}
+            activeOpacity={0.7}
+          >
+            <View
+              style={[
+                styles.statIcon,
+                { backgroundColor: colors.primary + '18' },
+              ]}
+            >
+              <Ionicons
+                name="library-outline"
+                size={20}
+                color={colors.primary}
+              />
+            </View>
+
+            <View>
+              <Text style={styles.statNumber}>{decks.length}</Text>
+              <Text style={styles.statLabel}>
+                {decks.length === 1 ? 'Deck' : 'Decks'}
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.statCard}
+            onPress={() => (navigation as any).navigate('QuizTab')}
+            activeOpacity={0.7}
+          >
+            <View
+              style={[
+                styles.statIcon,
+                { backgroundColor: '#F59E0B18' },
+              ]}
+            >
+              <Ionicons
+                name="albums-outline"
+                size={20}
+                color="#F59E0B"
+              />
+            </View>
+
+            <View>
+              <Text style={styles.statNumber}>{quizzes.length}</Text>
+              <Text style={styles.statLabel}>
+                {quizzes.length === 1 ? 'Quiz' : 'Quizzes'}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* =========================
+            DECKS SECTION
+        ========================= */}
+        <View style={styles.sectionHeader}>
+          <View>
+            <Text style={styles.section}>My Decks</Text>
+            <Text style={styles.sectionSubtitle}>
+              Continue where you left off
+            </Text>
+          </View>
+
+          {decks.length > 0 && (
+            <TouchableOpacity
+              style={styles.viewAllBtn}
+              onPress={() => (navigation as any).navigate('DecksTab')}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.viewAllText}>View all</Text>
+              <Ionicons
+                name="chevron-forward"
+                size={15}
+                color={colors.primary}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Decks List or Empty State */}
+        {filtered.length > 0 ? (
+          filtered.map((item, index) => {
+            const accent = accents[index % accents.length];
+            const count = item.cards.length;
+
+            return (
+              <TouchableOpacity
+                key={item.id}
+                style={styles.card}
+                activeOpacity={0.7}
+                onPress={() =>
+                  Alert.alert(
+                    'Under Construction',
+                    'This feature is coming soon!',
+                  )
+                }
+              >
+                {/* Icon Circle */}
+                <View
+                  style={[
+                    styles.iconCircle,
+                    { backgroundColor: accent + '22' },
+                  ]}
+                >
+                  <Ionicons
+                    name={ICONS[index % ICONS.length]}
+                    size={24}
+                    color={accent}
+                  />
+                </View>
+
+                {/* Deck Info */}
+                <View style={styles.cardInfo}>
+                  <Text style={styles.cardTitle} numberOfLines={1}>
+                    {item.title}
+                  </Text>
+                  <Text style={styles.cardSubtitle}>
+                    {count} {count === 1 ? 'card' : 'cards'}
+                  </Text>
+                </View>
+
+                <Ionicons
+                  name="chevron-forward"
+                  size={18}
+                  color={colors.muted}
+                  style={{ marginRight: 4 }}
+                />
+              </TouchableOpacity>
+            );
+          })
+        ) : (
           <View style={styles.empty}>
             <View style={styles.emptyIcon}>
               <Ionicons
-                name={
-                  query
-                    ? 'search-outline'
-                    : 'library-outline'
-                }
+                name={query ? 'search-outline' : 'library-outline'}
                 size={30}
                 color={colors.primary}
               />
             </View>
 
             <Text style={styles.emptyTitle}>
-              {query
-                ? 'No decks found'
-                : 'No decks yet'}
+              {query ? 'No decks found' : 'No decks yet'}
             </Text>
 
             <Text style={styles.emptyText}>
@@ -413,24 +293,16 @@ export const HomeScreen = () => {
             {!query && (
               <TouchableOpacity
                 style={styles.emptyButton}
-                onPress={() =>
-                  (navigation as any).navigate('DecksTab')
-                }
+                onPress={() => (navigation as any).navigate('DecksTab')}
+                activeOpacity={0.8}
               >
-                <Ionicons
-                  name="add"
-                  size={18}
-                  color="#FFFFFF"
-                />
-
-                <Text style={styles.emptyButtonText}>
-                  Create a deck
-                </Text>
+                <Ionicons name="add" size={18} color="#FFFFFF" />
+                <Text style={styles.emptyButtonText}>Create a deck</Text>
               </TouchableOpacity>
             )}
           </View>
-        }
-      />
+        )}
+      </ScrollView>
     </View>
   );
 };
@@ -446,7 +318,7 @@ const createStyles = (
       backgroundColor: colors.bg,
     },
 
-    list: {
+    scrollContent: {
       paddingHorizontal: spacing.md,
     },
 
@@ -566,28 +438,6 @@ const createStyles = (
       lineHeight: 19,
     },
 
-    bannerDecorationOne: {
-      position: 'absolute',
-      width: 130,
-      height: 130,
-      borderRadius: 65,
-      backgroundColor:
-        'rgba(255,255,255,0.08)',
-      right: -30,
-      top: -30,
-    },
-
-    bannerDecorationTwo: {
-      position: 'absolute',
-      width: 80,
-      height: 80,
-      borderRadius: 40,
-      backgroundColor:
-        'rgba(255,255,255,0.07)',
-      right: 35,
-      bottom: -30,
-    },
-
     // =========================
     // STATS
     // =========================
@@ -668,58 +518,58 @@ const createStyles = (
     },
 
     // =========================
-    // DECK ROW
+    // DECK CARD
     // =========================
 
-    row: {
+    card: {
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: colors.card,
-      borderRadius: radius.lg,
-      borderWidth:
-        StyleSheet.hairlineWidth,
+      borderRadius: 24,
+      borderWidth: 1,
       borderColor: colors.border,
-      padding: spacing.sm + 4,
-      marginBottom: spacing.sm + 2,
-      gap: spacing.sm,
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+      marginBottom: spacing.sm + 4,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#2E1065',
+          shadowOffset: { width: 0, height: 3 },
+          shadowOpacity: 0.06,
+          shadowRadius: 10,
+        },
+        android: {
+          elevation: 2,
+        },
+      }),
     },
 
-    tile: {
-      width: 44,
-      height: 44,
-      borderRadius: 22,
+    iconCircle: {
+      width: 48,
+      height: 48,
+      borderRadius: 24,
       alignItems: 'center',
       justifyContent: 'center',
     },
 
-    deckBody: {
+    cardInfo: {
       flex: 1,
-      marginLeft: 2,
+      marginLeft: 14,
+      justifyContent: 'center',
     },
 
-    deckTitle: {
+    cardTitle: {
       fontSize: 16,
       fontWeight: '700',
       color: colors.heading,
+      letterSpacing: -0.2,
     },
 
-    deckMeta: {
+    cardSubtitle: {
       fontSize: 13,
       color: colors.muted,
-      marginTop: 2,
-    },
-
-    openBtn: {
-      width: 38,
-      height: 38,
-      borderRadius: 19,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    openBtnEmpty: {
-      borderWidth: 1,
-      borderColor: colors.border,
+      marginTop: 3,
+      fontWeight: '500',
     },
 
     // =========================

@@ -12,11 +12,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { StyledTextInput } from '../components/StyledTextInput';
 import { useTheme } from '../context/ThemeContext';
@@ -33,9 +30,6 @@ const ICONS = [
 ] as const;
 
 export const DecksScreen = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -60,11 +54,8 @@ export const DecksScreen = () => {
     if (!title.trim()) {
       return Alert.alert('Validation Error', 'Deck title is required');
     }
-    const id = createDeck(title.trim(), description.trim());
+    createDeck(title.trim(), description.trim());
     closeCreateModal();
-    if (id) {
-      navigation.navigate('Deck', { deckId: id });
-    }
   };
 
   // ── Edit Modal ──────────────────────────────────────────────────────────────
@@ -151,7 +142,12 @@ export const DecksScreen = () => {
             <TouchableOpacity
               style={styles.card}
               activeOpacity={0.7}
-              onPress={() => navigation.navigate('Deck', { deckId: item.id })}
+              onPress={() =>
+                Alert.alert(
+                  'Under Construction',
+                  'This feature is coming soon!',
+                )
+              }
             >
               {/* Icon Circle */}
               <View
