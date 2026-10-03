@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react';   //imports React library and useState hook for managing component sta   te 
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, TextInputProps } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, radius, spacing } from '../theme';
 
-interface Props extends TextInputProps {
+interface Props extends TextInputProps {  // 
   label: string;
   secure?: boolean;
 }
