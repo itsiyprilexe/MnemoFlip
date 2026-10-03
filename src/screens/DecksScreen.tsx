@@ -179,7 +179,7 @@ export const DecksScreen = () => {
               >
                 <Ionicons
                   name="ellipsis-vertical"
-                  size={20}
+                  size={25}
                   color={colors.muted}
                 />
               </TouchableOpacity>
@@ -389,10 +389,7 @@ export const DecksScreen = () => {
               {/* Add New Deck */}
               <TouchableOpacity
                 style={styles.menuItem}
-                onPress={() => {
-                  setMenuDeck(null);
-                  setCreateModalVisible(true);
-                }}
+                onPress={() => {alert('This feature is coming soon!')}}
                 activeOpacity={0.7}
               >
                 <View
