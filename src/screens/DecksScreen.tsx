@@ -212,33 +212,19 @@ export const DecksScreen = () => {
                 </View>
               </View>
 
-              {/* Right Side: Study Button & 3-Dots */}
-              <View style={styles.rightSection}>
-                <TouchableOpacity
-                  style={[styles.studyBtn, { backgroundColor: colors.primary }]}
-                  onPress={() =>
-                    navigation.navigate('Deck', { deckId: item.id })
-                  }
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.studyBtnText}>Study</Text>
-                  <Ionicons name="chevron-forward" size={14} color="#FFFFFF" />
-                </TouchableOpacity>
-
-                {/* 3-Dots Menu Button */}
-                <TouchableOpacity
-                  style={styles.dotsBtn}
-                  onPress={() => setMenuDeck(item)}
-                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-                  accessibilityLabel={`Options for ${item.title}`}
-                >
-                  <Ionicons
-                    name="ellipsis-vertical"
-                    size={22}
-                    color={colors.muted}
-                  />
-                </TouchableOpacity>
-              </View>
+              {/* 3-Dots Menu Button */}
+              <TouchableOpacity
+                style={styles.dotsBtn}
+                onPress={() => setMenuDeck(item)}
+                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                accessibilityLabel={`Options for ${item.title}`}
+              >
+                <Ionicons
+                  name="ellipsis-vertical"
+                  size={22}
+                  color={colors.muted}
+                />
+              </TouchableOpacity>
             </TouchableOpacity>
           );
         }}
@@ -480,29 +466,6 @@ export const DecksScreen = () => {
                 </Text>
               </TouchableOpacity>
 
-              {/* Add New Deck */}
-              <TouchableOpacity
-                style={styles.menuItem}
-                onPress={() => {
-                  setMenuDeck(null);
-                  setCreateModalVisible(true);
-                }}
-                activeOpacity={0.7}
-              >
-                <View
-                  style={[
-                    styles.menuItemIconWrap,
-                    { backgroundColor: colors.primarySoft },
-                  ]}
-                >
-                  <Ionicons
-                    name="add-circle-outline"
-                    size={20}
-                    color={colors.primary}
-                  />
-                </View>
-                <Text style={styles.menuItemLabel}>Add New Deck</Text>
-              </TouchableOpacity>
             </View>
 
             <TouchableOpacity
@@ -704,26 +667,6 @@ const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
       fontWeight: '700',
     },
 
-    rightSection: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 6,
-    },
-
-    studyBtn: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 3,
-      paddingHorizontal: 12,
-      paddingVertical: 6,
-      borderRadius: radius.pill,
-    },
-
-    studyBtnText: {
-      color: '#FFFFFF',
-      fontSize: 12,
-      fontWeight: '700',
-    },
 
     dotsBtn: {
       width: 34,
