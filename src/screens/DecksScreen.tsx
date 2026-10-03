@@ -20,14 +20,14 @@ import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { StyledTextInput } from '../components/StyledTextInput';
 import { useTheme } from '../context/ThemeContext';
-import { useStorage } from '../context/StorageContext';
+import { useStorage, Deck } from '../context/StorageContext';
 import { radius, spacing, accents } from '../theme';
 
 const ICONS = [
+  'book',
   'school',
   'flask',
   'calculator',
-  'book',
   'leaf',
   'color-palette',
 ] as const;
@@ -41,6 +41,9 @@ export const DecksScreen = () => {
   const styles = useMemo(() => createStyles(colors), [colors]);
 
   const { decks, createDeck, renameDeck, deleteDeck } = useStorage();
+
+  // ── 3-Dots Options Menu ─────────────────────────────────────────────────────
+  const [menuDeck, setMenuDeck] = useState<Deck | null>(null);
 
   // ── Create Modal ────────────────────────────────────────────────────────────
   const [createModalVisible, setCreateModalVisible] = useState(false);
@@ -143,79 +146,47 @@ export const DecksScreen = () => {
         renderItem={({ item, index }) => {
           const accent = accents[index % accents.length];
           const count = item.cards.length;
-          const isEmpty = count === 0;
 
           return (
             <TouchableOpacity
-              style={styles.row}
+              style={styles.card}
               activeOpacity={0.7}
-              // onPress={() => navigation.navigate('Deck', { deckId: item.id })}
-              onPress={() => alert("not yet implemented")}
+              onPress={() => navigation.navigate('Deck', { deckId: item.id })}
             >
-              {/* Icon Tile */}
+              {/* Icon Circle */}
               <View
-                style={[styles.tile, { backgroundColor: accent + '26' }]}
+                style={[styles.iconCircle, { backgroundColor: accent + '22' }]}
               >
                 <Ionicons
                   name={ICONS[index % ICONS.length]}
-                  size={22}
+                  size={24}
                   color={accent}
                 />
               </View>
 
               {/* Deck Info */}
-              <View style={styles.body}>
-                <Text style={styles.title} numberOfLines={1}>
+              <View style={styles.cardInfo}>
+                <Text style={styles.cardTitle} numberOfLines={1}>
                   {item.title}
                 </Text>
-                <Text style={styles.meta}>
-                  {isEmpty
-                    ? 'No cards yet'
-                    : `${count} ${count === 1 ? 'card' : 'cards'}`}
+                <Text style={styles.cardSubtitle}>
+                  {count} {count === 1 ? 'card' : 'cards'}
                 </Text>
               </View>
 
-              {/* Edit */}
+              {/* 3-Dots Menu Button */}
               <TouchableOpacity
-                style={styles.iconBtn}
-                onPress={() =>
-                  openEditModal(item.id, item.title, item.description)
-                }
-                hitSlop={6}
-                accessibilityLabel={`Edit ${item.title}`}
+                style={styles.dotsBtn}
+                onPress={() => setMenuDeck(item)}
+                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                accessibilityLabel={`Options for ${item.title}`}
               >
                 <Ionicons
-                  name="create-outline"
-                  size={18}
-                  color={colors.primary}
+                  name="ellipsis-vertical"
+                  size={20}
+                  color={colors.muted}
                 />
               </TouchableOpacity>
-
-              {/* Delete */}
-              <TouchableOpacity
-                style={styles.iconBtn}
-                onPress={() => handleDeleteDeck(item.id, item.title)}
-                hitSlop={6}
-                accessibilityLabel={`Delete ${item.title}`}
-              >
-                <Ionicons name="trash-outline" size={18} color="#EF4444" />
-              </TouchableOpacity>
-
-              {/* Open / Add */}
-              <View
-                style={[
-                  styles.openBtn,
-                  isEmpty
-                    ? styles.openBtnEmpty
-                    : { backgroundColor: colors.primary },
-                ]}
-              >
-                <Ionicons
-                  name={isEmpty ? 'add' : 'chevron-forward'}
-                  size={isEmpty ? 20 : 18}
-                  color={isEmpty ? colors.muted : '#FFFFFF'}
-                />
-              </View>
             </TouchableOpacity>
           );
         }}
@@ -338,6 +309,122 @@ export const DecksScreen = () => {
           </View>
         </KeyboardAvoidingView>
       </Modal>
+
+      {/* ── 3-DOTS OPTIONS BOTTOM SHEET ───────────────────────────────────────── */}
+      <Modal
+        visible={!!menuDeck}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setMenuDeck(null)}
+      >
+        <Pressable
+          style={styles.menuOverlay}
+          onPress={() => setMenuDeck(null)}
+        >
+          <Pressable style={styles.menuSheet} onPress={(e) => e.stopPropagation()}>
+            <View style={styles.handle} />
+
+            {menuDeck && (
+              <View style={styles.menuHeader}>
+                <Text style={styles.menuDeckTitle} numberOfLines={1}>
+                  {menuDeck.title}
+                </Text>
+                <Text style={styles.menuSubtitle}>
+                  {menuDeck.cards.length} {menuDeck.cards.length === 1 ? 'card' : 'cards'}
+                </Text>
+              </View>
+            )}
+
+            <View style={styles.menuItemsList}>
+              {/* Edit Deck */}
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => {
+                  if (!menuDeck) return;
+                  const d = menuDeck;
+                  setMenuDeck(null);
+                  openEditModal(d.id, d.title, d.description);
+                }}
+                activeOpacity={0.7}
+              >
+                <View
+                  style={[
+                    styles.menuItemIconWrap,
+                    { backgroundColor: colors.primarySoft },
+                  ]}
+                >
+                  <Ionicons
+                    name="create-outline"
+                    size={20}
+                    color={colors.primary}
+                  />
+                </View>
+                <Text style={styles.menuItemLabel}>Edit Deck</Text>
+              </TouchableOpacity>
+
+              {/* Delete Deck */}
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => {
+                  if (!menuDeck) return;
+                  const d = menuDeck;
+                  setMenuDeck(null);
+                  handleDeleteDeck(d.id, d.title);
+                }}
+                activeOpacity={0.7}
+              >
+                <View
+                  style={[
+                    styles.menuItemIconWrap,
+                    { backgroundColor: '#FEF2F2' },
+                  ]}
+                >
+                  <Ionicons
+                    name="trash-outline"
+                    size={20}
+                    color="#EF4444"
+                  />
+                </View>
+                <Text style={[styles.menuItemLabel, { color: '#EF4444' }]}>
+                  Delete Deck
+                </Text>
+              </TouchableOpacity>
+
+              {/* Add New Deck */}
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => {
+                  setMenuDeck(null);
+                  setCreateModalVisible(true);
+                }}
+                activeOpacity={0.7}
+              >
+                <View
+                  style={[
+                    styles.menuItemIconWrap,
+                    { backgroundColor: colors.primarySoft },
+                  ]}
+                >
+                  <Ionicons
+                    name="add-circle-outline"
+                    size={20}
+                    color={colors.primary}
+                  />
+                </View>
+                <Text style={styles.menuItemLabel}>Add New Deck</Text>
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity
+              style={styles.menuCancelBtn}
+              onPress={() => setMenuDeck(null)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.menuCancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
   );
 };
@@ -398,67 +485,65 @@ const createStyles = (
       fontWeight: '700',
     },
 
-    // ── DECK ROW ─────────────────────────────────────────────────────────────
+    // ── DECK CARD (MATCHING DESIGN) ─────────────────────────────────────────
 
-    row: {
+    card: {
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: colors.card,
-      borderRadius: radius.lg,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderRadius: 24,
+      borderWidth: 1,
       borderColor: colors.border,
-      padding: spacing.sm + 4,
-      marginBottom: spacing.sm + 2,
-      gap: spacing.sm,
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+      marginBottom: spacing.sm + 4,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#2E1065',
+          shadowOffset: { width: 0, height: 3 },
+          shadowOpacity: 0.06,
+          shadowRadius: 10,
+        },
+        android: {
+          elevation: 2,
+        },
+      }),
     },
 
-    tile: {
-      width: 44,
-      height: 44,
-      borderRadius: 22,
+    iconCircle: {
+      width: 48,
+      height: 48,
+      borderRadius: 24,
       alignItems: 'center',
       justifyContent: 'center',
     },
 
-    body: {
+    cardInfo: {
       flex: 1,
-      marginLeft: 2,
+      marginLeft: 14,
+      justifyContent: 'center',
     },
 
-    title: {
+    cardTitle: {
       fontSize: 16,
       fontWeight: '700',
       color: colors.heading,
+      letterSpacing: -0.2,
     },
 
-    meta: {
+    cardSubtitle: {
       fontSize: 13,
       color: colors.muted,
-      marginTop: 2,
+      marginTop: 3,
+      fontWeight: '500',
     },
 
-    iconBtn: {
-      width: 34,
-      height: 34,
-      borderRadius: 17,
-      borderWidth: 1,
-      borderColor: colors.border,
+    dotsBtn: {
+      width: 36,
+      height: 36,
       alignItems: 'center',
       justifyContent: 'center',
-    },
-
-    openBtn: {
-      width: 38,
-      height: 38,
-      borderRadius: 19,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginLeft: 2,
-    },
-
-    openBtnEmpty: {
-      borderWidth: 1,
-      borderColor: colors.border,
+      marginLeft: 4,
     },
 
     // ── EMPTY STATE ───────────────────────────────────────────────────────────
@@ -515,5 +600,95 @@ const createStyles = (
     modalButtons: {
       flexDirection: 'row',
       marginTop: 12,
+    },
+
+    // ── 3-DOTS OPTIONS SHEET ──────────────────────────────────────────────────
+
+    menuOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(30, 27, 75, 0.45)',
+      justifyContent: 'flex-end',
+    },
+
+    menuSheet: {
+      backgroundColor: colors.card,
+      borderTopLeftRadius: 28,
+      borderTopRightRadius: 28,
+      paddingHorizontal: 20,
+      paddingTop: 12,
+      paddingBottom: 24,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -4 },
+          shadowOpacity: 0.1,
+          shadowRadius: 16,
+        },
+        android: { elevation: 12 },
+      }),
+    },
+
+    menuHeader: {
+      paddingBottom: 14,
+      marginBottom: 10,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: colors.border,
+    },
+
+    menuDeckTitle: {
+      fontSize: 18,
+      fontWeight: '800',
+      color: colors.heading,
+      marginBottom: 2,
+    },
+
+    menuSubtitle: {
+      fontSize: 13,
+      color: colors.muted,
+      fontWeight: '500',
+    },
+
+    menuItemsList: {
+      gap: 8,
+      marginBottom: 14,
+    },
+
+    menuItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 12,
+      paddingHorizontal: 12,
+      borderRadius: radius.md,
+      backgroundColor: colors.bg,
+      gap: 14,
+    },
+
+    menuItemIconWrap: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    menuItemLabel: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: colors.heading,
+    },
+
+    menuCancelBtn: {
+      paddingVertical: 14,
+      borderRadius: radius.md,
+      backgroundColor: colors.border + '60',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 4,
+    },
+
+    menuCancelText: {
+      fontSize: 15,
+      fontWeight: '700',
+      color: colors.heading,
     },
   });
