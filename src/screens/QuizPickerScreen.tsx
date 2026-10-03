@@ -15,12 +15,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { StyledTextInput } from '../components/StyledTextInput';
 import { useTheme } from '../context/ThemeContext';
 import { useStorage, Quiz } from '../context/StorageContext';
-import { radius, spacing } from '../theme';
+import { radius, spacing, accents } from '../theme';
 
 const ICONS = [
   'calculator',
@@ -106,9 +107,23 @@ export const QuizPickerScreen = () => {
       },
     ]);
 
-  // ── Play / Navigate ───────────────────────────────────────────────────────────
-  const handleRowPress = () => {
-    Alert.alert('Under Construction', 'This feature is coming soon!');
+  // ── Start Quiz ───────────────────────────────────────────────────────────────
+  const handleStartQuiz = (quiz: Quiz) => {
+    if (quiz.questions.length === 0) {
+      Alert.alert(
+        'No Questions Yet',
+        'This quiz does not have any questions. Would you like to add some now?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Add Questions',
+            onPress: () => navigation.navigate('QuizEditor', { quizId: quiz.id }),
+          },
+        ],
+      );
+      return;
+    }
+    navigation.navigate('Quiz', { quizId: quiz.id });
   };
 
   const countLabel = `${quizzes.length} ${
@@ -120,47 +135,76 @@ export const QuizPickerScreen = () => {
       <FlatList
         data={quizzes}
         keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.list,
-          { paddingBottom: insets.bottom + 110 },
+          {
+            paddingTop: insets.top + 12,
+            paddingBottom: insets.bottom + 110,
+          },
         ]}
-        showsVerticalScrollIndicator={false}
-
         // ── HEADER ─────────────────────────────────────────────────────────────
         ListHeaderComponent={
-          <View style={styles.headerRow}>
-            <View>
-              <Text style={styles.section}>Your quizzes</Text>
-              <Text style={styles.subtitle}>{countLabel}</Text>
+          <View style={styles.headerContainer}>
+            {/* Header Title */}
+            <View style={styles.headerRow}>
+              <View>
+                <Text style={styles.sectionTitle}>Your Quizzes</Text>
+                <Text style={styles.subtitle}>{countLabel}</Text>
+              </View>
             </View>
 
-            <TouchableOpacity
-              style={styles.addBtn}
-              onPress={() => setCreateModalVisible(true)}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="add" size={20} color="#FFFFFF" />
-              <Text style={styles.addBtnText}>New quiz</Text>
-            </TouchableOpacity>
+            {/* Hero Banner Card */}
+            <View style={styles.banner}>
+              <View style={styles.bannerContent}>
+                <Text style={styles.bannerLabel}>ACTIVE RECALL</Text>
+                <Text style={styles.bannerTitle}>Test Your Knowledge</Text>
+                <Text style={styles.bannerText}>
+                  Challenge yourself with practice questions to measure your mastery
+                  and reinforce concepts.
+                </Text>
+              </View>
+            </View>
+
+            {/* Section Heading & + New Quiz Button */}
+            <View style={styles.sectionHeader}>
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <Text style={styles.sectionHeadingText}>All Quizzes</Text>
+                <Text style={styles.sectionSubtitle}>
+                  Choose a quiz to start testing
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                style={styles.addBtn}
+                onPress={() => setCreateModalVisible(true)}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="add" size={18} color="#FFFFFF" />
+                <Text style={styles.addBtnText}>New quiz</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         }
-
-        // ── QUIZ ROW ───────────────────────────────────────────────────────────
+        // ── QUIZ CARD ITEM ─────────────────────────────────────────────────────
         renderItem={({ item, index }) => {
+          const accent = accents[index % accents.length];
           const count = item.questions.length;
 
           return (
             <TouchableOpacity
               style={styles.card}
               activeOpacity={0.7}
-              onPress={handleRowPress}
+              onPress={() => handleStartQuiz(item)}
             >
               {/* Left: Icon Circle */}
-              <View style={styles.iconCircle}>
+              <View
+                style={[styles.iconCircle, { backgroundColor: accent + '22' }]}
+              >
                 <Ionicons
                   name={ICONS[index % ICONS.length]}
                   size={24}
-                  color={colors.primary}
+                  color={accent}
                 />
               </View>
 
@@ -169,23 +213,35 @@ export const QuizPickerScreen = () => {
                 <Text style={styles.cardTitle} numberOfLines={1}>
                   {item.title}
                 </Text>
-                <Text style={styles.cardSubtitle}>
-                  {count} {count === 1 ? 'card' : 'cards'}
-                </Text>
+                {!!item.description && (
+                  <Text style={styles.cardDesc} numberOfLines={1}>
+                    {item.description}
+                  </Text>
+                )}
+                <View style={styles.badgeRow}>
+                  <View
+                    style={[
+                      styles.countBadge,
+                      { backgroundColor: accent + '18' },
+                    ]}
+                  >
+                    <Text style={[styles.countBadgeText, { color: accent }]}>
+                      {count} {count === 1 ? 'question' : 'questions'}
+                    </Text>
+                  </View>
+                </View>
               </View>
 
-              {/* Right Side: Start Now + Start Quiz pill button & 3-dots */}
+              {/* Right Side: Start Quiz Button & 3-Dots */}
               <View style={styles.rightSection}>
-                <View style={styles.startActionCol}>
-                  <Text style={styles.startNowLabel}>Start Now</Text>
-                  <TouchableOpacity
-                    style={styles.startQuizBtn}
-                    onPress={handleRowPress}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.startQuizBtnText}>Start Quiz</Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={[styles.startQuizBtn, { backgroundColor: colors.primary }]}
+                  onPress={() => handleStartQuiz(item)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.startQuizBtnText}>Start Quiz</Text>
+                  <Ionicons name="play" size={12} color="#FFFFFF" />
+                </TouchableOpacity>
 
                 {/* 3-Dots Menu Button */}
                 <TouchableOpacity
@@ -196,7 +252,7 @@ export const QuizPickerScreen = () => {
                 >
                   <Ionicons
                     name="ellipsis-vertical"
-                    size={20}
+                    size={22}
                     color={colors.muted}
                   />
                 </TouchableOpacity>
@@ -204,20 +260,28 @@ export const QuizPickerScreen = () => {
             </TouchableOpacity>
           );
         }}
-
         // ── EMPTY STATE ────────────────────────────────────────────────────────
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Ionicons
-              name="document-text-outline"
-              size={48}
-              color={colors.primary}
-              style={{ marginBottom: spacing.sm }}
-            />
+            <View style={styles.emptyIcon}>
+              <Ionicons
+                name="document-text-outline"
+                size={32}
+                color={colors.primary}
+              />
+            </View>
             <Text style={styles.emptyTitle}>No quizzes yet</Text>
             <Text style={styles.emptyText}>
-              Tap &quot;New quiz&quot; to make your first one.
+              Create your first quiz to practice multiple-choice active recall.
             </Text>
+            <TouchableOpacity
+              style={styles.emptyButton}
+              onPress={() => setCreateModalVisible(true)}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="add" size={18} color="#FFFFFF" />
+              <Text style={styles.emptyButtonText}>Create a quiz</Text>
+            </TouchableOpacity>
           </View>
         }
       />
@@ -354,7 +418,10 @@ export const QuizPickerScreen = () => {
           style={styles.menuOverlay}
           onPress={() => setMenuQuiz(null)}
         >
-          <Pressable style={styles.menuSheet} onPress={(e) => e.stopPropagation()}>
+          <Pressable
+            style={styles.menuSheet}
+            onPress={(e) => e.stopPropagation()}
+          >
             <View style={styles.handle} />
 
             {menuQuiz && (
@@ -364,12 +431,38 @@ export const QuizPickerScreen = () => {
                 </Text>
                 <Text style={styles.menuSubtitle}>
                   {menuQuiz.questions.length}{' '}
-                  {menuQuiz.questions.length === 1 ? 'card' : 'cards'}
+                  {menuQuiz.questions.length === 1 ? 'question' : 'questions'}
                 </Text>
               </View>
             )}
 
             <View style={styles.menuItemsList}>
+              {/* Start Quiz */}
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => {
+                  if (!menuQuiz) return;
+                  const q = menuQuiz;
+                  setMenuQuiz(null);
+                  handleStartQuiz(q);
+                }}
+                activeOpacity={0.7}
+              >
+                <View
+                  style={[
+                    styles.menuItemIconWrap,
+                    { backgroundColor: colors.primarySoft },
+                  ]}
+                >
+                  <Ionicons
+                    name="play-outline"
+                    size={20}
+                    color={colors.primary}
+                  />
+                </View>
+                <Text style={styles.menuItemLabel}>Start Quiz</Text>
+              </TouchableOpacity>
+
               {/* Edit Quiz */}
               <TouchableOpacity
                 style={styles.menuItem}
@@ -393,7 +486,33 @@ export const QuizPickerScreen = () => {
                     color={colors.primary}
                   />
                 </View>
-                <Text style={styles.menuItemLabel}>Edit Quiz</Text>
+                <Text style={styles.menuItemLabel}>Edit Details</Text>
+              </TouchableOpacity>
+
+              {/* Edit Questions */}
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => {
+                  if (!menuQuiz) return;
+                  const q = menuQuiz;
+                  setMenuQuiz(null);
+                  navigation.navigate('QuizEditor', { quizId: q.id });
+                }}
+                activeOpacity={0.7}
+              >
+                <View
+                  style={[
+                    styles.menuItemIconWrap,
+                    { backgroundColor: colors.primarySoft },
+                  ]}
+                >
+                  <Ionicons
+                    name="list-outline"
+                    size={20}
+                    color={colors.primary}
+                  />
+                </View>
+                <Text style={styles.menuItemLabel}>Edit Questions</Text>
               </TouchableOpacity>
 
               {/* Delete Quiz */}
@@ -423,32 +542,6 @@ export const QuizPickerScreen = () => {
                   Delete Quiz
                 </Text>
               </TouchableOpacity>
-
-              {/* Add Question */}
-              <TouchableOpacity
-                style={styles.menuItem}
-                onPress={() => {
-                  if (!menuQuiz) return;
-                  const q = menuQuiz;
-                  setMenuQuiz(null);
-                  navigation.navigate('QuizEditor', { quizId: q.id });
-                }}
-                activeOpacity={0.7}
-              >
-                <View
-                  style={[
-                    styles.menuItemIconWrap,
-                    { backgroundColor: colors.primarySoft },
-                  ]}
-                >
-                  <Ionicons
-                    name="add-circle-outline"
-                    size={20}
-                    color={colors.primary}
-                  />
-                </View>
-                <Text style={styles.menuItemLabel}>Add Question</Text>
-              </TouchableOpacity>
             </View>
 
             <TouchableOpacity
@@ -467,9 +560,7 @@ export const QuizPickerScreen = () => {
 
 export default QuizPickerScreen;
 
-const createStyles = (
-  colors: ReturnType<typeof useTheme>['colors'],
-) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -477,24 +568,27 @@ const createStyles = (
     },
 
     list: {
-      padding: spacing.md,
+      paddingHorizontal: spacing.md,
+    },
+
+    headerContainer: {
+      marginBottom: spacing.sm,
     },
 
     // ── HEADER ──────────────────────────────────────────────────────────────────
-
     headerRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: spacing.md,
+      marginBottom: 16,
       paddingHorizontal: 4,
     },
 
-    section: {
-      fontSize: 24,
+    sectionTitle: {
+      fontSize: 27,
       fontWeight: '800',
       color: colors.heading,
-      letterSpacing: -0.3,
+      letterSpacing: -0.4,
     },
 
     subtitle: {
@@ -511,18 +605,76 @@ const createStyles = (
       backgroundColor: colors.primary,
       paddingLeft: 12,
       paddingRight: 16,
-      paddingVertical: 10,
+      paddingVertical: 9,
       borderRadius: radius.pill,
     },
 
     addBtnText: {
       color: '#FFFFFF',
-      fontSize: 14,
+      fontSize: 13,
       fontWeight: '700',
     },
 
-    // ── QUIZ CARD (MATCHING DESIGN) ─────────────────────────────────────────
+    // ── HERO BANNER CARD ────────────────────────────────────────────────────
+    banner: {
+      position: 'relative',
+      overflow: 'hidden',
+      backgroundColor: colors.primary,
+      borderRadius: 24,
+      padding: 20,
+      minHeight: 160,
+      justifyContent: 'center',
+      marginBottom: 16,
+    },
 
+    bannerContent: {
+      maxWidth: '90%',
+    },
+
+    bannerLabel: {
+      fontSize: 10,
+      fontWeight: '800',
+      color: '#DDD8FF',
+      letterSpacing: 1.3,
+      marginBottom: 6,
+    },
+
+    bannerTitle: {
+      fontSize: 22,
+      fontWeight: '800',
+      color: '#FFFFFF',
+      marginBottom: 7,
+    },
+
+    bannerText: {
+      fontSize: 13,
+      color: '#E4E0FF',
+      lineHeight: 19,
+    },
+
+    // ── SECTION HEADER ──────────────────────────────────────────────────────
+    sectionHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginTop: 6,
+      marginBottom: 14,
+      paddingHorizontal: 4,
+    },
+
+    sectionHeadingText: {
+      fontSize: 20,
+      fontWeight: '800',
+      color: colors.heading,
+    },
+
+    sectionSubtitle: {
+      fontSize: 12,
+      color: colors.muted,
+      marginTop: 2,
+    },
+
+    // ── QUIZ CARD (MATCHING DESIGN) ─────────────────────────────────────────
     card: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -552,7 +704,6 @@ const createStyles = (
       borderRadius: 24,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: colors.primarySoft,
     },
 
     cardInfo: {
@@ -569,38 +720,44 @@ const createStyles = (
       letterSpacing: -0.2,
     },
 
-    cardSubtitle: {
-      fontSize: 13,
+    cardDesc: {
+      fontSize: 12,
       color: colors.muted,
-      marginTop: 3,
-      fontWeight: '500',
+      marginTop: 2,
+    },
+
+    badgeRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 4,
+      gap: 6,
+    },
+
+    countBadge: {
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      borderRadius: radius.pill,
+    },
+
+    countBadgeText: {
+      fontSize: 11,
+      fontWeight: '700',
     },
 
     rightSection: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 8,
+      gap: 6,
       marginLeft: 4,
     },
 
-    startActionCol: {
-      alignItems: 'center',
-    },
-
-    startNowLabel: {
-      fontSize: 14,
-      fontWeight: '700',
-      color: colors.heading,
-      marginBottom: 4,
-    },
-
     startQuizBtn: {
-      backgroundColor: colors.primary,
-      paddingHorizontal: 14,
-      paddingVertical: 6,
-      borderRadius: radius.pill,
+      flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center',
+      gap: 5,
+      paddingHorizontal: 12,
+      paddingVertical: 7,
+      borderRadius: radius.pill,
     },
 
     startQuizBtnText: {
@@ -617,11 +774,26 @@ const createStyles = (
       marginLeft: 2,
     },
 
-    // ── EMPTY STATE ──────────────────────────────────────────────────────────────
-
+    // ── EMPTY STATE ─────────────────────────────────────────────────────────
     empty: {
       alignItems: 'center',
-      marginTop: 40,
+      paddingVertical: 36,
+      paddingHorizontal: 20,
+      backgroundColor: colors.card,
+      borderRadius: 24,
+      borderWidth: 1,
+      borderColor: colors.border,
+      marginTop: 10,
+    },
+
+    emptyIcon: {
+      width: 64,
+      height: 64,
+      borderRadius: 32,
+      backgroundColor: colors.primary + '16',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 14,
     },
 
     emptyTitle: {
@@ -632,12 +804,31 @@ const createStyles = (
 
     emptyText: {
       color: colors.muted,
-      marginTop: 4,
+      fontSize: 13,
+      lineHeight: 19,
+      marginTop: 5,
       textAlign: 'center',
+      maxWidth: 280,
+    },
+
+    emptyButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 5,
+      backgroundColor: colors.primary,
+      paddingHorizontal: 18,
+      paddingVertical: 11,
+      borderRadius: radius.pill,
+      marginTop: 18,
+    },
+
+    emptyButtonText: {
+      color: '#FFFFFF',
+      fontSize: 13,
+      fontWeight: '700',
     },
 
     // ── BOTTOM SHEET ─────────────────────────────────────────────────────────────
-
     modalOverlay: {
       flex: 1,
       backgroundColor: 'rgba(30,27,75,0.5)',
@@ -692,7 +883,6 @@ const createStyles = (
     },
 
     // ── 3-DOTS OPTIONS SHEET ──────────────────────────────────────────────────
-
     menuOverlay: {
       flex: 1,
       backgroundColor: 'rgba(30, 27, 75, 0.45)',

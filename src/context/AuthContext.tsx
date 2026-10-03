@@ -42,6 +42,7 @@ interface AuthContextType {
   signUp: (name: string, email: string, password: string) => Promise<string | null>;
   logIn: (email: string, password: string) => Promise<string | null>;
   logOut: () => Promise<void>;
+  updateUser: (name: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -124,9 +125,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(null);
   }, []);
 
+  const updateUser = useCallback(async (name: string) => {
+    if (!user) return;
+    const cleanName = name.trim();
+    if (!cleanName) return;
+    try {
+      const users = await loadUsers();
+      const updatedUsers = users.map((u) => (u.id === user.id ? { ...u, name: cleanName } : u));
+      await AsyncStorage.setItem(USERS_KEY, JSON.stringify(updatedUsers));
+      setUser((prev) => (prev ? { ...prev, name: cleanName } : null));
+    } catch (e) {
+      console.warn('updateUser failed', e);
+    }
+  }, [user]);
+
   const value = useMemo(
-    () => ({ user, isLoading, signUp, logIn, logOut }),
-    [user, isLoading, signUp, logIn, logOut],
+    () => ({ user, isLoading, signUp, logIn, logOut, updateUser }),
+    [user, isLoading, signUp, logIn, logOut, updateUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

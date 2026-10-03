@@ -12,8 +12,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { StyledTextInput } from '../components/StyledTextInput';
 import { useTheme } from '../context/ThemeContext';
@@ -30,6 +33,8 @@ const ICONS = [
 ] as const;
 
 export const DecksScreen = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -101,7 +106,9 @@ export const DecksScreen = () => {
     ]);
   };
 
-  const countLabel = `${decks.length} ${decks.length === 1 ? 'deck' : 'decks'}`;
+  const countLabel = `${decks.length} ${
+    decks.length === 1 ? 'deck' : 'decks'
+  }`;
 
   return (
     <View style={styles.container}>
@@ -111,29 +118,55 @@ export const DecksScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.list,
-          { paddingBottom: insets.bottom + 110 },
+          {
+            paddingTop: insets.top + 12,
+            paddingBottom: insets.bottom + 110,
+          },
         ]}
-
         // ── HEADER ──────────────────────────────────────────────────────────
         ListHeaderComponent={
-          <View style={styles.headerRow}>
-            <View>
-              <Text style={styles.section}>Your decks</Text>
-              <Text style={styles.subtitle}>{countLabel}</Text>
+          <View style={styles.headerContainer}>
+            {/* Header Title */}
+            <View style={styles.headerRow}>
+              <View>
+                <Text style={styles.sectionTitle}>Your Decks</Text>
+                <Text style={styles.subtitle}>{countLabel}</Text>
+              </View>
             </View>
 
-            <TouchableOpacity
-              style={styles.addBtn}
-              onPress={() => setCreateModalVisible(true)}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="add" size={20} color="#FFFFFF" />
-              <Text style={styles.addBtnText}>New deck</Text>
-            </TouchableOpacity>
+            {/* Hero Banner Card */}
+            <View style={styles.banner}>
+              <View style={styles.bannerContent}>
+                <Text style={styles.bannerLabel}>FLASHCARD DECKS</Text>
+                <Text style={styles.bannerTitle}>Study & Memorize</Text>
+                <Text style={styles.bannerText}>
+                  Organize your flashcards into decks, test your knowledge, and
+                  track your learning progress.
+                </Text>
+              </View>
+            </View>
+
+            {/* Section Heading & + New Deck Button */}
+            <View style={styles.sectionHeader}>
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <Text style={styles.sectionHeadingText}>All Decks</Text>
+                <Text style={styles.sectionSubtitle}>
+                  Choose a deck to study
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                style={styles.addBtn}
+                onPress={() => setCreateModalVisible(true)}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="add" size={18} color="#FFFFFF" />
+                <Text style={styles.addBtnText}>New deck</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         }
-
-        // ── DECK ROW ─────────────────────────────────────────────────────────
+        // ── DECK CARD ITEM ───────────────────────────────────────────────────
         renderItem={({ item, index }) => {
           const accent = accents[index % accents.length];
           const count = item.cards.length;
@@ -142,12 +175,7 @@ export const DecksScreen = () => {
             <TouchableOpacity
               style={styles.card}
               activeOpacity={0.7}
-              onPress={() =>
-                Alert.alert(
-                  'Under Construction',
-                  'This feature is coming soon!',
-                )
-              }
+              onPress={() => navigation.navigate('Deck', { deckId: item.id })}
             >
               {/* Icon Circle */}
               <View
@@ -165,41 +193,77 @@ export const DecksScreen = () => {
                 <Text style={styles.cardTitle} numberOfLines={1}>
                   {item.title}
                 </Text>
-                <Text style={styles.cardSubtitle}>
-                  {count} {count === 1 ? 'card' : 'cards'}
-                </Text>
+                {!!item.description && (
+                  <Text style={styles.cardDesc} numberOfLines={1}>
+                    {item.description}
+                  </Text>
+                )}
+                <View style={styles.badgeRow}>
+                  <View
+                    style={[
+                      styles.countBadge,
+                      { backgroundColor: accent + '18' },
+                    ]}
+                  >
+                    <Text style={[styles.countBadgeText, { color: accent }]}>
+                      {count} {count === 1 ? 'card' : 'cards'}
+                    </Text>
+                  </View>
+                </View>
               </View>
 
-              {/* 3-Dots Menu Button */}
-              <TouchableOpacity
-                style={styles.dotsBtn}
-                onPress={() => setMenuDeck(item)}
-                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-                accessibilityLabel={`Options for ${item.title}`}
-              >
-                <Ionicons
-                  name="ellipsis-vertical"
-                  size={25}
-                  color={colors.muted}
-                />
-              </TouchableOpacity>
+              {/* Right Side: Study Button & 3-Dots */}
+              <View style={styles.rightSection}>
+                <TouchableOpacity
+                  style={[styles.studyBtn, { backgroundColor: colors.primary }]}
+                  onPress={() =>
+                    navigation.navigate('Deck', { deckId: item.id })
+                  }
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.studyBtnText}>Study</Text>
+                  <Ionicons name="chevron-forward" size={14} color="#FFFFFF" />
+                </TouchableOpacity>
+
+                {/* 3-Dots Menu Button */}
+                <TouchableOpacity
+                  style={styles.dotsBtn}
+                  onPress={() => setMenuDeck(item)}
+                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                  accessibilityLabel={`Options for ${item.title}`}
+                >
+                  <Ionicons
+                    name="ellipsis-vertical"
+                    size={22}
+                    color={colors.muted}
+                  />
+                </TouchableOpacity>
+              </View>
             </TouchableOpacity>
           );
         }}
-
         // ── EMPTY STATE ───────────────────────────────────────────────────────
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Ionicons
-              name="library-outline"
-              size={48}
-              color={colors.muted}
-              style={{ marginBottom: spacing.sm }}
-            />
+            <View style={styles.emptyIcon}>
+              <Ionicons
+                name="library-outline"
+                size={32}
+                color={colors.primary}
+              />
+            </View>
             <Text style={styles.emptyTitle}>No decks yet</Text>
             <Text style={styles.emptyText}>
-              Tap &quot;New deck&quot; to create your first study set.
+              Create your first study deck to organize and master flashcards.
             </Text>
+            <TouchableOpacity
+              style={styles.emptyButton}
+              onPress={() => setCreateModalVisible(true)}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="add" size={18} color="#FFFFFF" />
+              <Text style={styles.emptyButtonText}>Create a deck</Text>
+            </TouchableOpacity>
           </View>
         }
       />
@@ -317,7 +381,10 @@ export const DecksScreen = () => {
           style={styles.menuOverlay}
           onPress={() => setMenuDeck(null)}
         >
-          <Pressable style={styles.menuSheet} onPress={(e) => e.stopPropagation()}>
+          <Pressable
+            style={styles.menuSheet}
+            onPress={(e) => e.stopPropagation()}
+          >
             <View style={styles.handle} />
 
             {menuDeck && (
@@ -326,12 +393,39 @@ export const DecksScreen = () => {
                   {menuDeck.title}
                 </Text>
                 <Text style={styles.menuSubtitle}>
-                  {menuDeck.cards.length} {menuDeck.cards.length === 1 ? 'card' : 'cards'}
+                  {menuDeck.cards.length}{' '}
+                  {menuDeck.cards.length === 1 ? 'card' : 'cards'}
                 </Text>
               </View>
             )}
 
             <View style={styles.menuItemsList}>
+              {/* Study Deck */}
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => {
+                  if (!menuDeck) return;
+                  const d = menuDeck;
+                  setMenuDeck(null);
+                  navigation.navigate('Deck', { deckId: d.id });
+                }}
+                activeOpacity={0.7}
+              >
+                <View
+                  style={[
+                    styles.menuItemIconWrap,
+                    { backgroundColor: colors.primarySoft },
+                  ]}
+                >
+                  <Ionicons
+                    name="play-outline"
+                    size={20}
+                    color={colors.primary}
+                  />
+                </View>
+                <Text style={styles.menuItemLabel}>Study Deck</Text>
+              </TouchableOpacity>
+
               {/* Edit Deck */}
               <TouchableOpacity
                 style={styles.menuItem}
@@ -389,7 +483,10 @@ export const DecksScreen = () => {
               {/* Add New Deck */}
               <TouchableOpacity
                 style={styles.menuItem}
-                onPress={() => {alert('This feature is coming soon!')}}
+                onPress={() => {
+                  setMenuDeck(null);
+                  setCreateModalVisible(true);
+                }}
                 activeOpacity={0.7}
               >
                 <View
@@ -424,9 +521,7 @@ export const DecksScreen = () => {
 
 export default DecksScreen;
 
-const createStyles = (
-  colors: ReturnType<typeof useTheme>['colors'],
-) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -434,24 +529,27 @@ const createStyles = (
     },
 
     list: {
-      padding: spacing.md,
+      paddingHorizontal: spacing.md,
+    },
+
+    headerContainer: {
+      marginBottom: spacing.sm,
     },
 
     // ── HEADER ──────────────────────────────────────────────────────────────
-
     headerRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: spacing.md,
+      marginBottom: 16,
       paddingHorizontal: 4,
     },
 
-    section: {
-      fontSize: 24,
+    sectionTitle: {
+      fontSize: 27,
       fontWeight: '800',
       color: colors.heading,
-      letterSpacing: -0.3,
+      letterSpacing: -0.4,
     },
 
     subtitle: {
@@ -468,18 +566,76 @@ const createStyles = (
       backgroundColor: colors.primary,
       paddingLeft: 12,
       paddingRight: 16,
-      paddingVertical: 10,
+      paddingVertical: 9,
       borderRadius: radius.pill,
     },
 
     addBtnText: {
       color: '#FFFFFF',
-      fontSize: 14,
+      fontSize: 13,
       fontWeight: '700',
     },
 
-    // ── DECK CARD (MATCHING DESIGN) ─────────────────────────────────────────
+    // ── HERO BANNER CARD ────────────────────────────────────────────────────
+    banner: {
+      position: 'relative',
+      overflow: 'hidden',
+      backgroundColor: colors.primary,
+      borderRadius: 24,
+      padding: 20,
+      minHeight: 160,
+      justifyContent: 'center',
+      marginBottom: 16,
+    },
 
+    bannerContent: {
+      maxWidth: '90%',
+    },
+
+    bannerLabel: {
+      fontSize: 10,
+      fontWeight: '800',
+      color: '#DDD8FF',
+      letterSpacing: 1.3,
+      marginBottom: 6,
+    },
+
+    bannerTitle: {
+      fontSize: 22,
+      fontWeight: '800',
+      color: '#FFFFFF',
+      marginBottom: 7,
+    },
+
+    bannerText: {
+      fontSize: 13,
+      color: '#E4E0FF',
+      lineHeight: 19,
+    },
+
+    // ── SECTION HEADER ──────────────────────────────────────────────────────
+    sectionHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginTop: 6,
+      marginBottom: 14,
+      paddingHorizontal: 4,
+    },
+
+    sectionHeadingText: {
+      fontSize: 20,
+      fontWeight: '800',
+      color: colors.heading,
+    },
+
+    sectionSubtitle: {
+      fontSize: 12,
+      color: colors.muted,
+      marginTop: 2,
+    },
+
+    // ── DECK CARD ───────────────────────────────────────────────────────────
     card: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -524,26 +680,79 @@ const createStyles = (
       letterSpacing: -0.2,
     },
 
-    cardSubtitle: {
-      fontSize: 13,
+    cardDesc: {
+      fontSize: 12,
       color: colors.muted,
-      marginTop: 3,
-      fontWeight: '500',
+      marginTop: 2,
+    },
+
+    badgeRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 4,
+      gap: 6,
+    },
+
+    countBadge: {
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      borderRadius: radius.pill,
+    },
+
+    countBadgeText: {
+      fontSize: 11,
+      fontWeight: '700',
+    },
+
+    rightSection: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+    },
+
+    studyBtn: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 3,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderRadius: radius.pill,
+    },
+
+    studyBtnText: {
+      color: '#FFFFFF',
+      fontSize: 12,
+      fontWeight: '700',
     },
 
     dotsBtn: {
-      width: 36,
-      height: 36,
+      width: 34,
+      height: 34,
       alignItems: 'center',
       justifyContent: 'center',
-      marginLeft: 4,
+      marginLeft: 2,
     },
 
-    // ── EMPTY STATE ───────────────────────────────────────────────────────────
-
+    // ── EMPTY STATE ─────────────────────────────────────────────────────────
     empty: {
       alignItems: 'center',
-      marginTop: 40,
+      paddingVertical: 36,
+      paddingHorizontal: 20,
+      backgroundColor: colors.card,
+      borderRadius: 24,
+      borderWidth: 1,
+      borderColor: colors.border,
+      marginTop: 10,
+    },
+
+    emptyIcon: {
+      width: 64,
+      height: 64,
+      borderRadius: 32,
+      backgroundColor: colors.primary + '16',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 14,
     },
 
     emptyTitle: {
@@ -554,12 +763,31 @@ const createStyles = (
 
     emptyText: {
       color: colors.muted,
-      marginTop: 4,
+      fontSize: 13,
+      lineHeight: 19,
+      marginTop: 5,
       textAlign: 'center',
+      maxWidth: 280,
     },
 
-    // ── BOTTOM SHEET ──────────────────────────────────────────────────────────
+    emptyButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 5,
+      backgroundColor: colors.primary,
+      paddingHorizontal: 18,
+      paddingVertical: 11,
+      borderRadius: radius.pill,
+      marginTop: 18,
+    },
 
+    emptyButtonText: {
+      color: '#FFFFFF',
+      fontSize: 13,
+      fontWeight: '700',
+    },
+
+    // ── BOTTOM SHEET ────────────────────────────────────────────────────────
     modalOverlay: {
       flex: 1,
       backgroundColor: 'rgba(30,27,75,0.5)',
@@ -595,8 +823,7 @@ const createStyles = (
       marginTop: 12,
     },
 
-    // ── 3-DOTS OPTIONS SHEET ──────────────────────────────────────────────────
-
+    // ── 3-DOTS OPTIONS SHEET ────────────────────────────────────────────────
     menuOverlay: {
       flex: 1,
       backgroundColor: 'rgba(30, 27, 75, 0.45)',

@@ -130,9 +130,9 @@ export const MainTabs = () => {
       }}
     >
       <Tab.Screen name="HomeTab" component={HomeScreen} options={{ title: 'Home', headerShown: false }} />
-      <Tab.Screen name="DecksTab" component={DecksScreen} options={{ title: 'Decks', headerTitle: 'My Decks' }} />
-      <Tab.Screen name="QuizTab" component={QuizPickerScreen} options={{ title: 'Quiz', headerTitle: 'Choose a Quiz' }} />
-      <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ title: 'Profile', headerTitle: 'Profile' }} />
+      <Tab.Screen name="DecksTab" component={DecksScreen} options={{ title: 'Decks', headerShown: false }} />
+      <Tab.Screen name="QuizTab" component={QuizPickerScreen} options={{ title: 'Quiz', headerShown: false }} />
+      <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ title: 'Profile', headerShown: false }} />
     </Tab.Navigator>
   );
 };

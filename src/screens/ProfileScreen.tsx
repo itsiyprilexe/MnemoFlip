@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -6,16 +6,25 @@ import {
   StyleSheet,
   Alert,
   TouchableOpacity,
+  Platform,
+  Modal,
+  KeyboardAvoidingView,
+  Pressable,
+  TextInput,
+  Image,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { RootStackParamList } from '../types';
+import { PrimaryButton } from '../components/PrimaryButton';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-
-
-const pctOf = (score: number, total: number) =>
-  total > 0 ? Math.round((score / total) * 100) : 0;
+import { useStorage } from '../context/StorageContext';
+import { radius, spacing, scoreColor, scoreSoft } from '../theme';
 
 const initialsOf = (name?: string) => {
   const parts = (name ?? '')
@@ -31,17 +40,149 @@ const initialsOf = (name?: string) => {
     .join('');
 };
 
+const capitalizeWords = (str?: string) => {
+  if (!str) return '';
+  return str
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};
+
 export const ProfileScreen = () => {
-  const { user, logOut } = useAuth();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { user, logOut, updateUser } = useAuth();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
-  // const [tab, setTab] = useState<TabKey>('activity');
+  const { highScores } = useStorage();
 
-  const styles = useMemo(
-    () => createStyles(colors),
-    [colors]
-  );
+  // Photo state
+  const [photoUri, setPhotoUri] = useState<string | null>(null);
+
+  // Bio states
+  const [bio, setBio] = useState('');
+  const [editBio, setEditBio] = useState('');
+  const [bioModalVisible, setBioModalVisible] = useState(false);
+
+  // Edit Profile / Photo states
+  const [profileModalVisible, setProfileModalVisible] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [tempPhotoUri, setTempPhotoUri] = useState<string | null>(null);
+
+  // Load persisted bio & photo on startup or user change
+  useEffect(() => {
+    (async () => {
+      try {
+        const [storedBio, storedPhoto] = await Promise.all([
+          AsyncStorage.getItem(`@flashcards/bio_${user?.id || 'default'}`),
+          AsyncStorage.getItem(`@flashcards/photo_${user?.id || 'default'}`),
+        ]);
+        if (storedBio !== null) {
+          setBio(storedBio);
+        }
+        if (storedPhoto !== null) {
+          setPhotoUri(storedPhoto);
+        }
+      } catch (e) {
+        console.warn('Failed to load profile data', e);
+      }
+    })();
+  }, [user?.id]);
+
+  // Open Edit Profile modal (edits photo & name)
+  const openEditProfileModal = () => {
+    setEditName(user?.name ? capitalizeWords(user.name) : '');
+    setTempPhotoUri(photoUri);
+    setProfileModalVisible(true);
+  };
+
+  // Change Photo button inside modal shows "under construction"
+  const handlePickPhoto = () => {
+    Alert.alert(
+      'Under Construction',
+      'This feature is currently under construction.',
+    );
+  };
+
+  const handleRemovePhoto = () => {
+    setTempPhotoUri(null);
+  };
+
+  const handleSaveProfile = async () => {
+    try {
+      const cleanName = editName.trim();
+      if (!cleanName) {
+        Alert.alert('Name required', 'Please enter your name.');
+        return;
+      }
+
+      await updateUser(cleanName);
+
+      if (tempPhotoUri) {
+        await AsyncStorage.setItem(
+          `@flashcards/photo_${user?.id || 'default'}`,
+          tempPhotoUri,
+        );
+        setPhotoUri(tempPhotoUri);
+      } else {
+        await AsyncStorage.removeItem(
+          `@flashcards/photo_${user?.id || 'default'}`,
+        );
+        setPhotoUri(null);
+      }
+
+      setProfileModalVisible(false);
+    } catch (e) {
+      console.warn('handleSaveProfile failed', e);
+      Alert.alert('Error', 'Failed to save profile changes.');
+    }
+  };
+
+  const openEditBioModal = () => {
+    setEditBio(bio);
+    setBioModalVisible(true);
+  };
+
+  const handleSaveBio = async () => {
+    try {
+      const cleanBio = editBio.trim();
+      await AsyncStorage.setItem(
+        `@flashcards/bio_${user?.id || 'default'}`,
+        cleanBio,
+      );
+      setBio(cleanBio);
+      setBioModalVisible(false);
+    } catch {
+      Alert.alert('Error', 'Failed to save bio. Please try again.');
+    }
+  };
+
+  // Account button shows "under construction"
+  const handleAccountPress = () => {
+    Alert.alert(
+      'Under Construction',
+      'This feature is currently under construction.',
+    );
+  };
+
+  // Privacy button shows "under construction"
+  const handlePrivacyPress = () => {
+    Alert.alert(
+      'Under Construction',
+      'This feature is currently under construction.',
+    );
+  };
+
+  // Help and feedback button shows "under construction"
+  const handleHelpPress = () => {
+    Alert.alert(
+      'Under Construction',
+      'This feature is currently under construction.',
+    );
+  };
 
   const confirmLogout = () => {
     Alert.alert('Log out', 'Are you sure you want to log out?', [
@@ -50,423 +191,954 @@ export const ProfileScreen = () => {
     ]);
   };
 
-
-
   return (
     <View style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingTop: insets.top - 30,
-          paddingBottom: insets.bottom + 110,
-        }}
+        contentContainerStyle={[
+          styles.scrollContent,
+          {
+            paddingTop: insets.top + 16,
+            paddingBottom: insets.bottom + 110,
+          },
+        ]}
       >
-        {/* USER PROFILE */}
+        {/* =========================
+            PROFILE HEADER (CLEAN, NO CARD ENCLOSURE)
+        ========================= */}
         <View style={styles.profileSection}>
-          <View style={styles.userRow}>
-            {/* Avatar */}
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>
-                {initialsOf(user?.name)}
-              </Text>
-            </View>
-
-            {/* User Info */}
-            <View style={styles.userInfo}>
-              <Text
-                style={styles.name}
-                numberOfLines={1}
-              >
-                {user?.name || 'Student'}
-              </Text>
-
-              {!!user?.email && (
-                <Text
-                  style={styles.email}
-                  numberOfLines={1}
-                >
-                  {user.email}
-                </Text>
-              )}
-
-              <View style={styles.studentBadge}>
-                <Ionicons
-                  name="school"
-                  size={14}
-                  color={colors.primary}
-                />
-
-                <Text style={styles.studentText}>
-                  Student
-                </Text>
-              </View>
-            </View>
-
-            {/* Logout Button */}
+          {/* Upper row: "Edit photo" button positioned on upper right */}
+          <View style={styles.profileTopRow}>
+            <View style={{ flex: 1 }} />
             <TouchableOpacity
-              style={styles.logoutBtn}
-              onPress={confirmLogout}
-              hitSlop={8}
+              style={styles.editPhotoTopBtn}
+              onPress={openEditProfileModal}
+              activeOpacity={0.7}
+              accessibilityLabel="Edit photo and name"
             >
-              <Ionicons name="log-out-outline" size={24} color="#DC2626" />
+              <Ionicons
+                name="camera-outline"
+                size={15}
+                color={colors.primary}
+              />
+              <Text style={styles.editPhotoTopBtnText}>Edit photo</Text>
             </TouchableOpacity>
           </View>
-        </View>
 
-        {/* STATS */}
-        <View style={styles.statsCard}>
-          {/* Decks */}
-          <View style={styles.statItem}>
-            <View style={styles.blueIcon}>
-              <Ionicons
-                name="albums-outline"
-                size={20}
-                color={colors.primary}
-              />
-            </View>
-
-            <View>
-              <Text style={styles.statValue}>
-                0
-              </Text>
-
-              <Text style={styles.statLabel}>
-                Decks
-              </Text>
-            </View>
+          {/* Profile Icon / Avatar (Enlarged, no camera badge overlay) */}
+          <View style={styles.avatarContainer}>
+            <TouchableOpacity
+              style={styles.avatar}
+              onPress={openEditProfileModal}
+              activeOpacity={0.85}
+              accessibilityLabel="Change profile picture"
+            >
+              {photoUri ? (
+                <Image source={{ uri: photoUri }} style={styles.avatarImage} />
+              ) : (
+                <Text style={styles.avatarText}>{initialsOf(user?.name)}</Text>
+              )}
+            </TouchableOpacity>
           </View>
 
-          <View style={styles.divider} />
+          {/* Centered User Name (no pencil icon) */}
+          <Text style={styles.name} numberOfLines={1}>
+            {user?.name ? capitalizeWords(user.name) : 'User'}
+          </Text>
 
-          {/* Quizzes */}
-          <View style={styles.statItem}>
-            <View style={styles.purpleIcon}>
+          {/* Bio Display (Direct clean text, NO CARD) */}
+          {!!bio && (
+            <Text style={styles.bioText}>{bio}</Text>
+          )}
+
+          {/* Edit Bio Button */}
+          <TouchableOpacity
+            style={styles.editBioBtn}
+            onPress={openEditBioModal}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="create-outline" size={14} color={colors.primary} />
+            <Text style={styles.editBioBtnText}>
+              {bio ? 'Edit bio' : 'Add bio'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* =========================
+            RECENT QUIZZES SECTION
+        ========================= */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Recent Quizzes</Text>
+          {highScores.length > 0 && (
+            <Text style={styles.sectionSubtitle}>
+              {highScores.length} completed
+            </Text>
+          )}
+        </View>
+
+        {highScores.length > 0 ? (
+          <View style={styles.quizList}>
+            {highScores
+              .slice(-4)
+              .reverse()
+              .map((item, index) => {
+                const pct =
+                  item.totalQuestions > 0
+                    ? Math.round((item.score / item.totalQuestions) * 100)
+                    : 0;
+
+                return (
+                  <View key={index} style={styles.scoreCard}>
+                    <View style={styles.scoreCardIcon}>
+                      <Ionicons
+                        name="trophy-outline"
+                        size={20}
+                        color={scoreColor(pct)}
+                      />
+                    </View>
+
+                    <View style={styles.scoreCardInfo}>
+                      <Text style={styles.scoreDeckTitle} numberOfLines={1}>
+                        {item.deckTitle}
+                      </Text>
+                      <Text style={styles.scoreDate}>{item.date}</Text>
+                    </View>
+
+                    <View
+                      style={[
+                        styles.scoreBadge,
+                        { backgroundColor: scoreSoft(pct) },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.scoreBadgeText,
+                          { color: scoreColor(pct) },
+                        ]}
+                      >
+                        {item.score}/{item.totalQuestions} ({pct}%)
+                      </Text>
+                    </View>
+                  </View>
+                );
+              })}
+          </View>
+        ) : (
+          <View style={styles.emptyCard}>
+            <View style={styles.emptyIcon}>
               <Ionicons
                 name="document-text-outline"
-                size={20}
-                color={colors.primary}
+                size={28}
+                color={colors.muted}
               />
             </View>
 
-            <View>
-              <Text style={styles.statValue}>
-                0
-              </Text>
+            <Text style={styles.emptyTitle}>No Quiz Activity Yet</Text>
 
-              <Text style={styles.statLabel}>
-                Quizzes
-              </Text>
-            </View>
+            <Text style={styles.emptyText}>
+              Complete a quiz to see your scores, accuracy rate, and recent
+              performance here.
+            </Text>
+
+            <TouchableOpacity
+              style={styles.emptyButton}
+              onPress={() => (navigation as any).navigate('QuizTab')}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="play" size={14} color="#FFFFFF" />
+              <Text style={styles.emptyButtonText}>Take a Quiz</Text>
+            </TouchableOpacity>
           </View>
+        )}
 
-          <View style={styles.divider} />
-
-          {/* Average */}
-          <View style={styles.statItem}>
-            <View style={styles.greenIcon}>
-              <Ionicons
-                name="trending-up"
-                size={20}
-                color="#20AD67"
-              />
-            </View>
-
-            <View>
-              <Text style={styles.statValue}>
-                0
-              </Text>
-
-              <Text style={styles.statLabel}>
-                Average
-              </Text>
-            </View>
-          </View>
-        </View>
-
-    
-
-        {/* ACTIVITY */}
-          <View style={styles.content}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>
-                Recent Quizzes
-              </Text>
-            </View>
-              <View style={styles.emptyState}>
-                <View style={styles.emptyIcon}>
-                  <Ionicons
-                    name="document-text-outline"
-                    size={26}
-                    color={colors.muted}
-                  />
-                </View>
-
-                <Text style={styles.emptyTitle}>
-                  No quizzes yet
-                </Text>
-
-                <Text style={styles.emptyText}>
-                  Your quiz results will appear here.
-                </Text>
+        {/* =========================
+            SETTINGS CARD (ACCOUNT, PRIVACY, HELP & FEEDBACK)
+        ========================= */}
+        <View style={styles.settingsCard}>
+          {/* Account */}
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={handleAccountPress}
+            activeOpacity={0.7}
+          >
+            <View style={styles.settingLeft}>
+              <View
+                style={[
+                  styles.settingIconWrap,
+                  { backgroundColor: colors.primarySoft },
+                ]}
+              >
+                <Ionicons
+                  name="person-outline"
+                  size={19}
+                  color={colors.primary}
+                />
               </View>
+              <Text style={styles.settingLabel}>Account</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={colors.muted} />
+          </TouchableOpacity>
+
+          <View style={styles.settingDivider} />
+
+          {/* Privacy */}
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={handlePrivacyPress}
+            activeOpacity={0.7}
+          >
+            <View style={styles.settingLeft}>
+              <View
+                style={[
+                  styles.settingIconWrap,
+                  { backgroundColor: '#ECFDF5' },
+                ]}
+              >
+                <Ionicons
+                  name="shield-checkmark-outline"
+                  size={19}
+                  color="#10B981"
+                />
+              </View>
+              <Text style={styles.settingLabel}>Privacy</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={colors.muted} />
+          </TouchableOpacity>
+
+          <View style={styles.settingDivider} />
+
+          {/* Help and feedback */}
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={handleHelpPress}
+            activeOpacity={0.7}
+          >
+            <View style={styles.settingLeft}>
+              <View
+                style={[
+                  styles.settingIconWrap,
+                  { backgroundColor: '#EFF6FF' },
+                ]}
+              >
+                <Ionicons
+                  name="help-circle-outline"
+                  size={19}
+                  color="#3B82F6"
+                />
+              </View>
+              <Text style={styles.settingLabel}>Help and feedback</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={colors.muted} />
+          </TouchableOpacity>
+
+          <View style={styles.settingDivider} />
+
+          {/* App Version Row */}
+          <View style={styles.settingItem}>
+            <View style={styles.settingLeft}>
+              <View
+                style={[
+                  styles.settingIconWrap,
+                  { backgroundColor: '#F3F4F6' },
+                ]}
+              >
+                <Ionicons
+                  name="information-circle-outline"
+                  size={19}
+                  color={colors.muted}
+                />
+              </View>
+              <Text style={styles.settingLabel}>Version</Text>
+            </View>
+            <Text style={styles.versionText}>1.0.0</Text>
           </View>
+
+          <View style={styles.settingDivider} />
+
+          {/* Logout Action Row */}
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={confirmLogout}
+            activeOpacity={0.7}
+          >
+            <View style={styles.settingLeft}>
+              <View
+                style={[
+                  styles.settingIconWrap,
+                  { backgroundColor: '#FEF2F2' },
+                ]}
+              >
+                <Ionicons
+                  name="log-out-outline"
+                  size={19}
+                  color="#EF4444"
+                />
+              </View>
+              <Text style={[styles.settingLabel, { color: '#EF4444' }]}>
+                Log Out
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color="#EF4444" />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
+
+      {/* =========================
+          EDIT PROFILE & PHOTO MODAL
+      ========================= */}
+      <Modal
+        visible={profileModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setProfileModalVisible(false)}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalOverlay}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={() => setProfileModalVisible(false)}
+          />
+          <View
+            style={[
+              styles.sheet,
+              { paddingBottom: Math.max(insets.bottom, 16) + 12 },
+            ]}
+          >
+            <View style={styles.handle} />
+            <Text style={styles.modalTitle}>Edit Profile</Text>
+            <Text style={styles.modalSubtitle}>
+              Update your photo and display name
+            </Text>
+
+            {/* Photo Preview & Options */}
+            <View style={styles.modalPhotoRow}>
+              <View style={styles.modalAvatar}>
+                {tempPhotoUri ? (
+                  <Image
+                    source={{ uri: tempPhotoUri }}
+                    style={styles.modalAvatarImage}
+                  />
+                ) : (
+                  <Text style={styles.modalAvatarText}>
+                    {initialsOf(editName || user?.name)}
+                  </Text>
+                )}
+              </View>
+
+              <View style={styles.modalPhotoActions}>
+                <TouchableOpacity
+                  style={styles.photoActionBtn}
+                  onPress={handlePickPhoto}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons
+                    name="image-outline"
+                    size={16}
+                    color={colors.primary}
+                  />
+                  <Text style={styles.photoActionBtnText}>
+                    {tempPhotoUri ? 'Change Photo' : 'Upload Photo'}
+                  </Text>
+                </TouchableOpacity>
+
+                {tempPhotoUri && (
+                  <TouchableOpacity
+                    style={styles.removePhotoBtn}
+                    onPress={handleRemovePhoto}
+                    activeOpacity={0.8}
+                  >
+                    <Ionicons name="trash-outline" size={14} color="#EF4444" />
+                    <Text style={styles.removePhotoBtnText}>Remove</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+
+            {/* Name Input */}
+            <Text style={styles.modalLabel}>Display Name</Text>
+            <TextInput
+              style={styles.nameInput}
+              value={editName}
+              onChangeText={setEditName}
+              placeholder="Your name"
+              placeholderTextColor={colors.muted}
+              maxLength={40}
+              autoCapitalize="words"
+            />
+
+            <View style={styles.modalButtons}>
+              <PrimaryButton
+                title="Cancel"
+                variant="secondary"
+                onPress={() => setProfileModalVisible(false)}
+                style={{ flex: 1, marginRight: 8 }}
+              />
+              <PrimaryButton
+                title="Save"
+                onPress={handleSaveProfile}
+                style={{ flex: 1 }}
+              />
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      {/* =========================
+          EDIT BIO BOTTOM SHEET MODAL
+      ========================= */}
+      <Modal
+        visible={bioModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setBioModalVisible(false)}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalOverlay}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={() => setBioModalVisible(false)}
+          />
+          <View
+            style={[
+              styles.sheet,
+              { paddingBottom: Math.max(insets.bottom, 16) + 12 },
+            ]}
+          >
+            <View style={styles.handle} />
+            <Text style={styles.modalTitle}>Edit Bio</Text>
+            <Text style={styles.modalSubtitle}>
+              Write a short note about your study goals
+            </Text>
+
+            <TextInput
+              style={styles.bioInput}
+              value={editBio}
+              onChangeText={setEditBio}
+              placeholder="e.g. Studying for biology exams & vocabulary..."
+              placeholderTextColor={colors.muted}
+              multiline
+              maxLength={120}
+            />
+            <Text style={styles.charCount}>{editBio.length} / 120</Text>
+
+            <View style={styles.modalButtons}>
+              <PrimaryButton
+                title="Cancel"
+                variant="secondary"
+                onPress={() => setBioModalVisible(false)}
+                style={{ flex: 1, marginRight: 8 }}
+              />
+              <PrimaryButton
+                title="Save Bio"
+                onPress={handleSaveBio}
+                style={{ flex: 1 }}
+              />
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 };
 
 export default ProfileScreen;
 
-const createStyles = (
-  colors: ReturnType<typeof useTheme>['colors']
-) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.bg,
     },
 
-    /* PROFILE */
+    scrollContent: {
+      paddingHorizontal: spacing.md,
+    },
+
+    // ── PROFILE HEADER (OPEN, NO CARD) ──────────────────────────────────────
     profileSection: {
-      paddingHorizontal: 20,
-      
-    },
-    userRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingVertical: 10,
-    },
-
-    avatar: {
-      width: 72,
-      height: 72,
-      borderRadius: 36,
-      backgroundColor: colors.primary,
+      width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
+      alignSelf: 'center',
+      paddingTop: 4,
+      paddingBottom: 22,
     },
 
-    avatarText: {
-      fontSize: 26,
-      fontWeight: '900',
-      color: '#FFFFFF',
-    },
-
-    userInfo: {
-      flex: 1,
-      marginLeft: 16,
-    },
-
-    name: {
-      fontSize: 21,
-      fontWeight: '900',
-      color: colors.heading,
-    },
-
-    email: {
-      fontSize: 13,
-      color: colors.muted,
-      marginTop: 3,
-    },
-
-    logoutBtn: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
-      backgroundColor: '#FEE2E2',
+    profileTopRow: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
       alignItems: 'center',
-      justifyContent: 'center',
-      marginLeft: 12,
+      width: '100%',
+      marginBottom: 8,
     },
 
-    studentBadge: {
+    editPhotoTopBtn: {
       flexDirection: 'row',
       alignItems: 'center',
-      alignSelf: 'flex-start',
-
       gap: 5,
-
-      backgroundColor: colors.primarySoft,
-
-      paddingHorizontal: 9,
-      paddingVertical: 5,
-
-      borderRadius: 9,
-
-      marginTop: 8,
+      backgroundColor: colors.card,
+      paddingHorizontal: 12,
+      paddingVertical: 7,
+      borderRadius: radius.pill,
+      borderWidth: 1,
+      borderColor: colors.border,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#2E1065',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.05,
+          shadowRadius: 4,
+        },
+        android: { elevation: 2 },
+      }),
     },
 
-    studentText: {
+    editPhotoTopBtnText: {
       fontSize: 12,
       fontWeight: '700',
       color: colors.primary,
     },
 
-    /* STATS */
-    statsCard: {
-      marginHorizontal: 20,
-      marginTop: 20,
-
-      minHeight: 82,
-
-      backgroundColor: colors.card,
-
-      borderWidth: 1,
-      borderColor: colors.border,
-
-      borderRadius: 18,
-
-      flexDirection: 'row',
-      alignItems: 'center',
-
-      paddingHorizontal: 12,
-    },
-
-    statItem: {
-      flex: 1,
-
-      flexDirection: 'row',
+    avatarContainer: {
+      alignSelf: 'center',
       alignItems: 'center',
       justifyContent: 'center',
-
-      gap: 7,
+      marginBottom: 14,
     },
 
-    blueIcon: {
-      width: 35,
-      height: 35,
-      borderRadius: 11,
-
-      backgroundColor: colors.primarySoft,
-
+    avatar: {
+      width: 128,
+      height: 128,
+      borderRadius: 64,
+      backgroundColor: colors.primary,
       alignItems: 'center',
       justifyContent: 'center',
+      alignSelf: 'center',
+      overflow: 'hidden',
+      borderWidth: 4,
+      borderColor: colors.card,
+      ...Platform.select({
+        ios: {
+          shadowColor: colors.primary,
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.22,
+          shadowRadius: 14,
+        },
+        android: { elevation: 6 },
+      }),
     },
 
-    purpleIcon: {
-      width: 35,
-      height: 35,
-      borderRadius: 11,
-
-      backgroundColor: colors.primarySoft,
-
-      alignItems: 'center',
-      justifyContent: 'center',
+    avatarImage: {
+      width: 128,
+      height: 128,
+      borderRadius: 64,
     },
 
-    greenIcon: {
-      width: 35,
-      height: 35,
-      borderRadius: 11,
-
-      backgroundColor: '#E7F8EF',
-
-      alignItems: 'center',
-      justifyContent: 'center',
+    avatarText: {
+      fontSize: 48,
+      fontWeight: '900',
+      color: '#FFFFFF',
+      textAlign: 'center',
+      textAlignVertical: 'center',
+      includeFontPadding: false,
+      alignSelf: 'center',
+      lineHeight: Platform.OS === 'android' ? 56 : 52,
+      transform: [{ translateY: Platform.OS === 'android' ? 2 : 4 }],
     },
 
-    statValue: {
-      fontSize: 17,
+    name: {
+      fontSize: 26,
       fontWeight: '800',
       color: colors.heading,
+      letterSpacing: -0.4,
+      textAlign: 'center',
+      alignSelf: 'center',
+      marginTop: 2,
+      marginBottom: 4,
+      paddingHorizontal: 16,
     },
 
-    statLabel: {
-      fontSize: 10,
+    bioText: {
+      fontSize: 14,
       color: colors.muted,
-      marginTop: 1,
+      textAlign: 'center',
+      alignSelf: 'center',
+      lineHeight: 20,
+      marginTop: 6,
+      marginBottom: 4,
+      paddingHorizontal: 24,
+      maxWidth: 320,
     },
 
-    divider: {
-      width: 1,
-      height: 38,
-      backgroundColor: colors.border,
+    editBioBtn: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 5,
+      backgroundColor: colors.primarySoft,
+      paddingHorizontal: 14,
+      paddingVertical: 6,
+      borderRadius: radius.pill,
+      marginTop: 10,
+      alignSelf: 'center',
     },
 
-    /* TABS */
-    /* CONTENT */
-    content: {
-      paddingHorizontal: 20,
-      marginTop: 22,
+    editBioBtnText: {
+      fontSize: 12,
+      fontWeight: '700',
+      color: colors.primary,
     },
 
+    // ── SECTION HEADER ──────────────────────────────────────────────────────
     sectionHeader: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-
-      marginBottom: 12,
+      marginBottom: 10,
+      marginTop: 6,
+      paddingHorizontal: 4,
     },
 
     sectionTitle: {
       fontSize: 18,
       fontWeight: '800',
       color: colors.heading,
+      letterSpacing: -0.2,
     },
 
-    seeAll: {
-      fontSize: 11,
-      fontWeight: '600',
-      color: colors.primary,
+    sectionSubtitle: {
+      fontSize: 12,
+      color: colors.muted,
+      fontWeight: '500',
     },
 
-    /* QUIZZES */
+    // ── RECENT QUIZZES CARD LIST ─────────────────────────────────────────────
     quizList: {
       gap: 9,
+      marginBottom: 20,
     },
 
-
-
-
-
-
-   
-    /* EMPTY */
-    emptyState: {
-      minHeight: 150,
-
+    scoreCard: {
+      flexDirection: 'row',
+      alignItems: 'center',
       backgroundColor: colors.card,
-
-      borderRadius: 16,
-
+      borderRadius: 20,
       borderWidth: 1,
       borderColor: colors.border,
+      paddingVertical: 12,
+      paddingHorizontal: 14,
+      gap: 12,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#2E1065',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.04,
+          shadowRadius: 6,
+        },
+        android: { elevation: 1 },
+      }),
+    },
 
+    scoreCardIcon: {
+      width: 38,
+      height: 38,
+      borderRadius: 19,
+      backgroundColor: colors.inputBg,
       alignItems: 'center',
       justifyContent: 'center',
+    },
 
-      padding: 20,
+    scoreCardInfo: {
+      flex: 1,
+    },
+
+    scoreDeckTitle: {
+      fontSize: 15,
+      fontWeight: '700',
+      color: colors.heading,
+    },
+
+    scoreDate: {
+      fontSize: 11,
+      color: colors.muted,
+      marginTop: 2,
+    },
+
+    scoreBadge: {
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+      borderRadius: radius.pill,
+    },
+
+    scoreBadgeText: {
+      fontSize: 12,
+      fontWeight: '700',
+    },
+
+    emptyCard: {
+      backgroundColor: colors.card,
+      borderRadius: 24,
+      borderWidth: 1,
+      borderColor: colors.border,
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 24,
+      marginBottom: 20,
     },
 
     emptyIcon: {
-      width: 45,
-      height: 45,
-
-      borderRadius: 14,
-
-      backgroundColor: '#EEF2F7',
-
+      width: 52,
+      height: 52,
+      borderRadius: 26,
+      backgroundColor: colors.inputBg,
       alignItems: 'center',
       justifyContent: 'center',
-
-      marginBottom: 9,
+      marginBottom: 10,
     },
 
     emptyTitle: {
-      fontSize: 14,
+      fontSize: 15,
       fontWeight: '700',
       color: colors.heading,
     },
 
     emptyText: {
-      fontSize: 11,
+      fontSize: 12,
       color: colors.muted,
       marginTop: 4,
+      textAlign: 'center',
+      lineHeight: 18,
+      maxWidth: 260,
     },
 
-    /* SETTINGS */
-    settingsContent: {
+    emptyButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+      backgroundColor: colors.primary,
+      paddingHorizontal: 16,
+      paddingVertical: 9,
+      borderRadius: radius.pill,
+      marginTop: 14,
+    },
+
+    emptyButtonText: {
+      color: '#FFFFFF',
+      fontSize: 12,
+      fontWeight: '700',
+    },
+
+    // ── SETTINGS CARD ────────────────────────────────────────────────────────
+    settingsCard: {
+      backgroundColor: colors.card,
+      borderRadius: 24,
+      borderWidth: 1,
+      borderColor: colors.border,
+      paddingHorizontal: 16,
+      paddingVertical: 6,
+      marginBottom: 24,
+      marginTop: 4,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#2E1065',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.05,
+          shadowRadius: 8,
+        },
+        android: { elevation: 2 },
+      }),
+    },
+
+    settingItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: 12,
+    },
+
+    settingLeft: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 12,
+    },
+
+    settingIconWrap: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    settingLabel: {
+      fontSize: 15,
+      fontWeight: '600',
+      color: colors.heading,
+    },
+
+    versionText: {
+      fontSize: 13,
+      color: colors.muted,
+      fontWeight: '600',
+    },
+
+    settingDivider: {
+      height: StyleSheet.hairlineWidth,
+      backgroundColor: colors.border,
+    },
+
+    // ── MODAL STYLES ─────────────────────────────────────────────────────────
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(30,27,75,0.5)',
+      justifyContent: 'flex-end',
+    },
+
+    sheet: {
+      backgroundColor: colors.card,
+      borderTopLeftRadius: 28,
+      borderTopRightRadius: 28,
       paddingHorizontal: 20,
-      paddingTop: 20,
+      paddingTop: 12,
+    },
+
+    handle: {
+      alignSelf: 'center',
+      width: 40,
+      height: 4,
+      borderRadius: 2,
+      backgroundColor: colors.border,
+      marginBottom: 14,
+    },
+
+    modalTitle: {
+      fontSize: 20,
+      fontWeight: '800',
+      color: colors.heading,
+      marginBottom: 4,
+    },
+
+    modalSubtitle: {
+      fontSize: 13,
+      color: colors.muted,
+      marginBottom: 16,
+      lineHeight: 18,
+    },
+
+    modalPhotoRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 16,
+      marginBottom: 18,
+    },
+
+    modalAvatar: {
+      width: 72,
+      height: 72,
+      borderRadius: 36,
+      backgroundColor: colors.primary,
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden',
+    },
+
+    modalAvatarImage: {
+      width: 72,
+      height: 72,
+      borderRadius: 36,
+    },
+
+    modalAvatarText: {
+      fontSize: 28,
+      fontWeight: '800',
+      color: '#FFFFFF',
+    },
+
+    modalPhotoActions: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+    },
+
+    photoActionBtn: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+      backgroundColor: colors.primarySoft,
+      paddingHorizontal: 14,
+      paddingVertical: 8,
+      borderRadius: radius.pill,
+    },
+
+    photoActionBtnText: {
+      fontSize: 13,
+      fontWeight: '700',
+      color: colors.primary,
+    },
+
+    removePhotoBtn: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
+      backgroundColor: '#FEF2F2',
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      borderRadius: radius.pill,
+    },
+
+    removePhotoBtnText: {
+      fontSize: 13,
+      fontWeight: '700',
+      color: '#EF4444',
+    },
+
+    modalLabel: {
+      fontSize: 13,
+      fontWeight: '700',
+      color: colors.heading,
+      marginBottom: 6,
+    },
+
+    nameInput: {
+      backgroundColor: colors.inputBg,
+      borderRadius: radius.md,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+      fontSize: 15,
+      color: colors.text,
+      borderWidth: 1,
+      borderColor: colors.border,
+      marginBottom: 18,
+    },
+
+    bioInput: {
+      backgroundColor: colors.inputBg,
+      borderRadius: radius.md,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+      fontSize: 14,
+      color: colors.text,
+      borderWidth: 1,
+      borderColor: colors.border,
+      minHeight: 80,
+      textAlignVertical: 'top',
+    },
+
+    charCount: {
+      fontSize: 11,
+      color: colors.muted,
+      alignSelf: 'flex-end',
+      marginTop: 4,
+      marginBottom: 14,
+    },
+
+    modalButtons: {
+      flexDirection: 'row',
+      marginTop: 4,
     },
   });
