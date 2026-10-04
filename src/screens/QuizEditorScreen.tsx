@@ -15,7 +15,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { useTheme } from '../context/ThemeContext';
-import { useStorage } from '../context/StorageContext';
 import { radius, spacing } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'QuizEditor'>;
@@ -23,29 +22,21 @@ type Props = NativeStackScreenProps<RootStackParamList, 'QuizEditor'>;
 const LETTERS = ['A', 'B', 'C', 'D'];
 
 export const QuizEditorScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { quizId } = route.params;
-  const { quizzes, addQuestion, deleteQuestion } = useStorage();
+
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
-  const quiz = quizzes.find((q) => q.id === quizId);
 
-  const [question, setQuestion] = useState('');
   const [options, setOptions] = useState(['', '', '', '']);
   const [correct, setCorrect] = useState<number | null>(null);
 
-  if (!quiz) {
-    return (
-      <View style={styles.center}>
-        <Text style={styles.emptyTitle}>Quiz not found</Text>
-        <PrimaryButton title="Go back" onPress={() => navigation.goBack()} />
-      </View>
-    );
-  }
+
 
   const setOption = (i: number, text: string) =>
     setOptions((prev) => prev.map((o, idx) => (idx === i ? text : o)));
 
+<<<<<<< HEAD
+=======
   const add = () => {
     const trimmed = options.map((o) => o.trim());
     const filled = trimmed.map((text, i) => ({ text, i })).filter((o) => o.text);
@@ -67,6 +58,18 @@ export const QuizEditorScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const count = quiz.questions.length;
 
+  const handleStartQuiz = () => {
+    if (count === 0) {
+      Alert.alert('No questions yet', 'Add at least one question to start the quiz.');
+      return;
+    }
+    navigation.navigate('Quiz', { quizId });
+  };
+
+<<<<<<< HEAD
+=======
+>>>>>>> 7244ae1 (all files that have changes)
+>>>>>>> temp-work
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -74,22 +77,19 @@ export const QuizEditorScreen: React.FC<Props> = ({ route, navigation }) => {
       keyboardVerticalOffset={90}
     >
       <FlatList
-        data={quiz.questions}
+    
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View>
-            <Text style={styles.quizTitle}>{quiz.title}</Text>
-            {!!quiz.description && <Text style={styles.quizDesc}>{quiz.description}</Text>}
+
 
             <View style={styles.form}>
               <Text style={styles.label}>Question</Text>
               <TextInput
                 style={styles.input}
-                value={question}
-                onChangeText={setQuestion}
                 placeholder="e.g. What is the powerhouse of the cell?"
                 placeholderTextColor={colors.muted}
                 multiline
@@ -122,61 +122,58 @@ export const QuizEditorScreen: React.FC<Props> = ({ route, navigation }) => {
                 );
               })}
 
-              <PrimaryButton title="Add Question" onPress={add} style={{ marginTop: spacing.sm }} />
+              <PrimaryButton title="Add Question" onPress={() => Alert.alert('Not Available', 'This feature is coming soon!')} />
+
             </View>
 
             <Text style={styles.section}>
-              Questions <Text style={styles.count}>({count})</Text>
+
             </Text>
           </View>
         }
-        renderItem={({ item, index }) => (
-          <View style={styles.qRow}>
-            <View style={styles.qNum}>
-              <Text style={styles.qNumText}>{index + 1}</Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.qText}>{item.question}</Text>
-              {item.options.map((opt: string, i: number) => {
-                const isCorrect = i === item.correctIndex;
-                return (
-                  <View key={i} style={styles.previewRow}>
-                    <Ionicons
-                      name={isCorrect ? 'checkmark-circle' : 'ellipse-outline'}
-                      size={15}
-                      color={isCorrect ? colors.success : colors.muted}
-                    />
-                    <Text
-                      style={[
-                        styles.previewText,
-                        isCorrect && { color: colors.success, fontWeight: '700' },
-                      ]}
-                    >
-                      {opt}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-            <TouchableOpacity onPress={() => deleteQuestion(quizId, item.id)} hitSlop={10}>
-              <Ionicons name="trash-outline" size={20} color="#DC2626" />
-            </TouchableOpacity>
-          </View>
-        )}
         ListEmptyComponent={<Text style={styles.emptyText}>No questions yet. Add your first one above.</Text>}
       />
 
       <View style={styles.footer}>
         <PrimaryButton
+<<<<<<< HEAD
           title={count === 0 ? 'Add a question to start' : 'Start Quiz'}
+          onPress={handleStartQuiz}
+=======
+<<<<<<< HEAD
+          title={0 === 0 ? 'Add a question to start' : 'Start Quiz'}
           onPress={() =>
             Alert.alert('Not Available', 'This feature is coming soon!')
           }
+=======
+          title={count === 0 ? 'Add a question to start' : 'Start Quiz'}
+          onPress={handleStartQuiz}
+>>>>>>> 7244ae1 (all files that have changes)
+>>>>>>> temp-work
         />
       </View>
     </KeyboardAvoidingView>
   );
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default QuizEditorScreen;
 

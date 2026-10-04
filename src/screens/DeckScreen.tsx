@@ -57,10 +57,10 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const count = deck.cards.length;
 
-  const scores = highScores.filter((s) => s.deckId === deck.id);
-  const bestScore = scores.length
-    ? Math.max(...scores.map((s) => s.score))
-    : null;
+  // const scores = highScores.filter((s) => s.deckId === deck.id);
+  // const bestScore = scores.length
+  //   ? Math.max(...scores.map((s) => s.score))
+  //   : null;
 
   const later = (fn: () => void) => {
     setOptionsOpen(false);
@@ -68,17 +68,17 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
   };
 
   const handleStudy = () => {
-    if (count === 0) {
-      return Alert.alert(
-        'No Cards Yet',
-        'Add some flashcards to this deck before studying.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Add Cards', onPress: () => setAddCardOpen(true) },
-        ],
-      );
-    }
-    navigation.navigate('Quiz', { deckId: deck.id });
+    Alert.alert(
+      'Under Construction',
+      'This feature is currently under construction.',
+    );
+  };
+
+  const handleAddCardPress = () => {
+    Alert.alert(
+      'Under Construction',
+      'This feature is currently under construction.',
+    );
   };
 
   const openEdit = () => {
@@ -169,6 +169,16 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
         contentContainerStyle={styles.body}
         showsVerticalScrollIndicator={false}
       >
+
+
+
+
+
+
+
+
+
+
         {/* =========================
             DECK HERO SUMMARY CARD
         ========================= */}
@@ -194,15 +204,6 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
                 {count} {count === 1 ? 'card' : 'cards'}
               </Text>
             </View>
-
-            {bestScore !== null && (
-              <View style={[styles.statPill, { backgroundColor: '#FEF3C7' }]}>
-                <Ionicons name="trophy" size={13} color="#D97706" />
-                <Text style={[styles.statPillText, { color: '#B45309' }]}>
-                  Best: {bestScore}/{count}
-                </Text>
-              </View>
-            )}
           </View>
 
           {/* Action Buttons in Hero Card */}
@@ -218,7 +219,7 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.addCardBtn}
-              onPress={() => setAddCardOpen(true)}
+              onPress={handleAddCardPress}
               activeOpacity={0.8}
             >
               <Ionicons name="add" size={18} color={colors.primary} />
@@ -226,6 +227,14 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
+
+
+
+
+
+
+
+
 
         {/* =========================
             FLASHCARDS LIST SECTION
@@ -300,6 +309,19 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
         )}
       </ScrollView>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
       {/* ── ADD CARD MODAL ─────────────────────────────────────────── */}
       <Modal
         visible={addCardOpen}
@@ -348,6 +370,20 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
         </Pressable>
       </Modal>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       {/* ── OPTIONS MODAL ─────────────────────────────────────────── */}
       <Modal
         visible={optionsOpen}
@@ -366,7 +402,7 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
             <SheetItem
               icon="add-circle-outline"
               label="Add New Card"
-              onPress={() => later(() => setAddCardOpen(true))}
+              onPress={() => later(handleAddCardPress)}
             />
 
             <SheetItem
@@ -384,6 +420,20 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
           </Pressable>
         </Pressable>
       </Modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       {/* ── EDIT DECK MODAL ───────────────────────────────────────── */}
       <Modal
@@ -456,6 +506,20 @@ const SheetItem = ({
     </Text>
   </TouchableOpacity>
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default DeckScreen;
 
