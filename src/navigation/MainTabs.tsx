@@ -12,14 +12,14 @@ import { useTheme } from '../context/ThemeContext';
 import { TabParamList } from '../types';
 
 const Tab = createBottomTabNavigator<TabParamList>();
-
+// Maps each tab route to its focused and unfocused Ionicons names.
 const ICONS: Record<keyof TabParamList, [string, string]> = {
   HomeTab: ['home', 'home-outline'],
   DecksTab: ['layers', 'layers-outline'],
   QuizTab: ['document-text', 'document-text-outline'],
   ProfileTab: ['person', 'person-outline'],
 };
-
+// Dimensions used to create the floating, rounded tab bar.
 const BAR_HEIGHT = 64;
 const H_MARGIN = 20;
 const PADDING = 6;
@@ -42,7 +42,7 @@ const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) =
       mass: 0.8,
     }).start();
   }, [state.index, tabWidth]);
-
+// Capture the inner container width after React Native lays it out.
   const onInnerLayout = (e: LayoutChangeEvent) => setInnerWidth(e.nativeEvent.layout.width);
 
   return (
@@ -83,6 +83,8 @@ const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) =
             const color = focused ? colors.primary : colors.muted;
 
             const onPress = () => {
+              // Emit React Navigation's standard event so listeners can
+              // intercept or cancel the tab change.
               const event = navigation.emit({
                 type: 'tabPress',
                 target: route.key,
@@ -130,9 +132,9 @@ export const MainTabs = () => {
       }}
     >
       <Tab.Screen name="HomeTab" component={HomeScreen} options={{ title: 'Home', headerShown: false }} />
-      <Tab.Screen name="DecksTab" component={DecksScreen} options={{ title: 'Decks', headerShown: false }} />
-      <Tab.Screen name="QuizTab" component={QuizPickerScreen} options={{ title: 'Quiz', headerShown: false }} />
-      <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ title: 'Profile', headerShown: false }} />
+      <Tab.Screen name="DecksTab" component={DecksScreen} options={{ title: 'Decks', headerTitle: 'My Decks' }} />
+      <Tab.Screen name="QuizTab" component={QuizPickerScreen} options={{ title: 'Quiz', headerTitle: 'Choose a Quiz' }} />
+      <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ title: 'Profile', headerTitle: 'Profile' }} />
     </Tab.Navigator>
   );
 };
