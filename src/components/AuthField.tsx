@@ -5,21 +5,26 @@
  * - Icons & Design Tokens: External visual iconography (Ionicons) and central theme constants 
  *   (colors, radius, spacing) to ensure UI consistency across the app.
  */
-import React, { useState } from 'react';   //imports React library and useState hook for managing component sta   te 
+
+import React, { useState } from 'react';   
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, TextInputProps } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, radius, spacing } from '../theme';
 
 // _________Props interface_____________________________________________
-// Explanation of the Props interface:
-interface Props extends TextInputProps {  // 
+// Props Interface Definition
+// Defines the expected inputs: standard React Native TextInput props plus a custom `label` and optional `secure` flag.
+interface Props extends TextInputProps { 
   label: string;
   secure?: boolean;
 }
 
 // _________AuthField component_____________________________________________
-// Explanation of the AuthField component:
+// Function: AuthField (Component)
+// Renders a styled input field with an optional password toggle button.
 export const AuthField = ({ label, secure, style, ...rest }: Props) => {
+  // Function: useState
+  // Stores and manages whether the input text is currently hidden. 
   const [hidden, setHidden] = useState(!!secure);
   return (
     <View style={styles.wrap}>
@@ -44,11 +49,11 @@ export const AuthField = ({ label, secure, style, ...rest }: Props) => {
 };
 
 // _________Default Export_____________________________________________
-// Explanation of the default export:
 export default AuthField;
 
 // _________Styles_____________________________________________
-// Explanation of the Styles:
+// Function: StyleSheet.create
+// Compiles and optimizes style objects for native performance. 
 const styles = StyleSheet.create({
   wrap: { marginBottom: spacing.md },
   label: { fontSize: 14, fontWeight: '700', color: colors.heading, marginBottom: 6 },
