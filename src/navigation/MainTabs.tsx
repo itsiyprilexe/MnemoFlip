@@ -96,7 +96,7 @@ const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) =
                 navigation.navigate(route.name as never);
               }
             };
-
+// Preserve React Navigation's standard long-press behavior.
             const onLongPress = () => navigation.emit({ type: 'tabLongPress', target: route.key });
 
             return (
