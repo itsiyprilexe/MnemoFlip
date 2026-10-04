@@ -1,24 +1,23 @@
 // _________Props interface_____________________________________________
-// Explanation of the Props interface:
+// Explain
 import React from 'react';
 import { View, TextInput, Text, StyleSheet, TextInputProps } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 
 // _________StyledTextInput component_____________________________________________
-// Explanation of the StyledTextInput component:          
-// Explanation of the Props interface:
+// Explain
 interface StyledTextInputProps extends TextInputProps {
   label?: string;
   error?: string;
 }
 
 // ______________________________________________________
-// Explanation of the Props interface:
+// Explain
 export const StyledTextInput: React.FC<StyledTextInputProps> = ({ label, error, style, ...props }) => {
   const { colors } = useTheme();
   
   // ______________________________________________________
-  // Explanation of the Props interface:
+  // Explain
   return (
     <View style={styles.container}>
       {label && <Text style={[styles.label, { color: colors.heading }]}>{label}</Text>}
@@ -42,7 +41,7 @@ export const StyledTextInput: React.FC<StyledTextInputProps> = ({ label, error, 
 };
 
 // ______________________________________________________
-// Explanation of the Props interface:
+// Explain
 const styles = StyleSheet.create({
   container: {
     marginVertical: 8,

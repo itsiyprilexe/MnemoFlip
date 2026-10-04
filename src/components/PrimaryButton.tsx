@@ -1,15 +1,11 @@
 // ______________________________________________________
-/*Explanation: This component is a customizable button that can be used throughout 
-    the application. It supports different variants (primary, secondary, danger) and allows 
-    for additional styling through props. The button uses the theme context to apply colors 
-    based on the current theme.*/
+
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 
 // ______________________________________________________
-// Props Interface Definition
-// Defines the expected inputs: standard React Native TextInput props plus a custom `label` and optional `secure` flag.
+// Explain
 interface PrimaryButtonProps {
   title: string;
   onPress: () => void;
@@ -19,7 +15,7 @@ interface PrimaryButtonProps {
 }
 
 // ______________________________________________________
-// Expla
+// Explain
 export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   title,
   onPress,
@@ -53,7 +49,7 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
 };
 
 // ______________________________________________________
-// Expla
+// Explain
 const styles = StyleSheet.create({
   button: {
     paddingVertical: 14,
