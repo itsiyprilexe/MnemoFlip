@@ -57,10 +57,10 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const count = deck.cards.length;
 
-  const scores = highScores.filter((s) => s.deckId === deck.id);
-  const bestScore = scores.length
-    ? Math.max(...scores.map((s) => s.score))
-    : null;
+  // const scores = highScores.filter((s) => s.deckId === deck.id);
+  // const bestScore = scores.length
+  //   ? Math.max(...scores.map((s) => s.score))
+  //   : null;
 
   const later = (fn: () => void) => {
     setOptionsOpen(false);
@@ -169,6 +169,16 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
         contentContainerStyle={styles.body}
         showsVerticalScrollIndicator={false}
       >
+
+
+
+
+
+
+
+
+
+
         {/* =========================
             DECK HERO SUMMARY CARD
         ========================= */}
@@ -217,6 +227,14 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
+
+
+
+
+
+
+
+
 
         {/* =========================
             FLASHCARDS LIST SECTION
@@ -291,6 +309,19 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
         )}
       </ScrollView>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
       {/* ── ADD CARD MODAL ─────────────────────────────────────────── */}
       <Modal
         visible={addCardOpen}
@@ -339,6 +370,20 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
         </Pressable>
       </Modal>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       {/* ── OPTIONS MODAL ─────────────────────────────────────────── */}
       <Modal
         visible={optionsOpen}
@@ -375,6 +420,20 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
           </Pressable>
         </Pressable>
       </Modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       {/* ── EDIT DECK MODAL ───────────────────────────────────────── */}
       <Modal
@@ -447,6 +506,20 @@ const SheetItem = ({
     </Text>
   </TouchableOpacity>
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default DeckScreen;
 

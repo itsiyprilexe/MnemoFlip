@@ -50,14 +50,13 @@ const capitalizeWords = (str?: string) => {
 };
 
 export const ProfileScreen = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const { user, logOut, updateUser } = useAuth();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
-  const { highScores } = useStorage();
+
 
   // Photo state
   const [photoUri, setPhotoUri] = useState<string | null>(null);
