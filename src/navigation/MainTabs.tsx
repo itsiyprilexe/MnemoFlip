@@ -90,6 +90,8 @@ const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) =
                 target: route.key,
                 canPreventDefault: true,
               });
+              // Navigate only when the tab is not already active and the
+              // event has not been prevented by a listener.
               if (!focused && !event.defaultPrevented) {
                 navigation.navigate(route.name as never);
               }
