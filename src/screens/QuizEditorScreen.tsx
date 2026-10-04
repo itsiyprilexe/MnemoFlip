@@ -35,6 +35,38 @@ export const QuizEditorScreen: React.FC<Props> = ({ route, navigation }) => {
   const setOption = (i: number, text: string) =>
     setOptions((prev) => prev.map((o, idx) => (idx === i ? text : o)));
 
+<<<<<<< HEAD
+=======
+  const add = () => {
+    const trimmed = options.map((o) => o.trim());
+    const filled = trimmed.map((text, i) => ({ text, i })).filter((o) => o.text);
+
+    if (!question.trim()) return Alert.alert('Missing question', 'Type the question first.');
+    if (filled.length < 2) return Alert.alert('Need more options', 'Fill in at least 2 answer options.');
+    if (correct === null || !trimmed[correct]) {
+      return Alert.alert('Pick the correct answer', 'Tap the circle next to the right option.');
+    }
+
+    const finalOptions = filled.map((f) => f.text);
+    const finalCorrect = filled.findIndex((f) => f.i === correct);
+
+    addQuestion(quizId, question.trim(), finalOptions, finalCorrect);
+    setQuestion('');
+    setOptions(['', '', '', '']);
+    setCorrect(null);
+  };
+
+  const count = quiz.questions.length;
+
+  const handleStartQuiz = () => {
+    if (count === 0) {
+      Alert.alert('No questions yet', 'Add at least one question to start the quiz.');
+      return;
+    }
+    navigation.navigate('Quiz', { quizId });
+  };
+
+>>>>>>> 7244ae1 (all files that have changes)
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -101,10 +133,15 @@ export const QuizEditorScreen: React.FC<Props> = ({ route, navigation }) => {
 
       <View style={styles.footer}>
         <PrimaryButton
+<<<<<<< HEAD
           title={0 === 0 ? 'Add a question to start' : 'Start Quiz'}
           onPress={() =>
             Alert.alert('Not Available', 'This feature is coming soon!')
           }
+=======
+          title={count === 0 ? 'Add a question to start' : 'Start Quiz'}
+          onPress={handleStartQuiz}
+>>>>>>> 7244ae1 (all files that have changes)
         />
       </View>
     </KeyboardAvoidingView>
