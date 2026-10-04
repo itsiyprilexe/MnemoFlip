@@ -45,7 +45,7 @@ export const QuizPickerScreen = () => {
   // ── 3-Dots Options Menu ─────────────────────────────────────────────────────
   const [menuQuiz, setMenuQuiz] = useState<Quiz | null>(null);
 
-  // ── Create Modal ─────────────────────────────────────────────────────────────
+  // ── Create Modal an sa (new Quiz na button) ─────────────────────────────────────────────────────────────
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -57,9 +57,7 @@ export const QuizPickerScreen = () => {
   }, []);
 
   const handleCreate = () => {
-    if (!title.trim()) {
-      return Alert.alert('Validation Error', 'Quiz title is required');
-    }
+
     const id = createQuiz(title.trim(), description.trim());
     closeCreateModal();
     navigation.navigate('QuizEditor', { quizId: id });
@@ -123,7 +121,7 @@ export const QuizPickerScreen = () => {
       );
       return;
     }
-    navigation.navigate('Quiz', { quizId: quiz.id });
+
   };
 
   const countLabel = `${quizzes.length} ${
@@ -186,6 +184,11 @@ export const QuizPickerScreen = () => {
             </View>
           </View>
         }
+
+
+
+
+        
         // ── QUIZ CARD ITEM ─────────────────────────────────────────────────────
         renderItem={({ item, index }) => {
           const accent = accents[index % accents.length];
@@ -195,7 +198,7 @@ export const QuizPickerScreen = () => {
             <TouchableOpacity
               style={styles.card}
               activeOpacity={0.7}
-              onPress={() => handleStartQuiz(item)}
+              onPress={() =>  Alert.alert('Not Available', 'This feature is coming soon!')}
             >
               {/* Left: Icon Circle */}
               <View
@@ -232,11 +235,18 @@ export const QuizPickerScreen = () => {
                 </View>
               </View>
 
+
+
+
+
+
+
+
               {/* Right Side: Start Quiz Button & 3-Dots */}
               <View style={styles.rightSection}>
                 <TouchableOpacity
                   style={[styles.startQuizBtn, { backgroundColor: colors.primary }]}
-                  onPress={() => handleStartQuiz(item)}
+                  onPress={() =>  Alert.alert('Not Available', 'This feature is coming soon!')}
                   activeOpacity={0.8}
                 >
                   <Text style={styles.startQuizBtnText}>Start Quiz</Text>
@@ -260,6 +270,17 @@ export const QuizPickerScreen = () => {
             </TouchableOpacity>
           );
         }}
+
+
+
+
+
+
+
+
+
+
+
         // ── EMPTY STATE ────────────────────────────────────────────────────────
         ListEmptyComponent={
           <View style={styles.empty}>
@@ -286,7 +307,13 @@ export const QuizPickerScreen = () => {
         }
       />
 
-      {/* ── CREATE QUIZ BOTTOM SHEET ──────────────────────────────────────────── */}
+
+
+
+
+
+
+      {/* ── An PAG CREATE QUIZ(new Quiz)FORM SHEET ──────────────────────────────────────────── */}
       <Modal
         visible={createModalVisible}
         animationType="slide"
@@ -336,6 +363,13 @@ export const QuizPickerScreen = () => {
           </View>
         </KeyboardAvoidingView>
       </Modal>
+
+
+
+
+
+
+
 
       {/* ── EDIT QUIZ BOTTOM SHEET ────────────────────────────────────────────── */}
       <Modal
@@ -407,6 +441,15 @@ export const QuizPickerScreen = () => {
         </KeyboardAvoidingView>
       </Modal>
 
+
+
+
+
+
+
+
+
+
       {/* ── 3-DOTS OPTIONS BOTTOM SHEET ───────────────────────────────────────── */}
       <Modal
         visible={!!menuQuiz}
@@ -437,6 +480,16 @@ export const QuizPickerScreen = () => {
             )}
 
             <View style={styles.menuItemsList}>
+
+
+
+
+
+
+
+
+
+
               {/* Start Quiz */}
               <TouchableOpacity
                 style={styles.menuItem}
@@ -489,6 +542,20 @@ export const QuizPickerScreen = () => {
                 <Text style={styles.menuItemLabel}>Edit Details</Text>
               </TouchableOpacity>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               {/* Edit Questions */}
               <TouchableOpacity
                 style={styles.menuItem}
@@ -514,6 +581,18 @@ export const QuizPickerScreen = () => {
                 </View>
                 <Text style={styles.menuItemLabel}>Edit Questions</Text>
               </TouchableOpacity>
+
+
+
+
+
+
+
+
+
+
+
+
 
               {/* Delete Quiz */}
               <TouchableOpacity
@@ -551,6 +630,11 @@ export const QuizPickerScreen = () => {
             >
               <Text style={styles.menuCancelText}>Cancel</Text>
             </TouchableOpacity>
+
+
+
+
+
           </Pressable>
         </Pressable>
       </Modal>
@@ -558,7 +642,21 @@ export const QuizPickerScreen = () => {
   );
 };
 
+
+
+
+
+
+
+
 export default QuizPickerScreen;
+
+
+
+
+
+
+
 
 const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
