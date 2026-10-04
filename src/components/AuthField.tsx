@@ -10,15 +10,15 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, TextInputProps } f
 import { Ionicons } from '@expo/vector-icons';
 import { colors, radius, spacing } from '../theme';
 
-// ______________________________________________________
+// _________Props interface_____________________________________________
 // Explanation of the Props interface:
 interface Props extends TextInputProps {  // 
   label: string;
   secure?: boolean;
 }
 
-// ______________________________________________________
-// Explanation of the Props interface:
+// _________AuthField component_____________________________________________
+// Explanation of the AuthField component:
 export const AuthField = ({ label, secure, style, ...rest }: Props) => {
   const [hidden, setHidden] = useState(!!secure);
   return (
@@ -43,12 +43,12 @@ export const AuthField = ({ label, secure, style, ...rest }: Props) => {
   );
 };
 
-// ______________________________________________________
-// Explanation of the Props interface:
+// _________Default Export_____________________________________________
+// Explanation of the default export:
 export default AuthField;
 
-// ______________________________________________________
-// Explanation of the Props interface:
+// _________Styles_____________________________________________
+// Explanation of the Styles:
 const styles = StyleSheet.create({
   wrap: { marginBottom: spacing.md },
   label: { fontSize: 14, fontWeight: '700', color: colors.heading, marginBottom: 6 },
