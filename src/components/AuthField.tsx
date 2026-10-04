@@ -1,13 +1,24 @@
+/**
+ * Configures the core building blocks for a custom React Native input component:
+ * - React & Hooks: Manages component lifecycle and interactive states (e.g., password visibility).
+ * - React Native Primitives: Core UI layout elements, user input handling, and styling engine.
+ * - Icons & Design Tokens: External visual iconography (Ionicons) and central theme constants 
+ *   (colors, radius, spacing) to ensure UI consistency across the app.
+ */
 import React, { useState } from 'react';   //imports React library and useState hook for managing component sta   te 
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, TextInputProps } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, radius, spacing } from '../theme';
 
+// ______________________________________________________
+// Explanation of the Props interface:
 interface Props extends TextInputProps {  // 
   label: string;
   secure?: boolean;
 }
 
+// ______________________________________________________
+// Explanation of the Props interface:
 export const AuthField = ({ label, secure, style, ...rest }: Props) => {
   const [hidden, setHidden] = useState(!!secure);
   return (
@@ -32,8 +43,12 @@ export const AuthField = ({ label, secure, style, ...rest }: Props) => {
   );
 };
 
+// ______________________________________________________
+// Explanation of the Props interface:
 export default AuthField;
 
+// ______________________________________________________
+// Explanation of the Props interface:
 const styles = StyleSheet.create({
   wrap: { marginBottom: spacing.md },
   label: { fontSize: 14, fontWeight: '700', color: colors.heading, marginBottom: 6 },
