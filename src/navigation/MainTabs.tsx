@@ -61,7 +61,7 @@ const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) =
         ]}
       >
         <View style={styles.inner} onLayout={onInnerLayout}>
-          {/* Sliding active pill */}
+          {/* Animated background pill that highlights the selected tab. */}
           {tabWidth > 0 && (
             <Animated.View
               style={[
