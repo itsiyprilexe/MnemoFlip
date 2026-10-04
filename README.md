@@ -1,4 +1,4 @@
-# flashcard-app
+# MnemoFlip
 
 FlashCard – Digital Flashcards & Quiz Mobile Application
 
