@@ -1,10 +1,11 @@
-// ______________________________________________________
+// _________Props interface_____________________________________________
 // Explanation of the Props interface:
 import React from 'react';
 import { View, TextInput, Text, StyleSheet, TextInputProps } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 
-// ______________________________________________________
+// _________StyledTextInput component_____________________________________________
+// Explanation of the StyledTextInput component:          
 // Explanation of the Props interface:
 interface StyledTextInputProps extends TextInputProps {
   label?: string;
