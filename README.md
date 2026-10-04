@@ -1,6 +1,6 @@
 # MnemoFlip
 
-FlashCard – Digital Flashcards & Quiz Mobile Application
+# MnemoFlip – Digital Flashcards & Quiz Mobile Application
 
 FlashCard is a mobile study application designed to help students review lessons and improve their knowledge through digital flashcards and quizzes. The application allows users to create their own study decks, add questions and answers, review cards by flipping them, take quizzes, and keep track of their scores and learning progress.
 
