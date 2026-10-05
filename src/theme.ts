@@ -26,12 +26,13 @@ export const spacing = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };
 export const accents = ['#4C1D95', '#6D28D9', '#7C3AED', '#8B5CF6', '#A855F7', '#C084FC'];
 
 export const shadow: ViewStyle = Platform.select({
-  ios: {
+ios: {
     shadowColor: '#2E1065',
     shadowOpacity: 0.1,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
   },
+
   default: { elevation: 3 },
 }) as ViewStyle;
 

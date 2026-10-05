@@ -24,7 +24,7 @@ const lazyScreen = (load: () => any, name: string) => () => {
 
 export const AppNavigator = () => {
   const { user, isLoading } = useAuth();
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
 
   if (isLoading) {
     return (
@@ -54,6 +54,8 @@ export const AppNavigator = () => {
           headerTitleStyle: { fontWeight: '600' },
         }}
       >
+
+        {/* onPress={() => navigation.navigate('Login')} /> */}
         {user ? (
           <>
             <Stack.Screen
