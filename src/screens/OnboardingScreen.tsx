@@ -21,7 +21,7 @@ export const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
               <Ionicons name="bulb" size={52} color={colors.primary} />
             </View>
           </View>
-          <Text style={styles.title}>FlashCard</Text>
+          <Text style={styles.title}>Flash</Text>
           <Text style={styles.subtitle}>
             Create your own study decks, flip cards, take quizzes, and track your progress.
           </Text>
