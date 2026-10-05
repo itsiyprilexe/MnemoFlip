@@ -66,6 +66,9 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
           <PrimaryButton title={busy ? 'Logging in...' : 'Log In'} onPress={submit} style={{ marginTop: spacing.sm }} />
 
+
+
+
           <View style={styles.switchRow}>
             <Text style={styles.switchText}>New here?</Text>
             <TouchableOpacity onPress={() => navigation.navigate('SignUp')} hitSlop={10}>

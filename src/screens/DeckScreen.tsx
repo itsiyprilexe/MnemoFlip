@@ -68,17 +68,15 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
   };
 
   const handleStudy = () => {
-    Alert.alert(
-      'Under Construction',
-      'This feature is currently under construction.',
-    );
+    if (deck.cards.length === 0) {
+      Alert.alert('No cards yet', 'This deck has no flashcards yet.');
+      return;
+    }
+    navigation.navigate('Quiz', { deckId: deck.id });
   };
 
   const handleAddCardPress = () => {
-    Alert.alert(
-      'Under Construction',
-      'This feature is currently under construction.',
-    );
+    setAddCardOpen(true);
   };
 
   const openEdit = () => {
@@ -194,6 +192,14 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
                 {count} {count === 1 ? 'card' : 'cards'}
               </Text>
             </View>
+            {bestScore !== null && (
+              <View style={[styles.statPill, { backgroundColor: '#ECFDF5' }]}>
+                <Ionicons name="trophy-outline" size={14} color="#10B981" />
+                <Text style={[styles.statPillText, { color: '#10B981' }]}>
+                  Best: {bestScore} pts
+                </Text>
+              </View>
+            )}
           </View>
 
           {/* Action Buttons in Hero Card */}

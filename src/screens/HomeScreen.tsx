@@ -1,18 +1,15 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
-  Alert,
   TextInput,
   TouchableOpacity,
   Platform,
-  Image,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -78,27 +75,6 @@ export const HomeScreen = () => {
       : decks;
   }, [decks, query]);
 
-  const [photoUri, setPhotoUri] = useState<string | null>(null);
-
-  useFocusEffect(
-    useCallback(() => {
-      let isMounted = true;
-      (async () => {
-        try {
-          const stored = await AsyncStorage.getItem(
-            `@flashcards/photo_${user?.id || 'default'}`,
-          );
-          if (isMounted) setPhotoUri(stored);
-        } catch {
-          // ignore
-        }
-      })();
-      return () => {
-        isMounted = false;
-      };
-    }, [user]),
-  );
-
   const greetingName = user?.name
     ? `Hello, ${capitalizeWords(user.name)}!`
     : 'Hello, Student!';
@@ -155,15 +131,11 @@ export const HomeScreen = () => {
             activeOpacity={0.7}
             accessibilityLabel="View Profile"
           >
-            {photoUri ? (
-              <Image source={{ uri: photoUri }} style={styles.profileImage} />
-            ) : (
-              <Ionicons
-                name="person"
-                size={20}
-                color={colors.primary}
-              />
-            )}
+            <Ionicons
+              name="person"
+              size={20}
+              color={colors.primary}
+            />
           </TouchableOpacity>
         </View>
 
@@ -319,10 +291,7 @@ export const HomeScreen = () => {
                 style={styles.card}
                 activeOpacity={0.7}
                 onPress={() =>
-                  Alert.alert(
-                    'Under Construction',
-                    'This feature is coming soon!',
-                  )
+                  navigation.navigate('Deck', { deckId: item.id })
                 }
               >
                 {/* Icon Circle */}

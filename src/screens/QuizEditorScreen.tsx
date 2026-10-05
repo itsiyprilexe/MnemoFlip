@@ -67,6 +67,14 @@ export const QuizEditorScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const count = quiz.questions.length;
 
+  const handleStartQuiz = () => {
+    if (count === 0) {
+      Alert.alert('No questions yet', 'Add at least one question to start the quiz.');
+      return;
+    }
+    navigation.navigate('Quiz', { quizId });
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -169,9 +177,7 @@ export const QuizEditorScreen: React.FC<Props> = ({ route, navigation }) => {
       <View style={styles.footer}>
         <PrimaryButton
           title={count === 0 ? 'Add a question to start' : 'Start Quiz'}
-          onPress={() =>
-            Alert.alert('Not Available', 'This feature is coming soon!')
-          }
+          onPress={handleStartQuiz}
         />
       </View>
     </KeyboardAvoidingView>

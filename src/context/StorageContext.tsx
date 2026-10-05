@@ -1,17 +1,16 @@
 /**
  * StorageContext
- * Provides full CRUD for Decks and Quizzes, persisted with AsyncStorage.
+ * Provides static, pre-populated flashcard decks, quizzes, and high scores.
+ * Replaces dynamic AsyncStorage database CRUD with static mock data.
  */
 import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
   ReactNode,
 } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -50,29 +49,279 @@ export interface HighScore {
   date: string;
 }
 
-// ─── Storage Keys ─────────────────────────────────────────────────────────────
+// ─── Static Mock Data of Decks and Quizzes ───────────────────────────────────────────────────────
 
-const DECKS_KEY = '@flashcards/decks';
-const QUIZZES_KEY = '@flashcards/quizzes';
-const SCORES_KEY = '@flashcards/scores';
+export const STATIC_DECKS: Deck[] = [
+  {
+    id: 'deck-cs',
+    title: 'Computer Science Fundamentals',
+    description: 'Core concepts of data structures, algorithms, and computing.',
+    cards: [
+      {
+        id: 'c-cs-1',
+        question: 'What is the key difference between a Stack and a Queue?',
+        answer:
+          'A Stack operates on Last-In-First-Out (LIFO), whereas a Queue operates on First-In-First-Out (FIFO).',
+      },
+      {
+        id: 'c-cs-2',
+        question: 'What is the time complexity of binary search on a sorted array?',
+        answer:
+          'O(log n), because the search space is divided in half with every comparison.',
+      },
+      {
+        id: 'c-cs-3',
+        question: 'What does the ACID acronym represent in databases?',
+        answer:
+          'Atomicity, Consistency, Isolation, and Durability — guaranteeing reliable database transactions.',
+      },
+    ],
+  },
+  {
+    id: 'deck-bio',
+    title: 'General Biology & Life Science',
+    description: 'Key concepts in cellular biology, genetics, and physiology.',
+    cards: [
+      {
+        id: 'c-bio-1',
+        question: 'Which organelle is considered the powerhouse of the cell?',
+        answer:
+          'Mitochondria — produces ATP (adenosine triphosphate) through cellular respiration.',
+      },
+      {
+        id: 'c-bio-2',
+        question: 'What is the fundamental chemical reaction of photosynthesis?',
+        answer:
+          '6CO₂ + 6H₂O + solar energy → C₆H₁₂O₆ (glucose) + 6O₂.',
+      },
+      {
+        id: 'c-bio-3',
+        question: 'Which four nitrogenous bases make up DNA?',
+        answer:
+          'Adenine (A), Thymine (T), Guanine (G), and Cytosine (C).',
+      },
+    ],
+  },
+  {
+    id: 'deck-hist',
+    title: 'World History & Civilizations',
+    description: 'Milestones, cultural eras, and major global events.',
+    cards: [
+      {
+        id: 'c-hist-1',
+        question: 'In what year did World War II officially end?',
+        answer:
+          '1945, marked by the unconditional surrender of the Axis powers.',
+      },
+      {
+        id: 'c-hist-2',
+        question: 'Which ancient civilization built the Great Pyramids of Giza?',
+        answer:
+          'Ancient Egypt during the Old Kingdom period (~2500 BCE).',
+      },
+      {
+        id: 'c-hist-3',
+        question: 'What was the Renaissance and where did it originate?',
+        answer:
+          'A cultural revival of art, literature, and science originating in 14th-century Florence, Italy.',
+      },
+    ],
+  },
+  {
+    id: 'deck-span',
+    title: 'Spanish Language Essentials',
+    description: 'Essential vocabulary, greetings, and common expressions.',
+    cards: [
+      {
+        id: 'c-span-1',
+        question: 'How do you say "Good morning" and "Good night" in Spanish?',
+        answer:
+          '"Buenos días" (Good morning) and "Buenas noches" (Good night / evening).',
+      },
+      {
+        id: 'c-span-2',
+        question: 'What is the distinction between verbs "ser" and "estar"?',
+        answer:
+          '"Ser" is used for permanent traits and identity; "estar" is used for temporary conditions and locations.',
+      },
+      {
+        id: 'c-span-3',
+        question: 'How do you ask "Where is the library?" in Spanish?',
+        answer:
+          '"¿Dónde está la biblioteca?"',
+      },
+    ],
+  },
+  {
+    id: 'deck-art',
+    title: 'Visual Art & Design Principles',
+    description: 'Elements of composition, color harmony, and visual aesthetics.',
+    cards: [
+      {
+        id: 'c-art-1',
+        question: 'What are the primary colors in pigment (subtractive) color theory?',
+        answer:
+          'Red, Yellow, and Blue (or Cyan, Magenta, Yellow in modern printing).',
+      },
+      {
+        id: 'c-art-2',
+        question: 'What distinguishes serif from sans-serif fonts?',
+        answer:
+          'Serif fonts have small decorative strokes ("feet") at the ends of letterforms; sans-serif fonts are clean and stroke-less.',
+      },
+      {
+        id: 'c-art-3',
+        question: 'What is the Rule of Thirds in composition?',
+        answer:
+          'Dividing an image with 2 horizontal and 2 vertical lines to position focal points along lines or intersections.',
+      },
+    ],
+  },
+];
+
+export const STATIC_QUIZZES: Quiz[] = [
+  {
+    id: 'quiz-cs',
+    title: 'Computer Science Quick Check',
+    description: 'Test your understanding of basic algorithms, data structures, and computing.',
+    questions: [
+      {
+        id: 'q-cs-1',
+        question: 'What is the average time complexity of accessing an array element by index?',
+        options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'],
+        correctIndex: 0,
+      },
+      {
+        id: 'q-cs-2',
+        question: 'Which data structure follows a First-In-First-Out (FIFO) pattern?',
+        options: ['Stack', 'Queue', 'Binary Search Tree', 'Max-Heap'],
+        correctIndex: 1,
+      },
+      {
+        id: 'q-cs-3',
+        question: 'What does HTTP stand for in networking?',
+        options: [
+          'HyperText Transfer Protocol',
+          'High Tech Terminal Process',
+          'Host Transfer Protocol',
+          'Hybrid Text Transport Packet',
+        ],
+        correctIndex: 0,
+      },
+    ],
+  },
+  {
+    id: 'quiz-sci',
+    title: 'General Science Challenge',
+    description: 'Multiple-choice questions spanning life science, chemistry, and physics.',
+    questions: [
+      {
+        id: 'q-sci-1',
+        question: 'Which cell organelle generates ATP energy through cellular respiration?',
+        options: ['Ribosome', 'Mitochondria', 'Golgi Body', 'Endoplasmic Reticulum'],
+        correctIndex: 1,
+      },
+      {
+        id: 'q-sci-2',
+        question: 'What is the chemical formula for pure water?',
+        options: ['CO₂', 'NaCl', 'H₂O', 'CH₄'],
+        correctIndex: 2,
+      },
+      {
+        id: 'q-sci-3',
+        question: 'Which planet in our solar system orbits closest to the Sun?',
+        options: ['Venus', 'Mars', 'Mercury', 'Earth'],
+        correctIndex: 2,
+      },
+    ],
+  },
+  {
+    id: 'quiz-hist',
+    title: 'World History Quiz',
+    description: 'Explore key historical eras, ancient civilizations, and major milestones.',
+    questions: [
+      {
+        id: 'q-hist-1',
+        question: 'In which year did World War II conclude?',
+        options: ['1939', '1941', '1945', '1950'],
+        correctIndex: 2,
+      },
+      {
+        id: 'q-hist-2',
+        question: 'Which pre-Columbian civilization constructed the citadel of Machu Picchu?',
+        options: ['Aztec', 'Maya', 'Inca', 'Olmec'],
+        correctIndex: 2,
+      },
+      {
+        id: 'q-hist-3',
+        question: 'Who was the first President of the United States under the Constitution?',
+        options: ['Thomas Jefferson', 'George Washington', 'John Adams', 'Alexander Hamilton'],
+        correctIndex: 1,
+      },
+    ],
+  },
+  {
+    id: 'quiz-span',
+    title: 'Basic Spanish Vocabulary',
+    description: 'Review common vocabulary words, greetings, and expressions.',
+    questions: [
+      {
+        id: 'q-span-1',
+        question: 'What does the Spanish word "Gracias" mean?',
+        options: ['Please', 'Thank you', "You're welcome", 'Goodbye'],
+        correctIndex: 1,
+      },
+      {
+        id: 'q-span-2',
+        question: 'How do you greet someone with "Good morning" in Spanish?',
+        options: ['Buenas tardes', 'Buenas noches', 'Buenos días', 'Hasta pronto'],
+        correctIndex: 2,
+      },
+      {
+        id: 'q-span-3',
+        question: 'What does the Spanish word "libro" translate to in English?',
+        options: ['Letter', 'Book', 'Pen', 'Library'],
+        correctIndex: 1,
+      },
+    ],
+  },
+];
+
+export const STATIC_HIGH_SCORES: HighScore[] = [
+  {
+    deckId: 'quiz-cs',
+    deckTitle: 'Computer Science Quick Check',
+    score: 5,
+    totalQuestions: 5,
+    date: 'Yesterday',
+  },
+  {
+    deckId: 'quiz-sci',
+    deckTitle: 'General Science Challenge',
+    score: 4,
+    totalQuestions: 5,
+    date: '3 days ago',
+  },
+  {
+    deckId: 'quiz-hist',
+    deckTitle: 'World History Quiz',
+    score: 5,
+    totalQuestions: 5,
+    date: 'Oct 2, 2026',
+  },
+  {
+    deckId: 'quiz-span',
+    deckTitle: 'Basic Spanish Vocabulary',
+    score: 4,
+    totalQuestions: 5,
+    date: 'Oct 1, 2026',
+  },
+];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const makeId = () =>
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
-
-async function load<T>(key: string, fallback: T): Promise<T> {
-  try {
-    const raw = await AsyncStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-async function save<T>(key: string, value: T): Promise<void> {
-  await AsyncStorage.setItem(key, JSON.stringify(value));
-}
 
 // ─── Context Shape ────────────────────────────────────────────────────────────
 
@@ -101,6 +350,9 @@ interface StorageContextType {
   // High Scores
   highScores: HighScore[];
   saveHighScore: (score: HighScore) => void;
+
+  // Reset to static defaults
+  resetToStaticDefaults: () => void;
 }
 
 const StorageContext = createContext<StorageContextType | undefined>(undefined);
@@ -110,34 +362,25 @@ const StorageContext = createContext<StorageContextType | undefined>(undefined);
 export const StorageProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [decks, setDecks] = useState<Deck[]>([]);
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [highScores, setHighScores] = useState<HighScore[]>([]);
+  // Initialized directly with rich static mock data (no AsyncStorage needed)
+  const [decks, setDecks] = useState<Deck[]>(STATIC_DECKS);
+  const [quizzes, setQuizzes] = useState<Quiz[]>(STATIC_QUIZZES);
+  const [highScores, setHighScores] = useState<HighScore[]>(STATIC_HIGH_SCORES);
 
-  // Load everything on mount
-  useEffect(() => {
-    Promise.all([
-      load<Deck[]>(DECKS_KEY, []),
-      load<Quiz[]>(QUIZZES_KEY, []),
-      load<HighScore[]>(SCORES_KEY, []),
-    ]).then(([d, q, s]) => {
-      setDecks(d);
-      setQuizzes(q);
-      setHighScores(s);
-    });
+  // ─── Reset Helper ───────────────────────────────────────────────────────────
+  const resetToStaticDefaults = useCallback(() => {
+    setDecks(STATIC_DECKS);
+    setQuizzes(STATIC_QUIZZES);
+    setHighScores(STATIC_HIGH_SCORES);
   }, []);
 
-  // ─── Deck CRUD ──────────────────────────────────────────────────────────────
+  // ─── Deck In-Memory Operations ──────────────────────────────────────────────
 
   const createDeck = useCallback(
     (title: string, description: string): string => {
       const id = makeId();
       const next: Deck = { id, title, description, cards: [] };
-      setDecks((prev) => {
-        const updated = [...prev, next];
-        save(DECKS_KEY, updated);
-        return updated;
-      });
+      setDecks((prev) => [...prev, next]);
       return id;
     },
     [],
@@ -145,64 +388,48 @@ export const StorageProvider: React.FC<{ children: ReactNode }> = ({
 
   const renameDeck = useCallback(
     (id: string, title: string, description: string) => {
-      setDecks((prev) => {
-        const updated = prev.map((d) =>
-          d.id === id ? { ...d, title, description } : d,
-        );
-        save(DECKS_KEY, updated);
-        return updated;
-      });
+      setDecks((prev) =>
+        prev.map((d) => (d.id === id ? { ...d, title, description } : d)),
+      );
     },
     [],
   );
 
   const deleteDeck = useCallback((id: string) => {
-    setDecks((prev) => {
-      const updated = prev.filter((d) => d.id !== id);
-      save(DECKS_KEY, updated);
-      return updated;
-    });
+    setDecks((prev) => prev.filter((d) => d.id !== id));
   }, []);
 
   const addCard = useCallback(
     (deckId: string, question: string, answer: string) => {
-      setDecks((prev) => {
-        const updated = prev.map((d) => {
+      setDecks((prev) =>
+        prev.map((d) => {
           if (d.id !== deckId) return d;
           return {
             ...d,
             cards: [...d.cards, { id: makeId(), question, answer }],
           };
-        });
-        save(DECKS_KEY, updated);
-        return updated;
-      });
+        }),
+      );
     },
     [],
   );
 
   const deleteCard = useCallback((deckId: string, cardId: string) => {
-    setDecks((prev) => {
-      const updated = prev.map((d) => {
+    setDecks((prev) =>
+      prev.map((d) => {
         if (d.id !== deckId) return d;
         return { ...d, cards: d.cards.filter((c) => c.id !== cardId) };
-      });
-      save(DECKS_KEY, updated);
-      return updated;
-    });
+      }),
+    );
   }, []);
 
-  // ─── Quiz CRUD ──────────────────────────────────────────────────────────────
+  // ─── Quiz In-Memory Operations ──────────────────────────────────────────────
 
   const createQuiz = useCallback(
     (title: string, description: string): string => {
       const id = makeId();
       const next: Quiz = { id, title, description, questions: [] };
-      setQuizzes((prev) => {
-        const updated = [...prev, next];
-        save(QUIZZES_KEY, updated);
-        return updated;
-      });
+      setQuizzes((prev) => [...prev, next]);
       return id;
     },
     [],
@@ -210,23 +437,15 @@ export const StorageProvider: React.FC<{ children: ReactNode }> = ({
 
   const renameQuiz = useCallback(
     (id: string, title: string, description: string) => {
-      setQuizzes((prev) => {
-        const updated = prev.map((q) =>
-          q.id === id ? { ...q, title, description } : q,
-        );
-        save(QUIZZES_KEY, updated);
-        return updated;
-      });
+      setQuizzes((prev) =>
+        prev.map((q) => (q.id === id ? { ...q, title, description } : q)),
+      );
     },
     [],
   );
 
   const deleteQuiz = useCallback((id: string) => {
-    setQuizzes((prev) => {
-      const updated = prev.filter((q) => q.id !== id);
-      save(QUIZZES_KEY, updated);
-      return updated;
-    });
+    setQuizzes((prev) => prev.filter((q) => q.id !== id));
   }, []);
 
   const addQuestion = useCallback(
@@ -236,8 +455,8 @@ export const StorageProvider: React.FC<{ children: ReactNode }> = ({
       options: string[],
       correctIndex: number,
     ) => {
-      setQuizzes((prev) => {
-        const updated = prev.map((q) => {
+      setQuizzes((prev) =>
+        prev.map((q) => {
           if (q.id !== quizId) return q;
           return {
             ...q,
@@ -246,36 +465,28 @@ export const StorageProvider: React.FC<{ children: ReactNode }> = ({
               { id: makeId(), question, options, correctIndex },
             ],
           };
-        });
-        save(QUIZZES_KEY, updated);
-        return updated;
-      });
+        }),
+      );
     },
     [],
   );
 
   const deleteQuestion = useCallback((quizId: string, questionId: string) => {
-    setQuizzes((prev) => {
-      const updated = prev.map((q) => {
+    setQuizzes((prev) =>
+      prev.map((q) => {
         if (q.id !== quizId) return q;
         return {
           ...q,
           questions: q.questions.filter((qs) => qs.id !== questionId),
         };
-      });
-      save(QUIZZES_KEY, updated);
-      return updated;
-    });
+      }),
+    );
   }, []);
 
-  // ─── High Scores ────────────────────────────────────────────────────────────
+  // ─── High Scores In-Memory Operations ───────────────────────────────────────
 
   const saveHighScore = useCallback((score: HighScore) => {
-    setHighScores((prev) => {
-      const updated = [...prev, score];
-      save(SCORES_KEY, updated);
-      return updated;
-    });
+    setHighScores((prev) => [score, ...prev]);
   }, []);
 
   // ─── Context Value ───────────────────────────────────────────────────────────
@@ -296,6 +507,7 @@ export const StorageProvider: React.FC<{ children: ReactNode }> = ({
       deleteQuestion,
       highScores,
       saveHighScore,
+      resetToStaticDefaults,
     }),
     [
       decks,
@@ -312,6 +524,7 @@ export const StorageProvider: React.FC<{ children: ReactNode }> = ({
       deleteQuestion,
       highScores,
       saveHighScore,
+      resetToStaticDefaults,
     ],
   );
 

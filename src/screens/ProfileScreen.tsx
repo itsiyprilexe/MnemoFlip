@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,6 @@ import {
   TextInput,
   Image,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -57,40 +56,40 @@ export const ProfileScreen = () => {
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
-  const { highScores } = useStorage();
+  const { decks, quizzes, highScores, resetToStaticDefaults } = useStorage();
+
+  const totalCards = useMemo(
+    () => decks.reduce((sum, d) => sum + d.cards.length, 0),
+    [decks],
+  );
+
+  const averageScore = useMemo(() => {
+    if (!highScores.length) return 0;
+    const totalPct = highScores.reduce(
+      (sum, s) =>
+        sum +
+        (s.totalQuestions > 0
+          ? Math.round((s.score / s.totalQuestions) * 100)
+          : 0),
+      0,
+    );
+    return Math.round(totalPct / highScores.length);
+  }, [highScores]);
 
   // Photo state
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
   // Bio states
-  const [bio, setBio] = useState('');
-  const [editBio, setEditBio] = useState('');
+  const DEFAULT_BIO =
+    'KAHUSAY KO!';
+  const [bio, setBio] = useState(DEFAULT_BIO);
+  const [editBio, setEditBio] = useState(DEFAULT_BIO);
   const [bioModalVisible, setBioModalVisible] = useState(false);
 
   // Edit Profile / Photo states
   const [profileModalVisible, setProfileModalVisible] = useState(false);
   const [editName, setEditName] = useState('');
   const [tempPhotoUri, setTempPhotoUri] = useState<string | null>(null);
-
-  // Load persisted bio & photo on startup or user change
-  useEffect(() => {
-    (async () => {
-      try {
-        const [storedBio, storedPhoto] = await Promise.all([
-          AsyncStorage.getItem(`@flashcards/bio_${user?.id || 'default'}`),
-          AsyncStorage.getItem(`@flashcards/photo_${user?.id || 'default'}`),
-        ]);
-        if (storedBio !== null) {
-          setBio(storedBio);
-        }
-        if (storedPhoto !== null) {
-          setPhotoUri(storedPhoto);
-        }
-      } catch (e) {
-        console.warn('Failed to load profile data', e);
-      }
-    })();
-  }, [user?.id]);
 
   // Open Edit Profile modal (edits photo & name)
   const openEditProfileModal = () => {
@@ -99,11 +98,11 @@ export const ProfileScreen = () => {
     setProfileModalVisible(true);
   };
 
-  // Change Photo button inside modal shows "under construction"
+  // Change Photo button inside modal
   const handlePickPhoto = () => {
     Alert.alert(
-      'Under Construction',
-      'This feature is currently under construction.',
+      'Demo Profile',
+      'Photo upload is disabled in static prototype mode.',
     );
   };
 
@@ -112,33 +111,15 @@ export const ProfileScreen = () => {
   };
 
   const handleSaveProfile = async () => {
-    try {
-      const cleanName = editName.trim();
-      if (!cleanName) {
-        Alert.alert('Name required', 'Please enter your name.');
-        return;
-      }
-
-      await updateUser(cleanName);
-
-      if (tempPhotoUri) {
-        await AsyncStorage.setItem(
-          `@flashcards/photo_${user?.id || 'default'}`,
-          tempPhotoUri,
-        );
-        setPhotoUri(tempPhotoUri);
-      } else {
-        await AsyncStorage.removeItem(
-          `@flashcards/photo_${user?.id || 'default'}`,
-        );
-        setPhotoUri(null);
-      }
-
-      setProfileModalVisible(false);
-    } catch (e) {
-      console.warn('handleSaveProfile failed', e);
-      Alert.alert('Error', 'Failed to save profile changes.');
+    const cleanName = editName.trim();
+    if (!cleanName) {
+      Alert.alert('Name required', 'Please enter your name.');
+      return;
     }
+
+    await updateUser(cleanName);
+    setPhotoUri(tempPhotoUri);
+    setProfileModalVisible(false);
   };
 
   const openEditBioModal = () => {
@@ -147,40 +128,32 @@ export const ProfileScreen = () => {
   };
 
   const handleSaveBio = async () => {
-    try {
-      const cleanBio = editBio.trim();
-      await AsyncStorage.setItem(
-        `@flashcards/bio_${user?.id || 'default'}`,
-        cleanBio,
-      );
-      setBio(cleanBio);
-      setBioModalVisible(false);
-    } catch {
-      Alert.alert('Error', 'Failed to save bio. Please try again.');
-    }
+    const cleanBio = editBio.trim();
+    setBio(cleanBio);
+    setBioModalVisible(false);
   };
 
-  // Account button shows "under construction"
+  // Account button
   const handleAccountPress = () => {
     Alert.alert(
-      'Under Construction',
-      'This feature is currently under construction.',
+      'Static Account',
+      `Signed in as static user: ${user?.name || 'Alex Rivera'} (${user?.email || 'alex.rivera@example.com'})`,
     );
   };
 
-  // Privacy button shows "under construction"
+  // Privacy button
   const handlePrivacyPress = () => {
     Alert.alert(
-      'Under Construction',
-      'This feature is currently under construction.',
+      'Privacy Policy',
+      'This application runs in static prototype mode. All data is mock and in-memory.',
     );
   };
 
-  // Help and feedback button shows "under construction"
+  // Help and feedback button
   const handleHelpPress = () => {
     Alert.alert(
-      'Under Construction',
-      'This feature is currently under construction.',
+      'FlashCard App',
+      'Study flashcards, review decks, and practice with quizzes in this static prototype.',
     );
   };
 
@@ -264,7 +237,15 @@ export const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
 
+        {/* =========================
+            STUDY STATS (STATIC SUMMARY)
+        ========================= */}
+        
 
+        {/* =========================
+            RECENT QUIZ ACTIVITY (STATIC)
+        ========================= */}
+        
 
         {/* =========================
             SETTINGS CARD (ACCOUNT, PRIVACY, HELP & FEEDBACK)
@@ -571,6 +552,56 @@ const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
 
     scrollContent: {
       paddingHorizontal: spacing.md,
+    },
+
+    // ── STUDY STATS (STATIC SUMMARY) ────────────────────────────────────────
+    statsCard: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-around',
+      backgroundColor: colors.card,
+      borderRadius: 20,
+      borderWidth: 1,
+      borderColor: colors.border,
+      paddingVertical: 14,
+      paddingHorizontal: 8,
+      marginBottom: 20,
+      marginTop: 2,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#2E1065',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.04,
+          shadowRadius: 6,
+        },
+        android: { elevation: 2 },
+      }),
+    },
+
+    statItem: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    statValue: {
+      fontSize: 18,
+      fontWeight: '800',
+      color: colors.heading,
+      letterSpacing: -0.3,
+    },
+
+    statLabel: {
+      fontSize: 11,
+      fontWeight: '600',
+      color: colors.muted,
+      marginTop: 2,
+    },
+
+    statDivider: {
+      width: 1,
+      height: 28,
+      backgroundColor: colors.border,
     },
 
     // ── PROFILE HEADER (OPEN, NO CARD) ──────────────────────────────────────
