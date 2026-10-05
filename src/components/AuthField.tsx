@@ -1,11 +1,8 @@
-/**
- * Configures the core building blocks for a custom React Native input component:
- * - React & Hooks: Manages component lifecycle and interactive states (e.g., password visibility).
- * - React Native Primitives: Core UI layout elements, user input handling, and styling engine.
- * - Icons & Design Tokens: External visual iconography (Ionicons) and central theme constants 
- *   (colors, radius, spacing) to ensure UI consistency across the app.
- */
 
+/**
+ * Import statements:
+ * Loads React tools, standard mobile UI components, icons, and theme styles (colors, spacing, layout).
+ */
 import React, { useState } from 'react';   
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, TextInputProps } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';

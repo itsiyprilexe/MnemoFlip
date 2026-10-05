@@ -1,23 +1,29 @@
-// _________Props interface_____________________________________________
-// Explain
+// _________IMPORTS_____________________________________________
+// Brings in React, standard UI building blocks from React Native (View, Input, Text),
+// and your custom theme hook to get colors.
 import React from 'react';
 import { View, TextInput, Text, StyleSheet, TextInputProps } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 
-// _________StyledTextInput component_____________________________________________
-// Explain
+// _________PROPS TYPES DEFINITION_____________________________________________
+// Tells TypeScript what properties this component accepts:
+// - Everything a standard input accepts (placeholder, onChangeText, etc.)
+// - Plus an optional 'label' title and an optional 'error' message.
 interface StyledTextInputProps extends TextInputProps {
   label?: string;
   error?: string;
 }
 
-// ______________________________________________________
-// Explain
+// __________COMPONENT FUNCTION & THEME SETUP____________________________________________
+// Takes in props (label, error, extra styles) and fetches theme colors (light/dark mode).
 export const StyledTextInput: React.FC<StyledTextInputProps> = ({ label, error, style, ...props }) => {
   const { colors } = useTheme();
   
-  // ______________________________________________________
-  // Explain
+  // ________WHAT GETS DISPLAYED ON SCREEN______________________________________________
+  // Returns a box (View) containing:
+  // - A label above the input (if provided)
+  // - The text input box styled with dynamic theme colors (turns red on error)
+  // - An error message below the input (if an error exists)
   return (
     <View style={styles.container}>
       {label && <Text style={[styles.label, { color: colors.heading }]}>{label}</Text>}
@@ -40,8 +46,8 @@ export const StyledTextInput: React.FC<StyledTextInputProps> = ({ label, error, 
   );
 };
 
-// ______________________________________________________
-// Explain
+// ________STATIC STYLES______________________________________________
+// Sets up fixed layout rules like spacing, padding, font sizes, and rounded corners.
 const styles = StyleSheet.create({
   container: {
     marginVertical: 8,
