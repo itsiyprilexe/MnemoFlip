@@ -24,7 +24,7 @@ const lazyScreen = (load: () => any, name: string) => () => {
 
 export const AppNavigator = () => {
   const { user, isLoading } = useAuth();
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
 
   if (isLoading) {
     return (
