@@ -56,6 +56,8 @@ export const AppNavigator = () => {
           headerTitleStyle: { fontWeight: '600' },
         }}
       >
+
+        {/* onPress={() => navigation.navigate('Login')} /> */}
         {user ? (
           <>
             <Stack.Screen
