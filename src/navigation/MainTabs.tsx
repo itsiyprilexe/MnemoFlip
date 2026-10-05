@@ -25,9 +25,13 @@ const H_MARGIN = 20;
 const PADDING = 6;
 
 const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+  // Keeps the floating bar above the device's home indicator.
   const { colors } = useTheme();
+
   const insets = useSafeAreaInsets();
+
   const [innerWidth, setInnerWidth] = useState(0);
+  
   const translateX = useRef(new Animated.Value(0));
 
   const tabWidth = innerWidth / state.routes.length;
