@@ -26,12 +26,20 @@ const PADDING = 6;
 
 const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const { colors } = useTheme();
+
+ // Keeps the floating bar above the device's home indicator.
   const insets = useSafeAreaInsets();
+
+  // The available width must be measured before calculating each tab's width.
   const [innerWidth, setInnerWidth] = useState(0);
+
+  // Persists the pill's horizontal animated position across renders.
   const translateX = useRef(new Animated.Value(0));
 
+  // Each tab occupies an equal portion of the tab bar.
   const tabWidth = innerWidth / state.routes.length;
-
+  
+// Move the active pill underneath the currently selected tab.
   useEffect(() => {
     if (!tabWidth) return;
     Animated.spring(translateX.current, {
