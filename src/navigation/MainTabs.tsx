@@ -27,7 +27,7 @@ const PADDING = 6;
 const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   // Keeps the floating bar above the device's home indicator.
   const { colors } = useTheme();
-
+// The available width must be measured before calculating each tab's width.
   const insets = useSafeAreaInsets();
 
   const [innerWidth, setInnerWidth] = useState(0);
