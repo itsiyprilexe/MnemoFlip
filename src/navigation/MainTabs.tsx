@@ -31,7 +31,7 @@ const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) =
   const insets = useSafeAreaInsets();
 // Persists the pill's horizontal animated position across renders.
   const [innerWidth, setInnerWidth] = useState(0);
-  
+  // Each tab occupies an equal portion of the tab bar.
   const translateX = useRef(new Animated.Value(0));
 
   const tabWidth = innerWidth / state.routes.length;
