@@ -29,7 +29,7 @@ const FloatingTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) =
   const { colors } = useTheme();
 // The available width must be measured before calculating each tab's width.
   const insets = useSafeAreaInsets();
-
+// Persists the pill's horizontal animated position across renders.
   const [innerWidth, setInnerWidth] = useState(0);
   
   const translateX = useRef(new Animated.Value(0));
