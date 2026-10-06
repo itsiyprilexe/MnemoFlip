@@ -54,126 +54,126 @@ export interface HighScore {
 export const STATIC_DECKS: Deck[] = [
   {
     id: 'deck-cs',
-    title: 'Computer Science Fundamentals',
-    description: 'Core concepts of data structures, algorithms, and computing.',
+    title: 'Mobile Programming',
+    description: 'The process of writing software specifically designed to run on handheld devices such as smartphones, tablets, and smartwatches.',
     cards: [
       {
         id: 'c-cs-1',
-        question: 'What is the key difference between a Stack and a Queue?',
+        question: 'Which programming language is designated by Google as the preferred language for native Android development?',
         answer:
-          'A Stack operates on Last-In-First-Out (LIFO), whereas a Queue operates on First-In-First-Out (FIFO).',
+          'Kotlin.',
       },
       {
         id: 'c-cs-2',
-        question: 'What is the time complexity of binary search on a sorted array?',
+        question: 'Which programming language is primarily used for native iOS development?',
         answer:
-          'O(log n), because the search space is divided in half with every comparison.',
+          'Swift.',
       },
       {
         id: 'c-cs-3',
-        question: 'What does the ACID acronym represent in databases?',
+        question: 'What primary advantage does cross-platform mobile development offer over native development?Si',
         answer:
-          'Atomicity, Consistency, Isolation, and Durability — guaranteeing reliable database transactions.',
+          'Single Codebase Deployment',
       },
     ],
   },
   {
     id: 'deck-bio',
-    title: 'General Biology & Life Science',
-    description: 'Key concepts in cellular biology, genetics, and physiology.',
+    title: 'Automata Theory',
+    description: 'Branch of theoretical computer science and mathematics that studies abstract machines (automata) and the computational problems that can be solved using them.',
     cards: [
       {
         id: 'c-bio-1',
-        question: 'Which organelle is considered the powerhouse of the cell?',
+        question: 'Which type of language is formally recognized by a Deterministic Finite Automaton (DFA)?',
         answer:
-          'Mitochondria — produces ATP (adenosine triphosphate) through cellular respiration.',
+          'Regular Language',
       },
       {
         id: 'c-bio-2',
-        question: 'What is the fundamental chemical reaction of photosynthesis?',
+        question: 'What structural component distinguishes a Pushdown Automaton (PDA) from a Finite State Automaton (FSA)?',
         answer:
-          '6CO₂ + 6H₂O + solar energy → C₆H₁₂O₆ (glucose) + 6O₂.',
+          'Stack Memory',
       },
       {
         id: 'c-bio-3',
-        question: 'Which four nitrogenous bases make up DNA?',
+        question: 'In a formal transition function for a Deterministic Finite Automaton $\delta: Q \times \Sigma \rightarrow Q$, what does $Q$ represent?',
         answer:
-          'Adenine (A), Thymine (T), Guanine (G), and Cytosine (C).',
+          'Set of States',
       },
     ],
   },
   {
     id: 'deck-hist',
-    title: 'World History & Civilizations',
-    description: 'Milestones, cultural eras, and major global events.',
+    title: 'Software Engineering',
+    description: 'Systematic, disciplined application of engineering principles to the design, development, maintenance, testing, and evaluation of software systems.',
     cards: [
       {
         id: 'c-hist-1',
-        question: 'In what year did World War II officially end?',
+        question: 'Which software development methodology emphasizes short, iterative development cycles called sprints and frequent reassessment of plans?',
         answer:
-          '1945, marked by the unconditional surrender of the Axis powers.',
+          'Agile',
       },
       {
         id: 'c-hist-2',
-        question: 'Which ancient civilization built the Great Pyramids of Giza?',
+        question: 'What is the main purpose of using a version control system like Git in software engineering?',
         answer:
-          'Ancient Egypt during the Old Kingdom period (~2500 BCE).',
+          'Tracking changes to code over time and collaborating,',
       },
       {
         id: 'c-hist-3',
-        question: 'What was the Renaissance and where did it originate?',
+        question: 'Which type of software testing focuses on verifying that individual isolated units or functions work as expected?',
         answer:
-          'A cultural revival of art, literature, and science originating in 14th-century Florence, Italy.',
+          'Unit Testing',
       },
     ],
   },
   {
     id: 'deck-span',
-    title: 'Spanish Language Essentials',
-    description: 'Essential vocabulary, greetings, and common expressions.',
+    title: 'Reading Visual Arts',
+    description: 'The discipline and critical practice of analyzing, interpreting, and evaluating visual images and artifacts.',
     cards: [
       {
         id: 'c-span-1',
-        question: 'How do you say "Good morning" and "Good night" in Spanish?',
+        question: 'Which visual element refers to the path left by a moving point, such as a pencil, brush, or pen mark?',
         answer:
-          '"Buenos días" (Good morning) and "Buenas noches" (Good night / evening).',
+          'Line',
       },
       {
         id: 'c-span-2',
-        question: 'What is the distinction between verbs "ser" and "estar"?',
+        question: 'Which set consists entirely of primary colors in traditional color theory?',
         answer:
-          '"Ser" is used for permanent traits and identity; "estar" is used for temporary conditions and locations.',
+          'Red, Blue, and Yellow',
       },
       {
         id: 'c-span-3',
-        question: 'How do you ask "Where is the library?" in Spanish?',
+        question: 'What composition technique divides an image into a nine-part grid to create balance and interest?',
         answer:
-          '"¿Dónde está la biblioteca?"',
+          'Rule of Thirds',
       },
     ],
   },
   {
     id: 'deck-art',
-    title: 'Visual Art & Design Principles',
-    description: 'Elements of composition, color harmony, and visual aesthetics.',
+    title: 'Programming Languages',
+    description: 'Overview of popular programming languages and their characteristics.',
     cards: [
       {
         id: 'c-art-1',
-        question: 'What are the primary colors in pigment (subtractive) color theory?',
+        question: 'Which programming language is primarily used for structure and presentation when creating web pages?',
         answer:
-          'Red, Yellow, and Blue (or Cyan, Magenta, Yellow in modern printing).',
+          'HTML',
       },
       {
         id: 'c-art-2',
-        question: 'What distinguishes serif from sans-serif fonts?',
+        question: 'What is the primary role of a compiler in software development?',
         answer:
-          'Serif fonts have small decorative strokes ("feet") at the ends of letterforms; sans-serif fonts are clean and stroke-less.',
+          'To translate source code written in a high-level programming language into machine code that can be executed by a computer.',
       },
       {
         id: 'c-art-3',
-        question: 'What is the Rule of Thirds in composition?',
+        question: 'Which programming language is natively used for developing modern Android applications?',
         answer:
-          'Dividing an image with 2 horizontal and 2 vertical lines to position focal points along lines or intersections.',
+          'Kotlin',
       },
     ],
   },
@@ -181,107 +181,82 @@ export const STATIC_DECKS: Deck[] = [
 
 export const STATIC_QUIZZES: Quiz[] = [
   {
-    id: 'quiz-cs',
-    title: 'Computer Science Quick Check',
-    description: 'Test your understanding of basic algorithms, data structures, and computing.',
+    id: 'quiz-pl',
+    title: 'Pogramming Languages',
+    description: 'Give it a shot and test your computer science knowledge!',
     questions: [
       {
-        id: 'q-cs-1',
-        question: 'What is the average time complexity of accessing an array element by index?',
-        options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'],
+        id: 'q-pl-1',
+        question: 'Which programming paradigm treats computation primarily as the evaluation of mathematical functions while strictly avoiding state modification and mutable data?',
+        options: ['Functional Programming', 'Object-Oriented Programming', 'Procedural Programming', 'Imperative Programming'],
         correctIndex: 0,
       },
       {
-        id: 'q-cs-2',
-        question: 'Which data structure follows a First-In-First-Out (FIFO) pattern?',
-        options: ['Stack', 'Queue', 'Binary Search Tree', 'Max-Heap'],
-        correctIndex: 1,
+        id: 'q-pl-2',
+        question: 'Which parameter passing mechanism passes a reference to a variable that evaluates the argument each time it is accessed inside the function?',
+        options: ['Call by name', 'Call by reference', 'Call by value', 'Call by result'],
+        correctIndex: 0,
       },
       {
-        id: 'q-cs-3',
-        question: 'What does HTTP stand for in networking?',
+        id: 'q-pl-3',
+        question: 'What structural feature in a grammar causes ambiguous parsing for nested if-then-else constructs?',
         options: [
-          'HyperText Transfer Protocol',
-          'High Tech Terminal Process',
-          'Host Transfer Protocol',
-          'Hybrid Text Transport Packet',
+          'Left Recursion',
+          'Shift-reduce conflict',
+          'Danglin else',
+          'Operator precedence',
         ],
+        correctIndex: 2,
+      },
+    ],
+  },
+  {
+    id: 'quiz-rva',
+    title: 'Reading Visual Arts',
+    description: 'Give it a shot and test your computer science knowledge!',
+    questions: [
+      {
+        id: 'q-rva-1',
+        question: 'Which principle of design refers to the visual weight distribution that stabilizes an artwork?',
+        options: ['Proportion', 'Rhythm', 'Balance', 'Contrast'],
+        correctIndex: 2,
+      },
+      {
+        id: 'q-rva-2',
+        question: 'In formal art analysis, what does the term chiaroscuro describe?',
+        options: ['Linear Perspective', 'Surface Texture', 'Color Harmony', 'Light-dark Contrast'],
+        correctIndex: 3,
+      },
+      {
+        id: 'q-rva-3',
+        question: 'What level of art analysis focuses strictly on identifying symbols, themes, and subject matter?',
+        options: ['Medium Analysis', 'Iconagraphic Analysis', 'Contextual Analysis', 'Formal Analysis'],
+        correctIndex: 1,
+      },
+    ],
+  },
+  {
+    id: 'quiz-mp',
+    title: 'Mobile Programming',
+    description: 'Give it a shot and test your computer science knowledge!',
+    questions: [
+      {
+        id: 'q-mp-1',
+        question: 'Which architecture pattern relies on two-way data binding to automatically synchronize the view and data model in mobile applications?',
+        options: ['MVVM', 'MVC', 'MVI', 'MVP'],
         correctIndex: 0,
       },
-    ],
-  },
-  {
-    id: 'quiz-sci',
-    title: 'General Science Challenge',
-    description: 'Multiple-choice questions spanning life science, chemistry, and physics.',
-    questions: [
       {
-        id: 'q-sci-1',
-        question: 'Which cell organelle generates ATP energy through cellular respiration?',
-        options: ['Ribosome', 'Mitochondria', 'Golgi Body', 'Endoplasmic Reticulum'],
+        id: 'q-mp-2',
+        question: 'In Android app lifecycles, which callback is invoked immediately before an Activity becomes visible to the user?',
+        options: ['onStart', 'onResume', 'onPause', 'onStop'],
         correctIndex: 1,
       },
       {
-        id: 'q-sci-2',
-        question: 'What is the chemical formula for pure water?',
-        options: ['CO₂', 'NaCl', 'H₂O', 'CH₄'],
+        id: 'q-mp-3',
+        question: 'Which cross-platform framework uses direct compilation to native code via AOT (Ahead-Of-Time) instead of a JS bridge at runtime?',
+        options: ['React Native', 'Flutter', 'Apache Cordova', 'Ionic Framework'],
         correctIndex: 2,
-      },
-      {
-        id: 'q-sci-3',
-        question: 'Which planet in our solar system orbits closest to the Sun?',
-        options: ['Venus', 'Mars', 'Mercury', 'Earth'],
-        correctIndex: 2,
-      },
-    ],
-  },
-  {
-    id: 'quiz-hist',
-    title: 'World History Quiz',
-    description: 'Explore key historical eras, ancient civilizations, and major milestones.',
-    questions: [
-      {
-        id: 'q-hist-1',
-        question: 'In which year did World War II conclude?',
-        options: ['1939', '1941', '1945', '1950'],
-        correctIndex: 2,
-      },
-      {
-        id: 'q-hist-2',
-        question: 'Which pre-Columbian civilization constructed the citadel of Machu Picchu?',
-        options: ['Aztec', 'Maya', 'Inca', 'Olmec'],
-        correctIndex: 2,
-      },
-      {
-        id: 'q-hist-3',
-        question: 'Who was the first President of the United States under the Constitution?',
-        options: ['Thomas Jefferson', 'George Washington', 'John Adams', 'Alexander Hamilton'],
-        correctIndex: 1,
-      },
-    ],
-  },
-  {
-    id: 'quiz-span',
-    title: 'Basic Spanish Vocabulary',
-    description: 'Review common vocabulary words, greetings, and expressions.',
-    questions: [
-      {
-        id: 'q-span-1',
-        question: 'What does the Spanish word "Gracias" mean?',
-        options: ['Please', 'Thank you', "You're welcome", 'Goodbye'],
-        correctIndex: 1,
-      },
-      {
-        id: 'q-span-2',
-        question: 'How do you greet someone with "Good morning" in Spanish?',
-        options: ['Buenas tardes', 'Buenas noches', 'Buenos días', 'Hasta pronto'],
-        correctIndex: 2,
-      },
-      {
-        id: 'q-span-3',
-        question: 'What does the Spanish word "libro" translate to in English?',
-        options: ['Letter', 'Book', 'Pen', 'Library'],
-        correctIndex: 1,
       },
     ],
   },
@@ -289,32 +264,25 @@ export const STATIC_QUIZZES: Quiz[] = [
 
 export const STATIC_HIGH_SCORES: HighScore[] = [
   {
-    deckId: 'quiz-cs',
-    deckTitle: 'Computer Science Quick Check',
-    score: 5,
-    totalQuestions: 5,
+    deckId: 'quiz-rva',
+    deckTitle: 'Reading Visual Arts',
+    score: 3,
+    totalQuestions: 3,
     date: 'Yesterday',
   },
   {
-    deckId: 'quiz-sci',
-    deckTitle: 'General Science Challenge',
+    deckId: 'quiz-pl',
+    deckTitle: 'Programming Logic',
     score: 4,
-    totalQuestions: 5,
+    totalQuestions: 3,
     date: '3 days ago',
   },
   {
-    deckId: 'quiz-hist',
-    deckTitle: 'World History Quiz',
-    score: 5,
-    totalQuestions: 5,
+    deckId: 'quiz-mp',
+    deckTitle: 'Mobile Programming',
+    score: 2,
+    totalQuestions: 3,
     date: 'Oct 2, 2026',
-  },
-  {
-    deckId: 'quiz-span',
-    deckTitle: 'Basic Spanish Vocabulary',
-    score: 4,
-    totalQuestions: 5,
-    date: 'Oct 1, 2026',
   },
 ];
 
