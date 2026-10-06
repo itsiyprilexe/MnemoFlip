@@ -10,7 +10,7 @@ import { colors, radius, spacing } from '../theme';
 type Props = NativeStackScreenProps<RootStackParamList, 'Onboarding'>;
 
 export const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
-  return (
+  return ( // ididisplay niya an content (onboarding screen or ang pinaka una)
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
         <View style={styles.hero}>
@@ -21,7 +21,7 @@ export const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
               <Ionicons name="bulb" size={52} color={colors.primary} />
             </View>
           </View>
-          <Text style={styles.title}>FlashCard</Text>
+          <Text style={styles.title}>MnemoFlip</Text>
           <Text style={styles.subtitle}>
             Create your own study decks, flip cards, take quizzes, and track your progress.
           </Text>
@@ -35,7 +35,7 @@ export const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
 
 export default OnboardingScreen;
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ //Style sa on-boarding screen.
   safe: { flex: 1, backgroundColor: colors.bg },
   container: { flex: 1, padding: spacing.lg, justifyContent: 'space-between' },
   hero: { flex: 1, alignItems: 'center', justifyContent: 'center' },

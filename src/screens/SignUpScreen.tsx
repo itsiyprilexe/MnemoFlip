@@ -4,11 +4,11 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { PrimaryButton } from '../components/PrimaryButton';
@@ -16,22 +16,26 @@ import { AuthField } from '../components/AuthField';
 import { useAuth } from '../context/AuthContext';
 import { colors, spacing } from '../theme';
 
+// Pag sign up
 type Props = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
-
+// Checker if email ang tinype
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+// Face of screen bago mag sign up
 export const SignUpScreen: React.FC<Props> = ({ navigation }) => {
-  const { signUp } = useAuth();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
-  const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
+  const { signUp } = useAuth(); // Pag gawa ng account
+  const [name, setName] = useState(''); // pag set ng name
+  const [email, setEmail] = useState(''); // pag set ng email
+  const [password, setPassword] = useState(''); // pag set ng password
+  const [confirm, setConfirm] = useState(''); // pag confirm
+  const [error, setError] = useState(''); // warning if may mali sa sign up
+  const [busy, setBusy] = useState(false); // true = may ginagawa pa, hintayin muna
 
-  const submit = async () => {
-    if (busy) return;
-    if (!name.trim()) return setError('Enter your name.');
+
+  const submit = async () => { // Mag rarun pag pinindot ang sign up
+    if (busy) return; // if hindi mag proceed uulitin sa program
+
+    // If may mali lalabas ang error warning 
+    if (!name.trim()) return setError('Enter your name.'); 
     if (!EMAIL_RE.test(email.trim())) return setError('Enter a valid email address.');
     if (password.length < 6) return setError('Password must be at least 6 characters.');
     if (password !== confirm) return setError('Passwords do not match.');

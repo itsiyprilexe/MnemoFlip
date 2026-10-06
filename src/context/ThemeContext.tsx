@@ -6,7 +6,7 @@ type Mode = 'light';
 
 interface ThemeContextType {
   mode: Mode; // The current theme mode (e.g., 'light').
-  isDark: boolean;// Boolean flag indicating whether the theme is dark mode.
+  //isDark: boolean;// Boolean flag indicating whether the theme is dark mode.
   colors: Palette;// The active color palette used throughout the application.
 }
 
@@ -20,7 +20,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const value = useMemo(
     () => ({
       mode: 'light' as Mode,// Fixed theme mode set to 'light'.
-      isDark: false,// Explicitly marks the theme as non-dark.
+    //  isDark: false,// Explicitly marks the theme as non-dark.
       colors: lightColors,// Provides the light color palette to consumers.
     }),
     [],
