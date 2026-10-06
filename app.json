@@ -1,9 +1,10 @@
 {
   "expo": {
-    "name": "",
+    "name": "MnemoFlip",
     "slug": "flashcard-app",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "mnemoflip",
     "icon": "./assets/flashcard-logo.png",
     "userInterfaceStyle": "light",
     "ios": {
@@ -19,13 +20,12 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
     },
     "plugins": [
-      "expo-asset",
-      "expo-font",
-      "expo-status-bar",
-      "expo-image-picker"
+      "expo-router",
+      "expo-status-bar"
     ]
   }
 }
