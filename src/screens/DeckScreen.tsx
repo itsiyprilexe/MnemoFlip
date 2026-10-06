@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import {
   View,
   Text,
@@ -132,6 +133,13 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.safe}>
+
+
+
+
+
+
+
       {/* Top Bar */}
       <View style={styles.topBar}>
         <TouchableOpacity
@@ -167,6 +175,17 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
         contentContainerStyle={styles.body}
         showsVerticalScrollIndicator={false}
       >
+
+
+
+
+
+
+
+
+
+
+
         {/* =========================
             DECK HERO SUMMARY CARD
         ========================= */}
@@ -202,6 +221,19 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
             )}
           </View>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
           {/* Action Buttons in Hero Card */}
           <View style={styles.cardActionsRow}>
             <TouchableOpacity
@@ -215,14 +247,27 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.addCardBtn}
-              onPress={handleAddCardPress}
-              activeOpacity={0.8}
+
+              onPress={() => Alert.alert('Add Card', 'This feature is not implemented yet.')}              activeOpacity={0.8}
             >
               <Ionicons name="add" size={18} color={colors.primary} />
               <Text style={styles.addCardBtnText}>Add Card</Text>
             </TouchableOpacity>
           </View>
         </View>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         {/* =========================
             FLASHCARDS LIST SECTION
@@ -297,6 +342,14 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
         )}
       </ScrollView>
 
+
+
+
+
+
+
+
+
       {/* ── ADD CARD MODAL ─────────────────────────────────────────── */}
       <Modal
         visible={addCardOpen}
@@ -304,6 +357,7 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
         animationType="slide"
         onRequestClose={() => setAddCardOpen(false)}
       >
+        
         <Pressable
           style={styles.overlay}
           onPress={() => setAddCardOpen(false)}
@@ -340,10 +394,32 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
                 onPress={handleAddCard}
                 style={{ flex: 1 }}
               />
+
+
+
+
+              
             </View>
           </Pressable>
         </Pressable>
       </Modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       {/* ── OPTIONS MODAL ─────────────────────────────────────────── */}
       <Modal
@@ -381,6 +457,16 @@ export const DeckScreen: React.FC<Props> = ({ route, navigation }) => {
           </Pressable>
         </Pressable>
       </Modal>
+
+
+
+
+
+
+
+
+
+
 
       {/* ── EDIT DECK MODAL ───────────────────────────────────────── */}
       <Modal
@@ -453,6 +539,25 @@ const SheetItem = ({
     </Text>
   </TouchableOpacity>
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default DeckScreen;
 

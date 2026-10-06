@@ -33,7 +33,6 @@ export const AuthField = ({ label, secure, style, ...rest }: Props) => {
 };
 
 export default AuthField;
-
 const styles = StyleSheet.create({
   wrap: { marginBottom: spacing.md },
   label: { fontSize: 14, fontWeight: '700', color: colors.heading, marginBottom: 6 },

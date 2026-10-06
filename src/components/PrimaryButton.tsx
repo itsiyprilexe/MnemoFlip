@@ -1,7 +1,11 @@
+// ______________________________________________________
+
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 
+// ______________________________________________________
+// Explain
 interface PrimaryButtonProps {
   title: string;
   onPress: () => void;
@@ -10,6 +14,8 @@ interface PrimaryButtonProps {
   textStyle?: TextStyle;
 }
 
+// ______________________________________________________
+// Explain
 export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   title,
   onPress,
@@ -42,6 +48,8 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   );
 };
 
+// ______________________________________________________
+// Explain
 const styles = StyleSheet.create({
   button: {
     paddingVertical: 14,
