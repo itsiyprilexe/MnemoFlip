@@ -20,17 +20,26 @@ export const collections: StudyCollection[] = [
 export type DeckCard = { question: string; answer: string };
 
 export const deckCardPreviews: Record<string, DeckCard[]> = {
-  'visual-arts': [
-    { question: 'What does composition mean in visual art?', answer: 'The arrangement of visual elements within an artwork.' },
-    { question: 'What is contrast?', answer: 'The difference between visual elements, such as light and dark or large and small.' },
+  'Reading-visual-arts': [
+    { question: 'What is reading visual arts?', 
+      answer: 'It is the process of understanding and interpreting the meaning of an artwork.' },
+
+    { question: 'Why is reading visual arts important?', 
+      answer: 'It helps us understand the artist’s ideas, emotions, and message through colors, shapes, symbols, and other visual elements.' },
   ],
-  'plant-science': [
-    { question: 'What process lets plants turn sunlight into energy?', answer: 'Photosynthesis converts light, water, and carbon dioxide into sugars and oxygen.' },
-    { question: 'Which part of a plant absorbs most water?', answer: 'The roots absorb water and minerals from the soil.' },
+  'Mobile-programming': [
+    { question: 'What is Mobile Programming?', 
+      answer: 'Mobile programming is the process of creating applications for smartphones and tablets.' },
+
+    { question: 'Why is Mobile Programming important?', 
+      answer: 'It allows developers to create useful apps that people can access anytime using mobile devices.' },
   ],
-  'world-history': [
-    { question: 'What was the Renaissance?', answer: 'A period of renewed interest in art, science, and classical learning in Europe.' },
-    { question: 'Where did the ancient Olympic Games begin?', answer: 'They began in Olympia, in ancient Greece.' },
+  'Software-engineering': [
+    { question: 'What is software engineering?', 
+      answer: 'Software engineering is the process of designing, developing, testing, and maintaining software.' },
+
+    { question: 'Why is software engineering important?', 
+      answer: 'It helps developers create reliable, efficient, and easy-to-maintain software.' },
   ],
 };
 
@@ -42,14 +51,25 @@ export type StudyQuiz = {
 };
 
 export const quizzes: StudyQuiz[] = [
-  { id: 'quiz-arts', title: 'Reading Visual Arts', description: 'Color, composition, and visual language', questionCount: 8 },
-  { id: 'quiz-plants', title: 'Plant Science Basics', description: 'A quick review of how plants grow', questionCount: 10 },
-  { id: 'quiz-history', title: 'World History', description: 'People and moments that shaped our world', questionCount: 12 },
+  { id: 'quiz-arts', 
+    title: 'Reading Visual Arts', 
+    description: 'Color, composition, and visual language', 
+    questionCount: 50 },
+
+  { id: 'quiz-programming', 
+    title: 'Mobile Programming', 
+    description: 'Designing and developing applications for mobile devices', 
+    
+    questionCount: 10 },
+  { id: 'quiz-engineering', 
+    title: 'Software Engineering', 
+    description: 'Designing, developing, testing, and maintaining software', 
+    questionCount: 30 },
 ];
 
 export const week = [
-  { day: 'M', done: true },//0
-  { day: 'T', done: true },//1
+  { day: 'M', done: true },
+  { day: 'T', done: true },
   { day: 'W', done: true },
   { day: 'T', done: true },
   { day: 'F', done: false },

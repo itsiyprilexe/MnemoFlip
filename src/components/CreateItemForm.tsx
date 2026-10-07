@@ -28,9 +28,11 @@ export function CreateItemForm({ kind }: Props) {
       <FormScreenHeader />
       <Text style={styles.eyebrow}>STATIC PREVIEW</Text>
       <Text style={styles.title}>{kind === 'deck' ? 'Add a deck' : 'Add a quiz'}</Text>
+
       <Text style={styles.description}>
         Enter a title and description. The sample list will stay unchanged.
       </Text>
+
       <TextField
         label={titleLabel}
         value={title}
@@ -48,16 +50,27 @@ export function CreateItemForm({ kind }: Props) {
         multiline
         maxLength={180}
       />
-      <AppButton title={buttonLabel} onPress={showPreviewMessage} style={styles.button} />
+
+      <AppButton 
+        title={buttonLabel} 
+        onPress={showPreviewMessage} 
+        style={styles.button} 
+      />
+
       <Text style={styles.note}>Nothing is saved or added to the list.</Text>
     </>
   );
 }
 
 const styles = StyleSheet.create({
+
   eyebrow: { color: palette.muted, fontSize: 10, fontWeight: '700', letterSpacing: 1.5, marginBottom: 10 },
+
   title: { color: palette.ink, fontSize: 29, fontWeight: '700', letterSpacing: -1 },
+
   description: { color: palette.muted, fontSize: 13, lineHeight: 19, marginTop: 7, marginBottom: 25 },
+  
   button: { marginTop: 6 },
+
   note: { color: palette.muted, fontSize: 10, textAlign: 'center', marginTop: 16 },
 });

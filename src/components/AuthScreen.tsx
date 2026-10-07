@@ -18,15 +18,26 @@ export function AuthScreen({ mode }: Props) {
 
   return (
     <>
+
       <FormScreenHeader />
       <Text style={styles.eyebrow}>MNEMOFLIP ACCOUNT</Text>
       <Text style={styles.title}>{isSignUp ? 'Create your account' : 'Welcome back'}</Text>
+
       <Text style={styles.description}>
         {isSignUp ? 'A familiar place for your learning journey.' : 'Pick up where your curiosity left off.'}
       </Text>
+
       {isSignUp ? (
-        <TextField label="Name" value={name} onChangeText={setName} placeholder="Your name" autoCapitalize="words" maxLength={60} returnKeyType="next" />
+        <TextField 
+          label="Name" 
+          value={name} 
+          onChangeText={setName} 
+          placeholder="Your name" 
+          autoCapitalize="words" 
+          maxLength={60} 
+          returnKeyType="next" />
       ) : null}
+<<<<<<< HEAD
       <TextField 
           label="Email" value={email} 
           onChangeText={setEmail} 
@@ -56,6 +67,41 @@ export function AuthScreen({ mode }: Props) {
       
       <Link href={isSignUp ? '/login' : '/signup'} asChild>
         
+=======
+
+      <TextField 
+        label="Email" 
+        value={email} 
+        onChangeText={setEmail} 
+        placeholder="Email" 
+        autoCapitalize="none" 
+        keyboardType="email-address" 
+        autoComplete="email" 
+        maxLength={120} 
+        returnKeyType="next" 
+      />
+
+      <TextField 
+        label="Password" 
+        value={password} 
+        onChangeText={setPassword} 
+        placeholder="Enter your password" 
+        secureTextEntry 
+        maxLength={80} 
+        returnKeyType="done" 
+      />
+
+      <AppButton 
+        title={isSignUp ? 'Sign up' : 'Log in'} 
+        onPress={continueToApp} 
+        style={styles.submit} 
+      />
+
+      <Text style={styles.staticNote}>Continue to the app preview. No account details are saved.</Text>
+
+      <Link href={isSignUp ? '/login' : '/signup'} asChild>
+
+>>>>>>> 3a6b5f868e5b000afeedd23212b2e057310467bb
         <Pressable accessibilityRole="link" style={styles.switchRow}>
           <Text style={styles.switchPrompt}>
             {isSignUp ? 'Already have an account?' : 'New to MnemoFlip?'}
@@ -73,6 +119,7 @@ export function AuthScreen({ mode }: Props) {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   eyebrow: 
   {
     textAlign: 'center', 
@@ -129,4 +176,22 @@ const styles = StyleSheet.create({
     fontSize: 12, 
     fontWeight: '700' 
   },
+=======
+
+  eyebrow: {textAlign: 'center', marginTop: 55, color: palette.muted, fontSize: 10, fontWeight: '700', letterSpacing: 1.5, marginBottom: 10 },
+
+  title: { textAlign: 'center', color: palette.ink, fontSize: 28, fontWeight: '700', letterSpacing: -1},
+
+  description: { textAlign: 'center', color: palette.muted, fontSize: 13, lineHeight: 19, marginTop: 7, marginBottom: 25 },
+
+  submit: { marginTop: 6 },
+
+  staticNote: { color: palette.muted, fontSize: 10, textAlign: 'center', marginTop: 14 },
+
+  switchRow: { flexDirection: 'row', justifyContent: 'center', marginTop: 22, paddingVertical: 10 },
+
+  switchPrompt: { color: palette.muted, fontSize: 12 },
+
+  switchLink: { color: palette.green, fontSize: 12, fontWeight: '700' },
+>>>>>>> 3a6b5f868e5b000afeedd23212b2e057310467bb
 });

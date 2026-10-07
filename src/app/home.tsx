@@ -15,6 +15,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
+        
         <BrandHeader />
         <View style={styles.intro}>
           <Text style={styles.eyebrow}>A MINDFUL LEARNING SPACE</Text>
@@ -45,19 +46,106 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: palette.background },
-  page: { paddingHorizontal: 22, paddingTop: 8, paddingBottom: 126 },
-  intro: { marginBottom: 21 },
-  eyebrow: { fontSize: 10, color: palette.muted, letterSpacing: 1.5, fontWeight: '700', marginBottom: 12 },
-  headline: { fontSize: 30, lineHeight: 35, fontWeight: '700', letterSpacing: -1.1, color: palette.ink },
-  headlineSecond: { fontSize: 30, lineHeight: 35, fontWeight: '400', letterSpacing: -1.1, color: palette.green },
-  introCopy: { marginTop: 9, color: palette.muted, fontSize: 13, lineHeight: 19 },
-  stats: { marginTop: 13, marginBottom: 29 },
-  section: { marginBottom: 9 },
-  quoteCard: { flexDirection: 'row', alignItems: 'center', gap: 13, backgroundColor: '#F1E9DC', borderRadius: 18, padding: 15, marginTop: 17 },
-  quoteIcon: { width: 36, height: 36, borderRadius: 13, backgroundColor: '#FBF5EA', alignItems: 'center', justifyContent: 'center' },
-  quoteContent: { flex: 1 },
-  quoteText: { color: '#574A3E', fontSize: 12, lineHeight: 17, fontWeight: '600' },
-  quoteByline: { color: '#A18A72', fontSize: 8, letterSpacing: 1, fontWeight: '700', marginTop: 5 },
-  footer: { color: '#B1B1A9', fontSize: 8, letterSpacing: 1.8, fontWeight: '700', textAlign: 'center', marginTop: 23 },
+
+  safeArea: { 
+    flex: 1, 
+    backgroundColor: palette.background 
+  },
+
+  page: { 
+    paddingHorizontal: 22, 
+    paddingTop: 8, 
+    paddingBottom: 126 
+  },
+
+  intro: { 
+    marginBottom: 21 
+  },
+
+  eyebrow: { 
+    fontSize: 10, 
+    color: palette.muted, 
+    letterSpacing: 1.5, 
+    fontWeight: '700', 
+    marginBottom: 12 
+  },
+
+  headline: { 
+    fontSize: 30, 
+    lineHeight: 35, 
+    fontWeight: '700', 
+    letterSpacing: -1.1, 
+    color: palette.ink 
+  },
+
+  headlineSecond: { 
+    fontSize: 30, 
+    lineHeight: 35, 
+    fontWeight: '400', 
+    letterSpacing: -1.1, 
+    color: palette.green 
+  },
+
+  introCopy: { 
+    marginTop: 9, 
+    color: palette.muted, 
+    fontSize: 13, 
+    lineHeight: 19 
+  },
+
+  stats: { 
+    marginTop: 13, 
+    marginBottom: 29 
+  },
+
+  section: { 
+    marginBottom: 9 
+  },
+
+  quoteCard: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 13, 
+    backgroundColor: '#F1E9DC', 
+    borderRadius: 18, 
+    padding: 15, 
+    marginTop: 17 
+  },
+
+  quoteIcon: { 
+    width: 36, 
+    height: 36, 
+    borderRadius: 13, 
+    backgroundColor: '#FBF5EA', 
+    alignItems: 'center', 
+    justifyContent: 'center' 
+  },
+
+  quoteContent: { 
+    flex: 1 
+  },
+
+  quoteText: { 
+    color: '#574A3E', 
+    fontSize: 12, 
+    lineHeight: 17, 
+    fontWeight: '600' 
+  },
+
+  quoteByline: { 
+    color: '#A18A72', 
+    fontSize: 8, 
+    letterSpacing: 1, 
+    fontWeight: '700', 
+    marginTop: 5 
+  },
+  
+  footer: { 
+    color: '#B1B1A9', 
+    fontSize: 8, 
+    letterSpacing: 1.8, 
+    fontWeight: '700', 
+    textAlign: 'center', 
+    marginTop: 23 
+  },
 });
