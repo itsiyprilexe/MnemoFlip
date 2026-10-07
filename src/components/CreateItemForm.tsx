@@ -28,17 +28,11 @@ export function CreateItemForm({ kind }: Props) {
       <FormScreenHeader />
       <Text style={styles.eyebrow}>STATIC PREVIEW</Text>
       <Text style={styles.title}>{kind === 'deck' ? 'Add a deck' : 'Add a quiz'}</Text>
-<<<<<<< HEAD
 
       <Text style={styles.description}>
         Enter a title and description. The sample list will stay unchanged.
       </Text>
 
-=======
-      <Text style={styles.description}>
-        Enter a title and description. The sample list will stay unchanged.
-      </Text>
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
       <TextField
         label={titleLabel}
         value={title}
@@ -48,10 +42,6 @@ export function CreateItemForm({ kind }: Props) {
         maxLength={60}
         returnKeyType="next"
       />
-<<<<<<< HEAD
-
-=======
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
       <TextField
         label="Description"
         value={description}
@@ -60,7 +50,6 @@ export function CreateItemForm({ kind }: Props) {
         multiline
         maxLength={180}
       />
-<<<<<<< HEAD
 
       <AppButton 
         title={buttonLabel} 
@@ -68,16 +57,12 @@ export function CreateItemForm({ kind }: Props) {
         style={styles.button} 
       />
 
-=======
-      <AppButton title={buttonLabel} onPress={showPreviewMessage} style={styles.button} />
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
       <Text style={styles.note}>Nothing is saved or added to the list.</Text>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
 
   eyebrow: { color: palette.muted, fontSize: 10, fontWeight: '700', letterSpacing: 1.5, marginBottom: 10 },
 
@@ -87,11 +72,5 @@ const styles = StyleSheet.create({
   
   button: { marginTop: 6 },
 
-=======
-  eyebrow: { color: palette.muted, fontSize: 10, fontWeight: '700', letterSpacing: 1.5, marginBottom: 10 },
-  title: { color: palette.ink, fontSize: 29, fontWeight: '700', letterSpacing: -1 },
-  description: { color: palette.muted, fontSize: 13, lineHeight: 19, marginTop: 7, marginBottom: 25 },
-  button: { marginTop: 6 },
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
   note: { color: palette.muted, fontSize: 10, textAlign: 'center', marginTop: 16 },
 });

@@ -15,10 +15,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
-<<<<<<< HEAD
         
-=======
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
         <BrandHeader />
         <View style={styles.intro}>
           <Text style={styles.eyebrow}>A MINDFUL LEARNING SPACE</Text>
@@ -26,38 +23,22 @@ export default function HomeScreen() {
           <Text style={styles.headlineSecond}>a lot of growth.</Text>
           <Text style={styles.introCopy}>Your study space is ready when you are.</Text>
         </View>
-<<<<<<< HEAD
-
-=======
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
         <WeeklyRhythm />
         <View style={styles.stats}><StatsOverview /></View>
         <View style={styles.section}>
           <SectionHeading title="Your collections" note="A few places to begin" />
           {collections.map((collection, index) => <CollectionCard key={collection.title} collection={collection} index={index} />)}
         </View>
-<<<<<<< HEAD
-
-=======
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
         <AppButton
           title="Continue studying"
           onPress={() => Alert.alert('Under construction', 'Study sessions are coming soon.')}
         />
-<<<<<<< HEAD
-
-=======
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
         <View style={styles.quoteCard}>
           <View style={styles.quoteContent}>
             <Text style={styles.quoteText}>Small steps each day lead to big discoveries.</Text>
             <Text style={styles.quoteByline}>A GENTLE REMINDER</Text>
           </View>
         </View>
-<<<<<<< HEAD
-
-=======
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
         <Text style={styles.footer}>MADE FOR CURIOUS MINDS</Text>
       </ScrollView>
     </SafeAreaView>
@@ -65,51 +46,106 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
 
-  safeArea: { flex: 1, backgroundColor: palette.background },
+  safeArea: { 
+    flex: 1, 
+    backgroundColor: palette.background 
+  },
 
-  page: { paddingHorizontal: 22, paddingTop: 8, paddingBottom: 126 },
+  page: { 
+    paddingHorizontal: 22, 
+    paddingTop: 8, 
+    paddingBottom: 126 
+  },
 
-  intro: { marginBottom: 21 },
+  intro: { 
+    marginBottom: 21 
+  },
 
-  eyebrow: { fontSize: 10, color: palette.muted, letterSpacing: 1.5, fontWeight: '700', marginBottom: 12 },
+  eyebrow: { 
+    fontSize: 10, 
+    color: palette.muted, 
+    letterSpacing: 1.5, 
+    fontWeight: '700', 
+    marginBottom: 12 
+  },
 
-  headline: { fontSize: 30, lineHeight: 35, fontWeight: '700', letterSpacing: -1.1, color: palette.ink },
+  headline: { 
+    fontSize: 30, 
+    lineHeight: 35, 
+    fontWeight: '700', 
+    letterSpacing: -1.1, 
+    color: palette.ink 
+  },
 
-  headlineSecond: { fontSize: 30, lineHeight: 35, fontWeight: '400', letterSpacing: -1.1, color: palette.green },
+  headlineSecond: { 
+    fontSize: 30, 
+    lineHeight: 35, 
+    fontWeight: '400', 
+    letterSpacing: -1.1, 
+    color: palette.green 
+  },
 
-  introCopy: { marginTop: 9, color: palette.muted, fontSize: 13, lineHeight: 19 },
+  introCopy: { 
+    marginTop: 9, 
+    color: palette.muted, 
+    fontSize: 13, 
+    lineHeight: 19 
+  },
 
-  stats: { marginTop: 13, marginBottom: 29 },
+  stats: { 
+    marginTop: 13, 
+    marginBottom: 29 
+  },
 
-  section: { marginBottom: 9 },
+  section: { 
+    marginBottom: 9 
+  },
 
-  quoteCard: { flexDirection: 'row', alignItems: 'center', gap: 13, backgroundColor: '#F1E9DC', borderRadius: 18, padding: 15, marginTop: 17 },
+  quoteCard: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 13, 
+    backgroundColor: '#F1E9DC', 
+    borderRadius: 18, 
+    padding: 15, 
+    marginTop: 17 
+  },
 
-  quoteIcon: { width: 36, height: 36, borderRadius: 13, backgroundColor: '#FBF5EA', alignItems: 'center', justifyContent: 'center' },
+  quoteIcon: { 
+    width: 36, 
+    height: 36, 
+    borderRadius: 13, 
+    backgroundColor: '#FBF5EA', 
+    alignItems: 'center', 
+    justifyContent: 'center' 
+  },
 
-  quoteContent: { flex: 1 },
+  quoteContent: { 
+    flex: 1 
+  },
 
-  quoteText: { color: '#574A3E', fontSize: 12, lineHeight: 17, fontWeight: '600' },
+  quoteText: { 
+    color: '#574A3E', 
+    fontSize: 12, 
+    lineHeight: 17, 
+    fontWeight: '600' 
+  },
 
-  quoteByline: { color: '#A18A72', fontSize: 8, letterSpacing: 1, fontWeight: '700', marginTop: 5 },
+  quoteByline: { 
+    color: '#A18A72', 
+    fontSize: 8, 
+    letterSpacing: 1, 
+    fontWeight: '700', 
+    marginTop: 5 
+  },
   
-=======
-  safeArea: { flex: 1, backgroundColor: palette.background },
-  page: { paddingHorizontal: 22, paddingTop: 8, paddingBottom: 126 },
-  intro: { marginBottom: 21 },
-  eyebrow: { fontSize: 10, color: palette.muted, letterSpacing: 1.5, fontWeight: '700', marginBottom: 12 },
-  headline: { fontSize: 30, lineHeight: 35, fontWeight: '700', letterSpacing: -1.1, color: palette.ink },
-  headlineSecond: { fontSize: 30, lineHeight: 35, fontWeight: '400', letterSpacing: -1.1, color: palette.green },
-  introCopy: { marginTop: 9, color: palette.muted, fontSize: 13, lineHeight: 19 },
-  stats: { marginTop: 13, marginBottom: 29 },
-  section: { marginBottom: 9 },
-  quoteCard: { flexDirection: 'row', alignItems: 'center', gap: 13, backgroundColor: '#F1E9DC', borderRadius: 18, padding: 15, marginTop: 17 },
-  quoteIcon: { width: 36, height: 36, borderRadius: 13, backgroundColor: '#FBF5EA', alignItems: 'center', justifyContent: 'center' },
-  quoteContent: { flex: 1 },
-  quoteText: { color: '#574A3E', fontSize: 12, lineHeight: 17, fontWeight: '600' },
-  quoteByline: { color: '#A18A72', fontSize: 8, letterSpacing: 1, fontWeight: '700', marginTop: 5 },
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
-  footer: { color: '#B1B1A9', fontSize: 8, letterSpacing: 1.8, fontWeight: '700', textAlign: 'center', marginTop: 23 },
+  footer: { 
+    color: '#B1B1A9', 
+    fontSize: 8, 
+    letterSpacing: 1.8, 
+    fontWeight: '700', 
+    textAlign: 'center', 
+    marginTop: 23 
+  },
 });

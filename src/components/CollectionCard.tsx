@@ -7,10 +7,6 @@ import { palette } from '../theme';
 
 export function CollectionCard({ collection, index }: { collection: StudyCollection; index: number }) {
   return (
-<<<<<<< HEAD
-
-=======
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={`${collection.title}, ${collection.detail}`}
@@ -18,7 +14,6 @@ export function CollectionCard({ collection, index }: { collection: StudyCollect
       style={styles.card}
     >
       <View style={[styles.icon, { backgroundColor: collection.tint }]}>
-<<<<<<< HEAD
 
         <Ionicons 
           name={collection.icon} 
@@ -27,15 +22,10 @@ export function CollectionCard({ collection, index }: { collection: StudyCollect
         />
       </View>
 
-=======
-        <Ionicons name={collection.icon} size={22} color={collection.color} />
-      </View>
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
       <View style={styles.text}>
         <Text style={styles.title}>{collection.title}</Text>
         <Text style={styles.detail}>{collection.detail}</Text>
       </View>
-<<<<<<< HEAD
 
       <View style={styles.trailing}>
         <View 
@@ -50,26 +40,41 @@ export function CollectionCard({ collection, index }: { collection: StudyCollect
         />
       </View>
       
-=======
-      <View style={styles.trailing}>
-        <View style={styles.count}><Text style={styles.countText}>{String(index + 1).padStart(2, '0')}</Text></View>
-        <Ionicons name="chevron-forward" size={16} color={palette.muted} />
-      </View>
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
 
-  card: { flexDirection: 'row', alignItems: 'center', backgroundColor: palette.surface, borderRadius: 17, borderWidth: 1, borderColor: palette.line, padding: 12, marginBottom: 9 },
+  card: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    backgroundColor: palette.surface, 
+    borderRadius: 17, 
+    borderWidth: 1, 
+    borderColor: palette.line, 
+    padding: 12, 
+    marginBottom: 9 
+  },
 
-  icon: { width: 44, height: 44, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  icon: { 
+    width: 44, 
+    height: 44, 
+    borderRadius: 14, 
+    alignItems: 'center', 
+    justifyContent: 'center' 
+  },
 
-  text: { flex: 1, marginLeft: 12 },
+  text: { 
+    flex: 1, 
+    marginLeft: 12 
+  },
 
-  title: { color: palette.ink, fontSize: 14, fontWeight: '700' },
+  title: { 
+    color: palette.ink, 
+    fontSize: 14, 
+    fontWeight: '700' 
+  },
 
   detail: { color: palette.muted, fontSize: 10, marginTop: 4 },
 
@@ -77,14 +82,5 @@ const styles = StyleSheet.create({
 
   trailing: { flexDirection: 'row', alignItems: 'center', gap: 6 },
 
-=======
-  card: { flexDirection: 'row', alignItems: 'center', backgroundColor: palette.surface, borderRadius: 17, borderWidth: 1, borderColor: palette.line, padding: 12, marginBottom: 9 },
-  icon: { width: 44, height: 44, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
-  text: { flex: 1, marginLeft: 12 },
-  title: { color: palette.ink, fontSize: 14, fontWeight: '700' },
-  detail: { color: palette.muted, fontSize: 10, marginTop: 4 },
-  count: { width: 29, height: 29, borderRadius: 10, backgroundColor: palette.background, alignItems: 'center', justifyContent: 'center' },
-  trailing: { flexDirection: 'row', alignItems: 'center', gap: 6 },
->>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
   countText: { color: palette.muted, fontSize: 9, fontWeight: '700' },
 });
