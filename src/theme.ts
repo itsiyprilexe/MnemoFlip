@@ -1,4 +1,4 @@
-export const palette = { // Universal Theme color
+export const palette = { // Universal Theme colors
   background: '#F7F5F0',
   surface: '#FFFFFF',
   ink: '#20221F',
