@@ -13,7 +13,7 @@ import { palette } from '../theme';
 //screen itself. export default is what makes Expo Router treat this file as the /add-quiz page.
 export default function AddQuizScreen() {
 
-  //outer box. Fills the screen and paints it off-white. edges={['top']} = only avoid the top notch, not the bottom.
+  //outer box. Fills the screen and paints it off-white.
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
