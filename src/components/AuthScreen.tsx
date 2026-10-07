@@ -19,7 +19,7 @@ export function AuthScreen({ mode }: Props) {
   return (
     <>
 
-      <FormScreenHeader />
+      <FormScreenHeader fallbackHref="/" />
       <Text style={styles.eyebrow}>MNEMOFLIP ACCOUNT</Text>
       <Text style={styles.title}>{isSignUp ? 'Create your account' : 'Welcome back'}</Text>
 

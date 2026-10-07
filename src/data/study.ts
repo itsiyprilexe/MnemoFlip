@@ -12,9 +12,28 @@ export type StudyCollection = {
 };
 
 export const collections: StudyCollection[] = [
-  { id: 'visual-arts', title: 'Visual arts', detail: '18 cards · 4 topics', icon: 'color-palette-outline', tint: palette.lilac, color: '#786798' },
-  { id: 'plant-science', title: 'Plant science', detail: '24 cards · 6 topics', icon: 'leaf-outline', tint: palette.greenLight, color: palette.green },
-  { id: 'world-history', title: 'World history', detail: '32 cards · 8 topics', icon: 'globe-outline', tint: palette.peach, color: '#A66F43' },
+  { id: 'eading-visual-arts', 
+    title: 'Reading Visual Arts', 
+    detail: '18 cards · 4 topics', 
+    icon: 'color-palette-outline', 
+    tint: palette.lilac, 
+    color: '#786798' 
+  },
+
+  { id: 'Mobile-programming', 
+    title: 'Mobile Programming',
+    detail: '24 cards · 6 topics', 
+    icon: 'leaf-outline', 
+    tint: palette.greenLight, 
+    color: palette.green 
+  },
+  { id: 'Software-engineering', 
+    title: 'Software Engineering', 
+    detail: '32 cards · 8 topics', 
+    icon: 'globe-outline', 
+    tint: palette.peach, 
+    color: '#A66F43' 
+  },
 ];
 
 export type DeckCard = { question: string; answer: string };

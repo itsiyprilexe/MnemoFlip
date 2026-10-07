@@ -25,7 +25,7 @@ export function CreateItemForm({ kind }: Props) {
 
   return (
     <>
-      <FormScreenHeader />
+      <FormScreenHeader fallbackHref={kind === 'deck' ? '/collections' : '/quizzes'} />
       <Text style={styles.eyebrow}>STATIC PREVIEW</Text>
       <Text style={styles.title}>{kind === 'deck' ? 'Add a deck' : 'Add a quiz'}</Text>
 

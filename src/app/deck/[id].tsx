@@ -17,7 +17,7 @@ export default function DeckScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
-        <FormScreenHeader />
+        <FormScreenHeader fallbackHref="/collections" />
         {deck ? (
           <>
             <View style={[styles.heroIcon, { backgroundColor: deck.tint }]}>

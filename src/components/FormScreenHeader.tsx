@@ -4,15 +4,25 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { palette } from '../theme';
 
-export function FormScreenHeader() {
+type Props = { fallbackHref: '/' | '/collections' | '/quizzes' };
+
+export function FormScreenHeader({ fallbackHref }: Props) {
   const router = useRouter();
+  const goBack = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace(fallbackHref);
+    }
+  };
+
   return (
     <View style={styles.row}>
 
       <Pressable 
         accessibilityRole="button" 
         accessibilityLabel="Go back" 
-        onPress={() => router.back()} style={styles.back}
+        onPress={goBack} style={styles.back}
         >
 
         <Ionicons 
