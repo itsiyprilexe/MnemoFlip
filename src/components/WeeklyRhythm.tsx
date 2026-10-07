@@ -47,23 +47,115 @@ export function WeeklyRhythm() {
 }
 
 const stylesweek = StyleSheet.create({
-  card: { overflow: 'hidden', backgroundColor: '#405F47', borderRadius: 24, padding: 20 },
- // orb: { position: 'absolute', width: 190, height: 190, borderRadius: 95, backgroundColor: '#527257', top: -106, right: -42, opacity: 0.48 },
-  heading: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  labelWrap: { flexDirection: 'row', alignItems: 'center', gap: 7 },
- // liveDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#DABF82' },
-  label: { fontSize: 9, letterSpacing: 1.2, fontWeight: '700', color: '#DCE4D8' },
-  metrics: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 22, marginBottom: 20 },
-  number: { fontSize: 34, fontWeight: '700', color: '#FFFFFF', letterSpacing: -1 },
-  unit: { fontSize: 17, fontWeight: '500', color: '#E3E8DE', letterSpacing: 0 },
-  caption: { fontSize: 11, color: '#DCE4D8', marginTop: 3 },
-  streak: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: '#FFFFFF18', paddingHorizontal: 10, paddingVertical: 8, borderRadius: 14 },
-  streakText: { color: '#FFFFFF', fontSize: 10, fontWeight: '700' },
-  weekRow: { flexDirection: 'row', justifyContent: 'space-between', paddingTop: 15, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: '#FFFFFF38' },
-  weekItem: { alignItems: 'center', gap: 7 },
-  weekDot: { width: 27, height: 27, borderRadius: 14, borderWidth: 1, borderColor: '#A4B3A3', alignItems: 'center', justifyContent: 'center' },
-  weekDotDone: { backgroundColor: '#E4EBDD', borderColor: '#E4EBDD' },
-  weekDotToday: { borderColor: '#E8C579', borderWidth: 1.5 },
-  weekDay: { fontSize: 9, color: '#CFD8CD', fontWeight: '600' },
-  weekDayToday: { color: '#F1D28E' },
+  card: { 
+    overflow: 'hidden', 
+    backgroundColor: '#405F47', 
+    borderRadius: 24, 
+    padding: 20 
+  },
+
+  heading: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between' 
+  },
+
+  labelWrap: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 7 
+  },
+  
+  label: { 
+    fontSize: 9, 
+    letterSpacing: 1.2, 
+    fontWeight: '700', 
+    color: '#DCE4D8' 
+  },
+
+  metrics: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+    marginTop: 22, 
+    marginBottom: 20 
+  },
+
+  number: { 
+    fontSize: 34, 
+    fontWeight: '700', 
+    color: '#FFFFFF', 
+    letterSpacing: -1 
+  },
+
+  unit: { 
+    fontSize: 17, 
+    fontWeight: '500', 
+    color: '#E3E8DE', 
+    letterSpacing: 0 
+  },
+
+  caption: { 
+    fontSize: 11, 
+    color: '#DCE4D8', 
+    marginTop: 3 
+  },
+
+  streak: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 6, 
+    backgroundColor: '#FFFFFF18', 
+    paddingHorizontal: 10, 
+    paddingVertical: 8, 
+    borderRadius: 14 },
+
+  streakText: { 
+    color: '#FFFFFF', 
+    fontSize: 10, 
+    fontWeight: '700' 
+  },
+
+  weekRow: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    paddingTop: 15, 
+    borderTopWidth: StyleSheet.hairlineWidth, 
+    borderTopColor: '#FFFFFF38' 
+  },
+
+  weekItem: { 
+    alignItems: 'center', 
+    gap: 7 
+  },
+
+  weekDot: { 
+    width: 27, 
+    height: 27, 
+    borderRadius: 14, 
+    borderWidth: 1, 
+    borderColor: '#A4B3A3', 
+    alignItems: 'center', 
+    justifyContent: 'center' 
+  },
+
+  weekDotDone: { 
+    backgroundColor: '#E4EBDD', 
+    borderColor: '#E4EBDD' 
+  },
+
+  weekDotToday: { 
+    borderColor: '#E8C579', 
+    borderWidth: 1.5 
+  },
+
+  weekDay: { 
+    fontSize: 9, 
+    color: '#CFD8CD', 
+    fontWeight: '600' 
+  },
+
+  weekDayToday: { 
+    color: '#F1D28E' 
+  },
 });
