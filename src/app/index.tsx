@@ -43,7 +43,7 @@ export default function WelcomeScreen() {
 
           </Link>
 
-          {/* para  Sign up Button Routing nag gamit kit Link same iya function sa navigation  */}
+          {/* para  Sign up Button Routing nag gamit kit Link same iya function navigation  */}
           <Link href="/signup" asChild>
             {/* Button para sa Signin ngan iya style */}
             <Pressable accessibilityRole="button" style={styles.secondaryButton}>
