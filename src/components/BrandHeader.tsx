@@ -7,6 +7,7 @@ import { palette } from '../theme';
 export function BrandHeader() {
   return (
     <View style={styles.row}>
+<<<<<<< HEAD
 
       <Text style={styles.brand}>mnemo<Text style={styles.accent}>flip</Text></Text>
 
@@ -25,6 +26,13 @@ export function BrandHeader() {
             color={palette.green} 
           />
 
+=======
+      <Text style={styles.brand}>mnemo<Text style={styles.accent}>flip</Text></Text>
+      <View style={styles.spacer} />
+      <Link href="/profile" asChild>
+        <Pressable accessibilityRole="button" accessibilityLabel="Open profile" style={styles.profile}>
+          <Ionicons name="person-outline" size={17} color={palette.green} />
+>>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
         </Pressable>
       </Link>
     </View>
@@ -32,6 +40,7 @@ export function BrandHeader() {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
 
   row: { flexDirection: 'row', alignItems: 'center', marginBottom: 30 },
 
@@ -43,5 +52,12 @@ const styles = StyleSheet.create({
 
   spacer: { flex: 1 },
   
+=======
+  row: { flexDirection: 'row', alignItems: 'center', marginBottom: 30 },
+  mark: { width: 30, height: 30, borderRadius: 10, backgroundColor: palette.green, alignItems: 'center', justifyContent: 'center', marginRight: 9 },
+  brand: { fontSize: 19, fontWeight: '800', color: palette.ink, letterSpacing: -0.8 },
+  accent: { color: palette.green },
+  spacer: { flex: 1 },
+>>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
   profile: { width: 38, height: 38, borderRadius: 19, backgroundColor: palette.surface, borderWidth: 1, borderColor: palette.line, alignItems: 'center', justifyContent: 'center' },
 });

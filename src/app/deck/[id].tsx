@@ -55,6 +55,7 @@ export default function DeckScreen() {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
 
   safeArea: { flex: 1, backgroundColor: palette.background },
 
@@ -82,6 +83,21 @@ const styles = StyleSheet.create({
 
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: palette.line, marginVertical: 14 },
   
+=======
+  safeArea: { flex: 1, backgroundColor: palette.background },
+  page: { paddingHorizontal: 22, paddingTop: 8, paddingBottom: 126 },
+  heroIcon: { width: 58, height: 58, borderRadius: 18, alignItems: 'center', justifyContent: 'center', marginBottom: 18 },
+  eyebrow: { color: palette.muted, fontSize: 10, fontWeight: '700', letterSpacing: 1.5, marginBottom: 9 },
+  title: { color: palette.ink, fontSize: 29, lineHeight: 35, fontWeight: '700', letterSpacing: -1 },
+  description: { color: palette.muted, fontSize: 13, lineHeight: 19, marginTop: 7, marginBottom: 20 },
+  studyButton: { marginBottom: 27 },
+  card: { backgroundColor: palette.surface, borderWidth: 1, borderColor: palette.line, borderRadius: 19, padding: 17, marginBottom: 11 },
+  cardIndex: { alignSelf: 'flex-start', minWidth: 29, height: 27, borderRadius: 9, backgroundColor: palette.background, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 7, marginBottom: 13 },
+  cardIndexText: { color: palette.muted, fontSize: 9, fontWeight: '700' },
+  cardLabel: { color: palette.green, fontSize: 9, fontWeight: '800', letterSpacing: 1.1 },
+  question: { color: palette.ink, fontSize: 15, fontWeight: '700', lineHeight: 22, marginTop: 6 },
+  divider: { height: StyleSheet.hairlineWidth, backgroundColor: palette.line, marginVertical: 14 },
+>>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
   answer: { color: palette.muted, fontSize: 13, lineHeight: 20, marginTop: 6 },
   notFound: { paddingTop: 25 },
 });

@@ -15,8 +15,12 @@ export default function AddDeckScreen() {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   
   safeArea: { flex: 1, backgroundColor: palette.background },
 
+=======
+  safeArea: { flex: 1, backgroundColor: palette.background },
+>>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
   page: { flexGrow: 1, paddingHorizontal: 22, paddingTop: 12, paddingBottom: 30 },
 });

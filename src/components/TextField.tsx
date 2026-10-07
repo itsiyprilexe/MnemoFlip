@@ -19,6 +19,7 @@ export function TextField({ label, multiline, style, ...inputProps }: Props) {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
 
   field: { 
     marginBottom: 18 
@@ -46,4 +47,10 @@ const styles = StyleSheet.create({
     minHeight: 104, 
     textAlignVertical: 'top' 
   },
+=======
+  field: { marginBottom: 18 },
+  label: { color: palette.ink, fontSize: 12, fontWeight: '700', marginBottom: 8 },
+  input: { minHeight: 50, borderWidth: 1, borderColor: palette.line, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, backgroundColor: palette.surface, color: palette.ink, fontSize: 14 },
+  multiline: { minHeight: 104, textAlignVertical: 'top' },
+>>>>>>> a9db2932fee6b8197ded6561fb8affac12a8f7da
 });
