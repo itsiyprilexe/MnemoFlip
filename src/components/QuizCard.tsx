@@ -1,16 +1,19 @@
 import React from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+// Import data types and color palette theme
 import { StudyQuiz } from '../data/study';
 import { palette } from '../theme';
 
 export function QuizCard({ quiz }: { quiz: StudyQuiz }) {
   return (
+    // Clickable container for the quiz card
     <Pressable
       accessibilityRole="button"
       onPress={() => Alert.alert('Quiz mode under construction', `${quiz.title} is ready to be built out.`)}
       style={styles.card}
     >
+      {/* Left side: Icon badge container */}
       <View 
         style={styles.icon}><Ionicons 
         name="help-circle-outline" 
@@ -25,6 +28,7 @@ export function QuizCard({ quiz }: { quiz: StudyQuiz }) {
         <Text style={styles.count}>{quiz.questionCount} questions</Text>
       </View>
 
+      {/* Right side: Arrow navigation indicator */}
       <Ionicons 
         name="chevron-forward" 
         size={18} 

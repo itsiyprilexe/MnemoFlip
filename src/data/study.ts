@@ -12,7 +12,7 @@ export type StudyCollection = {
 };
 
 export const collections: StudyCollection[] = [
-  { id: 'eading-visual-arts', 
+  { id: 'Reading-visual-arts', 
     title: 'Reading Visual Arts', 
     detail: '18 cards · 4 topics', 
     icon: 'color-palette-outline', 

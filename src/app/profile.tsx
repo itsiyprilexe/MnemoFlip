@@ -29,7 +29,7 @@ export default function ProfileScreen() {
           styles the container, while an "styles.avatarLetter" styles the letter "Y".*/}
           <View style={styles.avatar}>
             <Text 
-              style={styles.avatarLetter}>Y</Text>
+              style={styles.avatarLetter}>H</Text>
           </View>
 
           {/* gi display an user's name. "styles.name" controls its appearance.*/}

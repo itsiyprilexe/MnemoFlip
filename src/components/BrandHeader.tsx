@@ -8,7 +8,7 @@ export function BrandHeader() {
   return (
     <View style={styles.row}>
 
-      <Text style={styles.brand}>mnemo<Text style={styles.accent}>flip</Text></Text>
+      <Text style={styles.brand}>Mnemo<Text style={styles.accent}>Flip</Text></Text>
 
       <View style={styles.spacer} />
       <Link href="/profile" asChild>
