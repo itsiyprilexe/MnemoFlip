@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 // mao ine an universal theme gin import
 import { palette } from '../theme';
 
+
 export default function WelcomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
