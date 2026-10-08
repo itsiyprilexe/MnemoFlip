@@ -35,6 +35,8 @@ export function CreateItemForm({ kind }: Props) {
         Enter a title and description. The sample list will stay unchanged.
       </Text>
 
+
+      {/* para sa user input */}
       <TextField
         label={titleLabel}
         value={title}
@@ -53,6 +55,7 @@ export function CreateItemForm({ kind }: Props) {
         maxLength={180}
       />
 
+      {/* para sa button */}
       <AppButton 
         title={buttonLabel} 
         onPress={showPreviewMessage} 
@@ -64,15 +67,39 @@ export function CreateItemForm({ kind }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({//para sa Style 
 
-  eyebrow: { color: palette.muted, fontSize: 10, fontWeight: '700', letterSpacing: 1.5, marginBottom: 10 },
+  eyebrow: { 
+    color: palette.muted, 
+    fontSize: 10, 
+    fontWeight: '700', 
+    letterSpacing: 1.5, 
+    marginBottom: 10 
+  },
 
-  title: { color: palette.ink, fontSize: 29, fontWeight: '700', letterSpacing: -1 },
+  title: { 
+    color: palette.ink, 
+    fontSize: 29, 
+    fontWeight: '700', 
+    letterSpacing: -1 
+  },
 
-  description: { color: palette.muted, fontSize: 13, lineHeight: 19, marginTop: 7, marginBottom: 25 },
+  description: { color: palette.muted, 
+    fontSize: 13, 
+    lineHeight: 19, 
+    marginTop: 7, 
+    marginBottom: 25 
+  },
   
-  button: { marginTop: 6 },
+  button: { 
+    marginTop: 6 
+  },
 
-  note: { color: palette.muted, fontSize: 10, textAlign: 'center', marginTop: 16 },
+
+  note: { 
+    color: palette.muted, 
+    fontSize: 10, 
+    textAlign: 'center', 
+    marginTop: 16 
+  },
 });

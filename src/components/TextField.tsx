@@ -4,11 +4,14 @@ import { palette } from '../theme';
 
 type Props = TextInputProps & { label: string };
 
+
+
 export function TextField({ label, multiline, style, ...inputProps }: Props) {
   return (
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
+
         {...inputProps}
         multiline={multiline}
         placeholderTextColor={palette.muted}
@@ -18,7 +21,7 @@ export function TextField({ label, multiline, style, ...inputProps }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({// para sa design ngan layout san textfield
 
   field: { 
     marginBottom: 18 
