@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
-import { palette } from '../theme';
+import { palette } from '../theme';//import an mga universal theme
 
 export function BrandHeader() {
   return (
@@ -11,6 +11,8 @@ export function BrandHeader() {
       <Text style={styles.brand}>Mnemo<Text style={styles.accent}>Flip</Text></Text>
 
       <View style={styles.spacer} />
+
+      {/* para sa button or link para pag gin click an bagan prfile logo makadto sa profile  */}
       <Link href="/profile" asChild>
 
         <Pressable 
@@ -19,7 +21,7 @@ export function BrandHeader() {
           style={styles.profile}
           >
 
-          <Ionicons 
+          <Ionicons // para profile logo
             name="person-outline" 
             size={17} 
             color={palette.green} 
@@ -31,7 +33,7 @@ export function BrandHeader() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({// para sa design 
 
   row: { 
     flexDirection: 'row', 
