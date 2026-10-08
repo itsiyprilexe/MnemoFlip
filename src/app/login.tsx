@@ -6,6 +6,7 @@ import { palette } from '../theme';
 
 export default function LoginScreen() {
   return (
+    // nag assign value para sa mode = Log in ngan rout pakadto sa AuthScreen
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
         <AuthScreen mode="login" />

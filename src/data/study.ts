@@ -12,12 +12,12 @@ export type StudyCollection = {
 };
 
 export const collections: StudyCollection[] = [
-  { id: 'Reading-visual-arts', 
-    title: 'Reading Visual Arts', 
+  { id: 'Reading-visual-arts', // iya id
+    title: 'Reading Visual Arts', // iya title
     detail: '18 cards · 4 topics', 
-    icon: 'color-palette-outline', 
-    tint: palette.lilac, 
-    color: '#786798' 
+    icon: 'color-palette-outline', // an iya logo call name tikang sa Ionicons built in 
+    tint: palette.lilac, //color para sa iya background icon
+    color: '#786798' //color para sa iya icon
   },
 
   { id: 'Mobile-programming', 
@@ -36,9 +36,12 @@ export const collections: StudyCollection[] = [
   },
 ];
 
-export type DeckCard = { question: string; answer: string };
+export type DeckCard = { // an sa question para sa decks
+  question: string; 
+  answer: string 
+};
 
-export const deckCardPreviews: Record<string, DeckCard[]> = {
+export const deckCardPreviews: Record<string, DeckCard[]> = {//an data para sa DeckCard questions
   'Reading-visual-arts': [
     { question: 'What is reading visual arts?', 
       answer: 'It is the process of understanding and interpreting the meaning of an artwork.' },
@@ -62,14 +65,14 @@ export const deckCardPreviews: Record<string, DeckCard[]> = {
   ],
 };
 
-export type StudyQuiz = {
+export type StudyQuiz = {// an para sa quizzes line 72
   id: string;
   title: string;
   description: string;
   questionCount: number;
 };
 
-export const quizzes: StudyQuiz[] = [
+export const quizzes: StudyQuiz[] = [//data san quizzes
   { id: 'quiz-arts', 
     title: 'Reading Visual Arts', 
     description: 'Color, composition, and visual language', 
@@ -86,7 +89,7 @@ export const quizzes: StudyQuiz[] = [
     questionCount: 30 },
 ];
 
-export const week = [
+export const week = [//an sa week sa home para sa days na my check 
   { day: 'M', done: true },
   { day: 'T', done: true },
   { day: 'W', done: true },

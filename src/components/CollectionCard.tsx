@@ -7,6 +7,7 @@ import { palette } from '../theme';
 
 export function CollectionCard({ collection, index }: { collection: StudyCollection; index: number }) {
   return (
+    // asya ine an button if gin click mo reading visual art e rout.push ka sa [id].tsx tikang an data sa Study.ts
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={`${collection.title}, ${collection.detail}`}

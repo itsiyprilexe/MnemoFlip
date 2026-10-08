@@ -27,7 +27,7 @@ export function AuthScreen({ mode }: Props) {
         {isSignUp ? 'A familiar place for your learning journey.' : 'Pick up where your curiosity left off.'}
       </Text>
 
-      {isSignUp ? (
+      {isSignUp ? (// gin display if isSignUp = signup
         <TextField 
           label="Name" 
           value={name} 

@@ -23,12 +23,19 @@ export default function HomeScreen() {
           <Text style={styles.headlineSecond}>a lot of growth.</Text>
           <Text style={styles.introCopy}>Your study space is ready when you are.</Text>
         </View>
+
+
         <WeeklyRhythm />
+        {/* mao ine an sa pag display sa card box or an green box tikang sa StatsOverview */}
         <View style={styles.stats}><StatsOverview /></View>
+
+        {/* mao ine an responsible sa pag display san collectio like reading visual art etc etc tokang sa CollectionCard */}
         <View style={styles.section}>
           <SectionHeading title="Your collections" note="A few places to begin" />
           {collections.map((collection, index) => <CollectionCard key={collection.title} collection={collection} index={index} />)}
         </View>
+
+
         <AppButton
           title="Continue studying"
           onPress={() => Alert.alert('Under construction', 'Study sessions are coming soon.')}

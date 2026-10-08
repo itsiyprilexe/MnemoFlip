@@ -7,11 +7,13 @@ import { palette } from '../theme';
 
 export default function WelcomeScreen() {
   return (
+
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.page}>
         <View style={styles.brand}>
         </View>
 
+        {/* asya ine an sa butnga na content na gi display */}
         <View style={styles.hero}>
           <View style={styles.art}><Ionicons name="albums-outline" size={48} color={palette.green} /></View>
           <Text style={styles.eyebrow}>A MINDFUL LEARNING SPACE</Text>
@@ -20,13 +22,14 @@ export default function WelcomeScreen() {
         </View>
 
         <View style={styles.actions}>
+          {/* button para ma link sa folder sa login */}
           <Link href="/login" asChild>
-          
             <Pressable accessibilityRole="button" style={styles.primaryButton}>
               <Text style={styles.primaryText}>Log in</Text>
             </Pressable>
           </Link>
 
+          {/* button para ma link sa folder na signup */}
           <Link href="/signup" asChild>
             <Pressable accessibilityRole="button" style={styles.secondaryButton}>
               <Text style={styles.secondaryText}>Sign up</Text>

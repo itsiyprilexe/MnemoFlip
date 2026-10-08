@@ -15,6 +15,7 @@ export default function DeckScreen() {
   const cards = deck ? deckCardPreviews[deck.id] ?? [] : [];
 
   return (
+    
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
         <FormScreenHeader fallbackHref="/collections" />

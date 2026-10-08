@@ -32,7 +32,7 @@ export function FormScreenHeader({ fallbackHref }: Props) {
         />
       </Pressable>
 
-      <Text style={styles.label}>MNEMOFLIP</Text>
+      <Text style={styles.label}>MnemoFlip</Text>
     </View>
   );
 }
