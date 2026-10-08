@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { palette } from '../theme';
 
-const tabs = [
+const tabs = [//reference/content para sa mga button like href kun pakain etc etc 
   { label: 'Home', 
     href: '/home', 
     icon: 'home-outline' as const, 

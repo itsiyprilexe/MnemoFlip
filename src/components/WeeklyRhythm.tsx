@@ -31,12 +31,13 @@ export function WeeklyRhythm() {
 
       <View style={stylesweek.weekRow}>
         {week.map((item, index) => (
+          
           <View style={stylesweek.weekItem} key={`${item.day}-${index}`}>
-
+              {/* para sa check ngan an highlight na gold circle */}
             <View style={[stylesweek.weekDot, item.done && stylesweek.weekDotDone, index === 3 && stylesweek.weekDotToday]}>
               {item.done ? <Ionicons name="checkmark" size={14} color={palette.green} /> : null}
             </View>
-
+              {/* para sa check ngan an highlight na gold circle */}
             <Text style={[stylesweek.weekDay, index === 3 && stylesweek.weekDayToday]}>{item.day}</Text>
           </View>
 

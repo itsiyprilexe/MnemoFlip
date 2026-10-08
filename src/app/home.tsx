@@ -24,9 +24,11 @@ export default function HomeScreen() {
           <Text style={styles.introCopy}>Your study space is ready when you are.</Text>
         </View>
 
-
+        {/* An sa pag display sa green box WeeklyRhythm*/}
         <WeeklyRhythm />
-        {/* mao ine an sa pag display sa card box or an green box tikang sa StatsOverview */}
+
+
+        {/* mao ine an sa pag display sa card box tikang sa StatsOverview */}
         <View style={styles.stats}><StatsOverview /></View>
 
         {/* mao ine an responsible sa pag display san collectio like reading visual art etc etc tokang sa CollectionCard */}
