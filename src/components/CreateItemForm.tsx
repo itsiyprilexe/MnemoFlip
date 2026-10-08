@@ -5,18 +5,20 @@ import { FormScreenHeader } from './FormScreenHeader';
 import { TextField } from './TextField';
 import { palette } from '../theme';
 
-type Props = { kind: 'deck' | 'quiz' };
+type Props = { kind: 'deck' | 'quiz' };// ig set an value depende sa user kun galing siya sa deck or quiz
 
 export function CreateItemForm({ kind }: Props) {
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState('');//para sa user input 
   const [description, setDescription] = useState('');
-  const itemName = kind === 'deck' ? 'deck' : 'quiz';
+
+
+  const itemName = kind === 'deck' ? 'deck' : 'quiz'; // para sa pag display if deck or quiz
   const pluralName = kind === 'deck' ? 'decks' : 'quizzes';
   const titleLabel = kind === 'deck' ? 'Deck name' : 'Quiz name';
   const titlePlaceholder = kind === 'deck' ? 'e.g. Human anatomy' : 'e.g. Cell biology basics';
   const buttonLabel = kind === 'deck' ? 'Add deck' : 'Add quiz';
 
-  const showPreviewMessage = () => {
+  const showPreviewMessage = () => { //an para sa onPress iya ig print an Alert()
     Alert.alert(
       'Static preview',
       `You can enter ${itemName} details here, but adding ${pluralName} is not enabled in this preview.`,
