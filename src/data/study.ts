@@ -70,6 +70,7 @@ export type StudyQuiz = {// an para sa quizzes line 72
   title: string;
   description: string;
   questionCount: number;
+  
 };
 
 export const quizzes: StudyQuiz[] = [//data san quizzes
