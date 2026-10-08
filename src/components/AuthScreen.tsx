@@ -38,7 +38,7 @@ export function AuthScreen({ mode }: Props) {
           returnKeyType="next" />
       ) : null}
 
-      <TextField 
+      <TextField //para sa user input ngan display an data san user input 
         label="Email" 
         value={email} 
         onChangeText={setEmail} 
