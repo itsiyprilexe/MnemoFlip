@@ -36,6 +36,8 @@ export function BottomNavigation() {
   if (pathname === '/' || pathname === '/add-deck' || pathname === '/add-quiz' || pathname === '/login' || pathname === '/signup') return null;
 
   return (
+
+    // para sa pag display sa buttom nav bar
     <SafeAreaView 
       edges={['bottom']} 
       pointerEvents="box-none" 
