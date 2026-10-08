@@ -13,9 +13,9 @@ export function QuizCard({ quiz }: { quiz: StudyQuiz }) {
       onPress={() => Alert.alert('Quiz mode under construction', `${quiz.title} is ready to be built out.`)}
       style={styles.card}
     >
-      {/* Left side: Icon badge container */}
-      <View 
-        style={styles.icon}><Ionicons 
+      {/* asya ine an pag san icons */}
+      <View style={styles.icon}>
+        <Ionicons 
         name="help-circle-outline" 
         size={22} 
         color={palette.green} 

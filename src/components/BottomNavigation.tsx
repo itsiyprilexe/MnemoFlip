@@ -31,7 +31,7 @@ const tabs = [//reference/content para sa mga button like href kun pakain etc et
   },
 ];
 
-export function BottomNavigation() {
+export function BottomNavigation() {//para sa pag display sa buttom nav bar
   const pathname = usePathname();
   if (pathname === '/' || pathname === '/add-deck' || pathname === '/add-quiz' || pathname === '/login' || pathname === '/signup') return null;
 

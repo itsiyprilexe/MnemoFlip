@@ -14,13 +14,15 @@ export function CollectionCard({ collection, index }: { collection: StudyCollect
       onPress={() => router.push(`/deck/${collection.id}`)}
       style={styles.card}
     >
+
+      {/* an pag display san icons san mga subject sa home, deck section  */}
       <View style={[styles.icon, { backgroundColor: collection.tint }]}>
 
         <Ionicons 
           name={collection.icon} 
           size={22} 
           color={collection.color} 
-        />
+        /> 
       </View>
 
       <View style={styles.text}>

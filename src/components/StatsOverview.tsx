@@ -30,7 +30,7 @@ const stats = [
   },
 ];
 
-export function StatsOverview() {
+export function StatsOverview() {// content san stats overview card gin display sa home screen
   return (
     <View style={styles.row}>
       {stats.map((stat) => (
