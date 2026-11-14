@@ -1,11 +1,14 @@
 import React from 'react';
-import { Link } from 'expo-router';
+import { Link, Redirect } from 'expo-router';
+import { useAuth } from '../contexts/AuthContext';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { palette } from '../theme';
 
 export default function WelcomeScreen() {
+  const { user } = useAuth();
+  if (user) return <Redirect href="/(tabs)/home" />;
   return (
 
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
@@ -36,7 +39,7 @@ export default function WelcomeScreen() {
             </Pressable>
           </Link>
 
-          <Text style={styles.note}>Preview screens only. Account access is not connected.</Text>
+          <Text style={styles.note}>Sign in to access your learning space.</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

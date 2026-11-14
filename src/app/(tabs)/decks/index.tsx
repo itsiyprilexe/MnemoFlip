@@ -2,14 +2,16 @@ import React from 'react';
 import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BrandHeader } from '../components/BrandHeader';
-import { CollectionCard } from '../components/CollectionCard';
-import { AppButton } from '../components/AppButton';
-import { SectionHeading } from '../components/SectionHeading';
-import { collections } from '../data/study';
-import { palette } from '../theme';
+import { BrandHeader } from '../../../components/BrandHeader';
+import { CollectionCard } from '../../../components/CollectionCard';
+import { AppButton } from '../../../components/AppButton';
+import { SectionHeading } from '../../../components/SectionHeading';
+import { useDecks } from '../../../hooks/useDecks';
+import { palette } from '../../../theme';
 
 export default function CollectionsScreen() {
+  const { decks, loading, error } = useDecks();
+  const collections = decks.map(deck => ({ id: deck.id, title: deck.title, detail: deck.description || 'Study deck', icon: 'albums-outline' as const, tint: palette.lilac, color: palette.green }));
   const router = useRouter();
 
   return (
@@ -29,7 +31,7 @@ export default function CollectionsScreen() {
 
         <AppButton 
           title="Add a deck" 
-          onPress={() => router.push('/add-deck')} 
+          onPress={() => router.push('/decks/create')} 
           style={styles.addButton} 
         />
 
@@ -38,10 +40,11 @@ export default function CollectionsScreen() {
           note={`${collections.length} sets`} 
         />
         
-        {collections.map((deck, index) => <CollectionCard key={deck.title} collection={deck} index={index} />)}
+        {loading ? <Text>Loading decks...</Text> : error ? <Text>Could not load decks: {error}</Text> : collections.length === 0 ? <Text>No decks yet. Add your first deck.</Text> : null}
+        {collections.map((deck, index) => <CollectionCard key={deck.id} collection={deck} index={index} showActions />)}
 
         <View style={styles.note}>
-          <Text style={styles.noteText}>Deck details and flashcards are coming soon.</Text>
+          <Text style={styles.noteText}>Open a deck to view its details.</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

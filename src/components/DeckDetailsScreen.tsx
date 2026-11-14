@@ -1,25 +1,25 @@
 import React from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppButton } from '../../components/AppButton';
-import { FormScreenHeader } from '../../components/FormScreenHeader';
-import { SectionHeading } from '../../components/SectionHeading';
-import { collections, deckCardPreviews } from '../../data/study';
-import { palette } from '../../theme';
+import { FormScreenHeader } from './FormScreenHeader';
+import { ContentManager } from './ContentManager';
+import { useDecks } from '../hooks/useDecks';
+import { palette } from '../theme';
 
 export default function DeckScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const deck = collections.find((collection) => collection.id === id);
-  const cards = deck ? deckCardPreviews[deck.id] ?? [] : [];
+  const { id, add } = useLocalSearchParams<{ id: string; add?: string }>();
+  const { decks, loading, error } = useDecks();
+  const found = decks.find(item => item.id === id);
+  const deck = found ? { ...found, tint: palette.lilac, icon: 'albums-outline' as const, color: palette.green, detail: found.description } : null;
 
   return (
     
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
-        <FormScreenHeader fallbackHref="/collections" />
-        {deck ? (
+        <FormScreenHeader fallbackHref="/decks" />
+        {loading ? <Text>Loading deck...</Text> : error ? <Text>Could not load deck: {error}</Text> : deck ? (
           <>
             <View style={[styles.heroIcon, { backgroundColor: deck.tint }]}>
               <Ionicons name={deck.icon} size={28} color={deck.color} />
@@ -27,27 +27,12 @@ export default function DeckScreen() {
             <Text style={styles.eyebrow}>YOUR STUDY DECK</Text>
             <Text style={styles.title}>{deck.title}</Text>
             <Text style={styles.description}>{deck.detail}</Text>
-            <AppButton
-              title="Start studying"
-              onPress={() => Alert.alert('Under construction', 'Study mode is coming soon.')}
-              style={styles.studyButton}
-            />
-            <SectionHeading title="Card preview" note={`${cards.length} sample cards`} />
-            {cards.map((card, index) => (
-              <View style={styles.card} key={`${deck.id}-${index}`}>
-                <View style={styles.cardIndex}><Text style={styles.cardIndexText}>{String(index + 1).padStart(2, '0')}</Text></View>
-                <Text style={styles.cardLabel}>QUESTION</Text>
-                <Text style={styles.question}>{card.question}</Text>
-                <View style={styles.divider} />
-                <Text style={styles.cardLabel}>ANSWER</Text>
-                <Text style={styles.answer}>{card.answer}</Text>
-              </View>
-            ))}
+            <ContentManager kind="deck" itemId={id} maxItems={deck.maxItems} addMode={add === 'true'} />
           </>
         ) : (
           <View style={styles.notFound}>
             <Text style={styles.title}>Deck not found</Text>
-            <Text style={styles.description}>Choose one of the sample decks from your library.</Text>
+            <Text style={styles.description}>Choose a deck from your library.</Text>
           </View>
         )}
       </ScrollView>

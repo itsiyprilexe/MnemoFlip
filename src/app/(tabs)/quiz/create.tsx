@@ -7,8 +7,8 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 //Two files the form component, and your color list.
-import { CreateItemForm } from '../components/CreateItemForm';
-import { palette } from '../theme';
+import { CreateItemForm } from '../../../components/CreateItemForm';
+import { palette } from '../../../theme';
 
 //screen itself. export default is what makes Expo Router treat this file as the /add-quiz page.
 export default function AddQuizScreen() {

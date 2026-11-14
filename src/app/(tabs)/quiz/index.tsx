@@ -2,12 +2,11 @@ import React from 'react';
 import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// Import custom components, data, and styling theme
-import { BrandHeader } from '../components/BrandHeader';
-import { AppButton } from '../components/AppButton';
-import { QuizCard } from '../components/QuizCard';
-import { quizzes } from '../data/study';
-import { palette } from '../theme';
+import { BrandHeader } from '../../../components/BrandHeader';
+import { AppButton } from '../../../components/AppButton';
+import { QuizCard } from '../../../components/QuizCard';
+import { useItems } from '../../../hooks/useItems';
+import { palette } from '../../../theme';
 
 /**
  * Main screen components ini para sa quizzes. 
@@ -16,6 +15,7 @@ import { palette } from '../theme';
 export default function QuizzesScreen() {
   // Navigation hook para mag navigate sa iba pa na screens
   const router = useRouter();
+  const { items: quizzes, loading, error } = useItems('quiz');
 
   return (
     // SafeAreaView para masecure an content sa device screen boundaries
@@ -34,7 +34,7 @@ export default function QuizzesScreen() {
         {/* Action button to open the "Add Quiz" page */}
         <AppButton 
           title="Add a quiz" 
-          onPress={() => router.push('/add-quiz')} 
+          onPress={() => router.push('/quiz/create')} 
           style={styles.addButton} 
         />
 
@@ -46,12 +46,13 @@ export default function QuizzesScreen() {
 
       {/* Maps through the study dataset and renders a QuizCard component for each quiz */}
         </Text>
+        {loading ? <Text>Loading quizzes...</Text> : error ? <Text>Could not load quizzes: {error}</Text> : quizzes.length === 0 ? <Text>No quizzes yet. Add your first quiz.</Text> : null}
         {quizzes.map((quiz) => <QuizCard 
           key={quiz.id} 
           quiz={quiz} 
         />)}
 
-        <Text style={styles.note}>Quiz questions and play mode are the next step.</Text>
+        <Text style={styles.note}>Tap a quiz to start. Use the icons to edit or delete.</Text>
       </ScrollView>
     </SafeAreaView>
   );

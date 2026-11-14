@@ -1,8 +1,8 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { CreateItemForm } from '../components/CreateItemForm';
-import { palette } from '../theme';
+import { CreateItemForm } from '../../../components/CreateItemForm';
+import { palette } from '../../../theme';
 
 export default function AddDeckScreen() {
   return (//pag set sa kind = deck ngan ma route pakadto sa CreateItemForm

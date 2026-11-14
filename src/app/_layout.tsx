@@ -1,19 +1,20 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { BottomNavigation } from '../components/BottomNavigation';
+import { AuthProvider, useAuth } from '../contexts/AuthContext';
 import { palette } from '../theme';
 
+function Navigation() {
+  const { user, loading } = useAuth();
+  if (loading) return <View style={{ flex: 1, justifyContent: 'center' }}><ActivityIndicator size="large" /></View>;
+  return <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: palette.background } }}>
+    <Stack.Screen name="index" />
+    <Stack.Protected guard={!!user}><Stack.Screen name="(tabs)" /></Stack.Protected>
+    <Stack.Protected guard={!user}><Stack.Screen name="login" /><Stack.Screen name="signup" /></Stack.Protected>
+  </Stack>;
+}
 export default function RootLayout() {
-  return (
-    <SafeAreaProvider>
-      <View style={{ flex: 1, backgroundColor: palette.background }}>
-        <StatusBar style="dark" />
-        <Stack screenOptions={{ headerShown: false, animation: 'none', contentStyle: { backgroundColor: palette.background } }} />
-        <BottomNavigation />
-      </View>
-    </SafeAreaProvider>
-  );
+  return <SafeAreaProvider><StatusBar style="dark" /><AuthProvider><Navigation /></AuthProvider></SafeAreaProvider>;
 }

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
-import { Link, router } from 'expo-router';
+import { Alert, Pressable, StyleSheet, Text } from 'react-native';
+import { Link } from 'expo-router';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth } from '../services/firebase';
 import { AppButton } from './AppButton';
 import { FormScreenHeader } from './FormScreenHeader';
 import { TextField } from './TextField';
@@ -14,7 +16,25 @@ export function AuthScreen({ mode }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const continueToApp = () => router.replace('/home');
+  const [busy, setBusy] = useState(false);
+  const continueToApp = async () => {
+    if (busy) return;
+    if (!email.trim() || !password || (isSignUp && !name.trim())) {
+      Alert.alert('Missing information', 'Please fill in all fields.'); return;
+    }
+    setBusy(true);
+    try {
+      if (isSignUp) {
+        const result = await createUserWithEmailAndPassword(auth, email.trim(), password);
+        try { await updateProfile(result.user, { displayName: name.trim() }); }
+        catch { Alert.alert('Account created', 'Your account was created, but your name could not be saved.'); }
+      } else await signInWithEmailAndPassword(auth, email.trim(), password);
+    } catch (error) {
+      const code = typeof error === 'object' && error !== null && 'code' in error ? error.code : '';
+      const message = code === 'auth/email-already-in-use' ? 'An account with this email already exists. Please log in.' : error instanceof Error ? error.message : 'Please try again.';
+      Alert.alert('Unable to continue', message);
+    } finally { setBusy(false); }
+  };
 
   return (
     <>
@@ -61,12 +81,12 @@ export function AuthScreen({ mode }: Props) {
       />
 
       <AppButton 
-        title={isSignUp ? 'Sign up' : 'Log in'} 
+        title={busy ? 'Please wait...' : isSignUp ? 'Sign up' : 'Log in'} 
         onPress={continueToApp} 
         style={styles.submit} 
       />
 
-      <Text style={styles.staticNote}>Continue to the app preview. No account details are saved.</Text>
+      <Text style={styles.staticNote}>Sign in to keep your learning space available across devices.</Text>
 
       <Link href={isSignUp ? '/login' : '/signup'} asChild>
 

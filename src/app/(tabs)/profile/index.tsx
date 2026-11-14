@@ -1,14 +1,23 @@
-import React from 'react'; //gi i-import an "React", which is is gin gagamit san interface san screen.
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'; //Imports items from React Native
-import { router } from 'expo-router'; //gi i-import an navigation tool san Expo Router’s. Sa "Profile screen" naman, gin gagmit an "router.replace('/')" para kumadto sa "welcome screen" when they tap Log out.
+import React, { useCallback, useState } from 'react'; //gi i-import an "React", which is is gin gagamit san interface san screen.
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'; //Imports items from React Native
+import { signOut } from 'firebase/auth';
+import { router, useFocusEffect } from 'expo-router';
+import { useItems } from '../../../hooks/useItems';
+import { auth } from '../../../services/firebase';
+import { useAuth } from '../../../contexts/AuthContext'; //gi i-import an navigation tool san Expo Router’s. Sa "Profile screen" naman, gin gagmit an "router.replace('/')" para kumadto sa "welcome screen" when they tap Log out.
 import { Ionicons } from '@expo/vector-icons'; //Imports the Ionicons component, used to show icons such as the deck and quiz symbols.
 import { SafeAreaView } from 'react-native-safe-area-context'; //Imports a container that keeps screen content within the device’s safe area, away from areas such as the status bar or screen edges.
-import { AppButton } from '../components/AppButton'; //brings the shared folder to the app kay gigagamit siya sa mga button pareho san "log out" button and "Account settings" button.
-import { BrandHeader } from '../components/BrandHeader'; // brings the shared folder to the app para pareho pareho design sa header kada screen. 
-import { collections, quizzes } from '../data/study'; // brings the mga sample data san deck ngan ngan quiz. Gin gagamit siya para maihap an mga sample deck ngan quiz.
-import { palette } from '../theme'; //brings the color na gigagmit sa bug-os na app, pareho sa "palette.green" ngan "palette.surface" para magtugma an color san buttons, card, ngan texts sa iba iba nga screen.
+import { AppButton } from '../../../components/AppButton'; //brings the shared folder to the app kay gigagamit siya sa mga button pareho san "log out" button and "Account settings" button.
+import { BrandHeader } from '../../../components/BrandHeader'; // brings the shared folder to the app para pareho pareho design sa header kada screen. 
+import { useDecks } from '../../../hooks/useDecks'; // brings the mga sample data san deck ngan ngan quiz. Gin gagamit siya para maihap an mga sample deck ngan quiz.
+import { palette } from '../../../theme'; //brings the color na gigagmit sa bug-os na app, pareho sa "palette.green" ngan "palette.surface" para magtugma an color san buttons, card, ngan texts sa iba iba nga screen.
 
 export default function ProfileScreen() {
+  const { user } = useAuth();
+  const [displayName, setDisplayName] = useState(user?.displayName?.trim() || 'Learner');
+  useFocusEffect(useCallback(() => { setDisplayName(user?.displayName?.trim() || 'Learner'); }, [user]));
+  const { decks, loading, error } = useDecks();
+  const { items: quizzes, loading: quizLoading, error: quizError } = useItems('quiz');
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
@@ -25,18 +34,17 @@ export default function ProfileScreen() {
         {/* gi didisplay an user's profile information. "styles.profileCard" controls its appearance.*/}
         <View style={styles.profileCard}>
 
-          {/*naghihimo san avatar containing san letter "Y". "styles.avatar" 
-          styles the container, while an "styles.avatarLetter" styles the letter "Y".*/}
+          {/*The avatar displays the first letter of the user's name.*/}
           <View style={styles.avatar}>
             <Text 
-              style={styles.avatarLetter}>H</Text>
+              style={styles.avatarLetter}>{Array.from(displayName)[0].toLocaleUpperCase()}</Text>
           </View>
 
           {/* gi display an user's name. "styles.name" controls its appearance.*/}
-          <Text style={styles.name}>Harry Potter</Text>
+          <Text style={styles.name}>{displayName}</Text>
 
           {/* gi display and user's subtitle. "styles.subtitle" controls its appearance.*/}
-          <Text style={styles.subtitle}>Computer Science Student</Text>
+          <Text style={styles.subtitle}>{user?.email}</Text>
         </View>
 
         {/*Displays the section title for the learning space. "styles.sectionTitle" controls its appearance.*/}
@@ -46,7 +54,7 @@ export default function ProfileScreen() {
         <View style={styles.statsCard}>
 
           {/*naghihimo row para sa study deck information ngan another row for quizzes.*/}
-          <View style={styles.statRow}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Open study decks" onPress={() => router.navigate('/(tabs)/decks')} style={styles.statRow}>
 
             {/*gi didisplays an deck or album icon. "name" selects the icon, "size" sets its size, 
             and "color" sets its color. Here, the color comes from the shared palette.*/}
@@ -64,10 +72,10 @@ export default function ProfileScreen() {
 
             {/* gi didisplays an value para sa "Study decks". 
             "styles.statValue" controls its appearance.*/}
-            <Text style={styles.statValue}>{collections.length}</Text>
-          </View>
+            <Text style={styles.statValue}>{loading ? '…' : error ? '—' : decks.length}</Text>
+          </Pressable>
           <View style={styles.divider} />
-          <View style={styles.statRow}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Open quizzes" onPress={() => router.navigate('/(tabs)/quiz')} style={styles.statRow}>
 
             {/* gi display a help icon. "name" selects the icon, "size" sets its size, 
             and "color" sets its color. Here, the color comes from the shared palette.*/}
@@ -85,8 +93,8 @@ export default function ProfileScreen() {
 
             {/* gi didisplays an value para sa "Quizzes". 
             "styles.statValue" controls its appearance.*/}
-            <Text style={styles.statValue}>{quizzes.length}</Text>
-          </View>
+            <Text style={styles.statValue}>{quizLoading ? '…' : quizError ? '—' : quizzes.length}</Text>
+          </Pressable>
         </View>
         
         
@@ -94,19 +102,19 @@ export default function ProfileScreen() {
         may magawas na allert message which is the “Profile settings are coming soon.” */}
         <AppButton 
           title="Account settings" 
-          onPress={() => Alert.alert('Under construction', 'Profile settings are coming soon.')} 
+          onPress={() => router.push('/(tabs)/profile/settings')} 
           style={styles.button} 
         />
 
         {/*kapag pinduton ini gi babalik siya sa welcome screen kun diin makikita an "Log in" ngan "Sign up"*/}
         <AppButton
           title="Log out"
-          onPress={() => router.replace('/')}
+          onPress={() => { signOut(auth).catch(() => Alert.alert('Unable to log out', 'Please try again.')); }}
           style={styles.logoutButton}
         />
 
         {/*Displays a note about the sample profile. "styles.note" controls its appearance.*/}
-        <Text style={styles.note}>This is a sample profile. No personal data is saved.</Text>
+        <Text style={styles.note}>Your account is connected to Firebase.</Text>
       </ScrollView>
     </SafeAreaView>
   );

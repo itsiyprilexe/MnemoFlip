@@ -1,17 +1,19 @@
 import React from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { AppButton } from '../components/AppButton';
-import { BrandHeader } from '../components/BrandHeader';
-import { CollectionCard } from '../components/CollectionCard';
-import { SectionHeading } from '../components/SectionHeading';
-import { StatsOverview } from '../components/StatsOverview';
-import { WeeklyRhythm } from '../components/WeeklyRhythm';
-import { collections } from '../data/study';
-import { palette } from '../theme';
+import { AppButton } from '../../../components/AppButton';
+import { BrandHeader } from '../../../components/BrandHeader';
+import { CollectionCard } from '../../../components/CollectionCard';
+import { SectionHeading } from '../../../components/SectionHeading';
+import { StudyCalendar } from '../../../components/StudyCalendar';
+import { useDecks } from '../../../hooks/useDecks';
+import { palette } from '../../../theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
+  const { decks, loading, error } = useDecks();
+  const collections = decks.map(deck => ({ id: deck.id, title: deck.title, detail: deck.description || 'Study deck', icon: 'albums-outline' as const, tint: palette.lilac, color: palette.green }));
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
@@ -23,24 +25,17 @@ export default function HomeScreen() {
           <Text style={styles.headlineSecond}>a lot of growth.</Text>
           <Text style={styles.introCopy}>Your study space is ready when you are.</Text>
         </View>
-
-        {/* An sa pag display sa green box WeeklyRhythm*/}
-        <WeeklyRhythm />
-
-
-        {/* mao ine an sa pag display sa card box tikang sa StatsOverview */}
-        <View style={styles.stats}><StatsOverview /></View>
-
-        {/* mao ine an responsible sa pag display san collectio like reading visual art etc etc tokang sa CollectionCard */}
+        <StudyCalendar />
         <View style={styles.section}>
           <SectionHeading title="Your collections" note="A few places to begin" />
-          {collections.map((collection, index) => <CollectionCard key={collection.title} collection={collection} index={index} />)}
+          {loading ? <Text>Loading decks...</Text> : error ? <Text>Could not load decks: {error}</Text> : collections.length === 0 ? <Text>No decks yet. Add your first deck.</Text> : null}
+        {collections.map((collection, index) => <CollectionCard key={collection.id} collection={collection} index={index} />)}
         </View>
 
 
         <AppButton
           title="Continue studying"
-          onPress={() => Alert.alert('Under construction', 'Study sessions are coming soon.')}
+          onPress={() => router.navigate('/(tabs)/decks')}
         />
         <View style={styles.quoteCard}>
           <View style={styles.quoteContent}>

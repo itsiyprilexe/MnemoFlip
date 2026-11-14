@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useAuth } from '../contexts/AuthContext';
+import { getItem, saveItem } from '../services/itemService';
 import { AppButton } from './AppButton';
 import { FormScreenHeader } from './FormScreenHeader';
 import { TextField } from './TextField';
@@ -8,35 +11,51 @@ import { palette } from '../theme';
 type Props = { kind: 'deck' | 'quiz' };// ig set an value depende sa user kun galing siya sa deck or quiz
 
 export function CreateItemForm({ kind }: Props) {
-  const [title, setTitle] = useState('');//para sa user input 
+  const { user } = useAuth();
+  const { id } = useLocalSearchParams<{ id?: string }>();
+  const [loading, setLoading] = useState(!!id);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-
-
-  const itemName = kind === 'deck' ? 'deck' : 'quiz'; // para sa pag display if deck or quiz
-  const pluralName = kind === 'deck' ? 'decks' : 'quizzes';
+  const [maximum, setMaximum] = useState('20');
+  const itemName = kind === 'deck' ? 'deck' : 'quiz';
+  useEffect(() => {
+    if (!id || !user) return;
+    let active = true;
+    setLoading(true); setLoadError(null);
+    getItem(user.uid, kind, id).then(item => { if (!active) return; if (!item) { setLoadError('This item was not found.'); return; } setTitle(item.title); setDescription(item.description); setMaximum(String(item.maxItems)); }).catch(() => { if (active) setLoadError('Could not load this item.'); }).finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [id, kind, user?.uid]);
   const titleLabel = kind === 'deck' ? 'Deck name' : 'Quiz name';
   const titlePlaceholder = kind === 'deck' ? 'e.g. Human anatomy' : 'e.g. Cell biology basics';
-  const buttonLabel = kind === 'deck' ? 'Add deck' : 'Add quiz';
+  const buttonLabel = id ? 'Save changes' : kind === 'deck' ? 'Add deck' : 'Add quiz';
 
-  const showPreviewMessage = () => { //an para sa onPress iya ig print an Alert()
-    Alert.alert(
-      'Static preview',
-      `You can enter ${itemName} details here, but adding ${pluralName} is not enabled in this preview.`,
-    );
+  const save = async () => {
+    if (saving || loading || loadError) return;
+    if (!user) { Alert.alert('Sign in required'); return; }
+    setSaving(true);
+    try {
+      const savedId = await saveItem(user.uid, kind, title, description, Number(maximum), id);
+      if (id) router.replace(kind === 'deck' ? '/decks' : '/quiz');
+      else if (kind === 'deck') router.replace({ pathname: '/(tabs)/decks/deck/[id]', params: { id: savedId, add: 'true' } });
+      else router.replace({ pathname: '/(tabs)/quiz/[id]', params: { id: savedId } });
+    }
+    catch (error) { Alert.alert(`Could not save ${kind}`, error instanceof Error ? error.message : 'Please try again.'); }
+    finally { setSaving(false); }
   };
 
   return (
     <>
-      <FormScreenHeader fallbackHref={kind === 'deck' ? '/collections' : '/quizzes'} />
-      <Text style={styles.eyebrow}>STATIC PREVIEW</Text>
-      <Text style={styles.title}>{kind === 'deck' ? 'Add a deck' : 'Add a quiz'}</Text>
+      <FormScreenHeader fallbackHref={kind === 'deck' ? '/decks' : '/quiz'} />
+      <Text style={styles.eyebrow}>YOUR LIBRARY</Text>
+      <Text style={styles.title}>{id ? `Edit ${kind}` : `Add a ${kind}`}</Text>
 
       <Text style={styles.description}>
-        Enter a title and description. The sample list will stay unchanged.
+        Enter a title and description.
       </Text>
 
-
-      {/* para sa user input */}
+      {loading ? <Text>Loading...</Text> : loadError ? <Text>{loadError}</Text> : null}
       <TextField
         label={titleLabel}
         value={title}
@@ -55,14 +74,15 @@ export function CreateItemForm({ kind }: Props) {
         maxLength={180}
       />
 
-      {/* para sa button */}
+      <TextField label={kind === 'deck' ? 'Maximum flashcards (1–100)' : 'Maximum questions (1–100)'} value={maximum} onChangeText={setMaximum} keyboardType="number-pad" maxLength={3} placeholder="20" />
+      <Text style={{ color: palette.muted, marginBottom: 14 }}>After saving, open it to add and manage {kind === 'deck' ? 'flashcards' : 'questions'}.</Text>
       <AppButton 
-        title={buttonLabel} 
-        onPress={showPreviewMessage} 
+        title={saving ? 'Saving...' : buttonLabel} 
+        onPress={save} 
         style={styles.button} 
       />
 
-      <Text style={styles.note}>Nothing is saved or added to the list.</Text>
+      
     </>
   );
 }
