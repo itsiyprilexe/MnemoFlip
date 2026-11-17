@@ -1,11 +1,10 @@
 import React from 'react';
 import { useRouter } from 'expo-router';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BrandHeader } from '../../../components/BrandHeader';
 import { CollectionCard } from '../../../components/CollectionCard';
-import { AppButton } from '../../../components/AppButton';
-import { SectionHeading } from '../../../components/SectionHeading';
 import { useDecks } from '../../../hooks/useDecks';
 import { palette } from '../../../theme';
 
@@ -16,7 +15,7 @@ export default function CollectionsScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <BrandHeader />
         <Text style={styles.eyebrow}>YOUR LIBRARY</Text>
         <Text style={styles.title}>Your decks</Text>
@@ -29,16 +28,15 @@ export default function CollectionsScreen() {
           </View>
         </View>
 
-        <AppButton 
-          title="Add a deck" 
-          onPress={() => router.push('/decks/create')} 
-          style={styles.addButton} 
-        />
-
-        <SectionHeading 
-          title="Featured decks" 
-          note={`${collections.length} sets`} 
-        />
+        <View style={styles.featuredRow}>
+          <View style={styles.featuredText}>
+            <Text style={styles.featuredTitle}>Featured decks</Text>
+            <Text style={styles.featuredCount}>{collections.length} sets</Text>
+          </View>
+          <Pressable accessibilityRole="button" accessibilityLabel="Add a deck" onPress={() => router.push('/decks/create')} style={styles.addButton}>
+            <Ionicons name="add" size={21} color={palette.green} />
+          </Pressable>
+        </View>
         
         {loading ? <Text>Loading decks...</Text> : error ? <Text>Could not load decks: {error}</Text> : collections.length === 0 ? <Text>No decks yet. Add your first deck.</Text> : null}
         {collections.map((deck, index) => <CollectionCard key={deck.id} collection={deck} index={index} showActions />)}
@@ -121,8 +119,19 @@ const styles = StyleSheet.create({
     marginTop: 4 
   },
 
-  addButton: { 
-    marginBottom: 24 
+  featuredRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 13 },
+  featuredText: { flex: 1 },
+  featuredTitle: { color: palette.ink, fontSize: 19, letterSpacing: -0.5, fontWeight: '700' },
+  featuredCount: { color: palette.muted, fontSize: 10, marginTop: 4 },
+  addButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: palette.surface,
+    borderWidth: 1,
+    borderColor: palette.line,
   },
 
   note: { 

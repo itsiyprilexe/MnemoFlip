@@ -17,17 +17,17 @@ export default function DeckScreen() {
   return (
     
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <FormScreenHeader fallbackHref="/decks" />
         {loading ? <Text>Loading deck...</Text> : error ? <Text>Could not load deck: {error}</Text> : deck ? (
           <>
-            <View style={[styles.heroIcon, { backgroundColor: deck.tint }]}>
+            {add !== 'true' && <View style={styles.deckHeader}><View style={styles.deckHeaderTop}><View style={[styles.heroIcon, { backgroundColor: palette.greenLight }]}>
               <Ionicons name={deck.icon} size={28} color={deck.color} />
-            </View>
+            </View><View style={styles.deckCount}><Ionicons name="copy-outline" size={14} color={palette.green} /><Text style={styles.deckCountText}>{deck.itemCount} {deck.itemCount === 1 ? 'card' : 'cards'}</Text></View></View>
             <Text style={styles.eyebrow}>YOUR STUDY DECK</Text>
             <Text style={styles.title}>{deck.title}</Text>
-            <Text style={styles.description}>{deck.detail}</Text>
-            <ContentManager kind="deck" itemId={id} maxItems={deck.maxItems} addMode={add === 'true'} />
+            {!!deck.detail && <Text style={styles.deckDescription}>{deck.detail}</Text>}</View>}
+            <ContentManager kind="deck" itemId={id} maxItems={deck.maxItems} addMode={add === 'true'} deckTitle={deck.title} />
           </>
         ) : (
           <View style={styles.notFound}>
@@ -41,6 +41,12 @@ export default function DeckScreen() {
 }
 
 const styles = StyleSheet.create({
+
+  deckHeader: { backgroundColor: palette.surface, borderWidth: 1, borderColor: palette.line, borderRadius: 20, padding: 18 },
+  deckHeaderTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  deckCount: { backgroundColor: palette.greenLight, borderRadius: 20, paddingVertical: 7, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', gap: 5 },
+  deckCountText: { color: palette.green, fontSize: 11, fontWeight: '700' },
+  deckDescription: { color: palette.muted, fontSize: 13, lineHeight: 19, marginTop: 7 },
 
   safeArea: { 
     flex: 1, 

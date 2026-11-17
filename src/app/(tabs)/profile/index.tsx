@@ -20,7 +20,7 @@ export default function ProfileScreen() {
   const { items: quizzes, loading: quizLoading, error: quizError } = useItems('quiz');
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <BrandHeader />
 
         {/*gi didisplay an small label na "YOUR SPACE". 

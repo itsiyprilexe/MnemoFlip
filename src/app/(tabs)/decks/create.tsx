@@ -7,7 +7,7 @@ import { palette } from '../../../theme';
 export default function AddDeckScreen() {
   return (//pag set sa kind = deck ngan ma route pakadto sa CreateItemForm
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <CreateItemForm kind="deck" />
       </ScrollView>
     </SafeAreaView>

@@ -8,7 +8,7 @@ export default function LoginScreen() {
   return (
     // nag assign value para sa mode = Log in ngan rout pakadto sa AuthScreen
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <AuthScreen mode="login" />
       </ScrollView>
     </SafeAreaView>

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRouter } from 'expo-router';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BrandHeader } from '../../../components/BrandHeader';
-import { AppButton } from '../../../components/AppButton';
 import { QuizCard } from '../../../components/QuizCard';
 import { useItems } from '../../../hooks/useItems';
 import { palette } from '../../../theme';
@@ -21,7 +21,7 @@ export default function QuizzesScreen() {
     // SafeAreaView para masecure an content sa device screen boundaries
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       {/* Allows content to scroll vertically */}
-      <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
 
       {/* Displays the top app branding header */}
         <BrandHeader />
@@ -31,21 +31,12 @@ export default function QuizzesScreen() {
         <Text style={styles.title}>Your quizzes</Text>
         <Text style={styles.description}>Quick reviews to help ideas stick.</Text>
 
-        {/* Action button to open the "Add Quiz" page */}
-        <AppButton 
-          title="Add a quiz" 
-          onPress={() => router.push('/quiz/create')} 
-          style={styles.addButton} 
-        />
+        <View style={styles.summary}>
+          <Text style={styles.summaryValue}>{loading ? '–' : error ? '–' : quizzes.length}</Text>
+          <View style={styles.summaryText}><Text style={styles.summaryTitle}>Quizzes</Text><Text style={styles.summaryNote}>A few questions to explore</Text></View>
+        </View>
 
-        {/* Displays total count of available quizzes */}   
-        <Text 
-          style={styles.sectionTitle}>Quiz library <Text 
-          style={styles.count}>{quizzes.length}
-        </Text>
-
-      {/* Maps through the study dataset and renders a QuizCard component for each quiz */}
-        </Text>
+        <View style={styles.libraryRow}><View style={styles.libraryText}><Text style={styles.sectionTitle}>Quiz library</Text><Text style={styles.count}>{quizzes.length} {quizzes.length === 1 ? 'quiz' : 'quizzes'}</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Add a quiz" onPress={() => router.push('/quiz/create')} style={styles.addButton}><Ionicons name="add" size={21} color={palette.green} /></Pressable></View>
         {loading ? <Text>Loading quizzes...</Text> : error ? <Text>Could not load quizzes: {error}</Text> : quizzes.length === 0 ? <Text>No quizzes yet. Add your first quiz.</Text> : null}
         {quizzes.map((quiz) => <QuizCard 
           key={quiz.id} 
@@ -95,21 +86,28 @@ const styles = StyleSheet.create({
     marginBottom: 23 
   },
 
-  addButton: { 
-    marginBottom: 26 
-  },
+  summary: { flexDirection: 'row', alignItems: 'center', gap: 13, backgroundColor: palette.green, borderRadius: 20, padding: 17, marginBottom: 28 },
+  summaryValue: { color: '#FFFFFF', fontSize: 32, fontWeight: '700', letterSpacing: -1 },
+  summaryText: { flex: 1 },
+  summaryTitle: { color: '#FFFFFF', fontSize: 14, fontWeight: '700' },
+  summaryNote: { color: '#E2E9DF', fontSize: 10, marginTop: 4 },
+
+  libraryRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 13 },
+  libraryText: { flex: 1 },
+  addButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: palette.surface, borderColor: palette.line, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
 
   sectionTitle: { 
     color: palette.ink, 
     fontSize: 18, 
     fontWeight: '700', 
-    marginBottom: 13 
+    marginBottom: 0
   },
 
   count: { 
     color: palette.muted, 
-    fontSize: 13, 
-    fontWeight: '600' 
+    fontSize: 10,
+    marginTop: 4,
+    fontWeight: '600'
   },
   
   note: { 

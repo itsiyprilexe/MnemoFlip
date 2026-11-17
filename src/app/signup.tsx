@@ -8,7 +8,7 @@ export default function SignupScreen() {
   return (
     //para sa pag set value sa mode = signup ngan rout pakadto sa AuthScreen
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <AuthScreen mode="signup" />
       </ScrollView>
     </SafeAreaView>

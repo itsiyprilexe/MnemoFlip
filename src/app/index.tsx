@@ -12,7 +12,7 @@ export default function WelcomeScreen() {
   return (
 
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
-      <ScrollView contentContainerStyle={styles.page}>
+      <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <View style={styles.brand}>
         </View>
 
