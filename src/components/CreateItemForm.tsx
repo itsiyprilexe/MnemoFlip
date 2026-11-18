@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Alert, StyleSheet, Text } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '../contexts/AuthContext';
 import { getItem, saveItem } from '../services/itemService';
@@ -49,18 +48,14 @@ export function CreateItemForm({ kind }: Props) {
   return (
     <>
       <FormScreenHeader fallbackHref={kind === 'deck' ? '/decks' : '/quiz'} />
-      <View style={styles.icon}><Ionicons name={kind === 'deck' ? 'albums-outline' : 'help-circle-outline'} size={24} color={palette.green} /></View>
       <Text style={styles.eyebrow}>YOUR LIBRARY</Text>
       <Text style={styles.title}>{id ? `Edit ${kind}` : `Add a ${kind}`}</Text>
 
       <Text style={styles.description}>
-        {id ? `Make this ${itemName} feel just right.` : `Create a space for what you're learning.`}
+        Enter a title and description.
       </Text>
 
       {loading ? <Text>Loading...</Text> : loadError ? <Text>{loadError}</Text> : null}
-      <View style={styles.formCard}>
-      <Text style={styles.formTitle}>{kind === 'deck' ? 'Deck details' : 'Quiz details'}</Text>
-      <Text style={styles.formSubtitle}>Give it a name and a little context.</Text>
       <TextField
         label={titleLabel}
         value={title}
@@ -79,11 +74,8 @@ export function CreateItemForm({ kind }: Props) {
         maxLength={180}
       />
 
-      <View style={styles.divider} />
-      <TextField label={kind === 'deck' ? 'Maximum flashcards (1-100)' : 'Maximum questions (1-100)'} value={maximum} onChangeText={setMaximum} keyboardType="number-pad" maxLength={3} placeholder="20" />
-      <Text style={styles.helper}>Choose how many {kind === 'deck' ? 'flashcards' : 'questions'} this {itemName} can hold.</Text>
-      </View>
-      <View style={styles.tip}><Ionicons name="sparkles-outline" size={19} color={palette.green} /><Text style={styles.tipText}>You can update these details whenever you need.</Text></View>
+      <TextField label={kind === 'deck' ? 'Maximum flashcards (1–100)' : 'Maximum questions (1–100)'} value={maximum} onChangeText={setMaximum} keyboardType="number-pad" maxLength={3} placeholder="20" />
+      <Text style={{ color: palette.muted, marginBottom: 14 }}>After saving, open it to add and manage {kind === 'deck' ? 'flashcards' : 'questions'}.</Text>
       <AppButton 
         title={saving ? 'Saving...' : buttonLabel} 
         onPress={save} 
@@ -97,15 +89,6 @@ export function CreateItemForm({ kind }: Props) {
 
 const styles = StyleSheet.create({//para sa Style 
 
-  icon: { width: 50, height: 50, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.greenLight, marginBottom: 18 },
-  formCard: { backgroundColor: palette.surface, borderColor: palette.line, borderWidth: 1, borderRadius: 20, padding: 18 },
-  formTitle: { color: '#294638', fontSize: 16, fontWeight: '700' },
-  formSubtitle: { color: palette.muted, fontSize: 11, marginTop: 5, marginBottom: 20 },
-  divider: { height: StyleSheet.hairlineWidth, backgroundColor: palette.line, marginBottom: 18 },
-  helper: { color: palette.muted, fontSize: 11, lineHeight: 16, marginTop: -8 },
-  tip: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: palette.greenLight, padding: 14, borderRadius: 14, marginTop: 16, marginBottom: 12 },
-  tipText: { color: '#496455', flex: 1, fontSize: 11, lineHeight: 16 },
-
   eyebrow: { 
     color: palette.muted, 
     fontSize: 10, 
@@ -115,7 +98,7 @@ const styles = StyleSheet.create({//para sa Style
   },
 
   title: { 
-    color: '#294638', 
+    color: palette.ink, 
     fontSize: 29, 
     fontWeight: '700', 
     letterSpacing: -1 
