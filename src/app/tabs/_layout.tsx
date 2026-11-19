@@ -11,6 +11,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="quiz" options={{ title: 'Quizzes', tabBarIcon: ({ size, focused }) => <Ionicons name={focused ? 'help-circle' : 'help-circle-outline'} color={focused ? palette.green : palette.muted} size={size} /> }} />
       <Tabs.Screen name="profile" options={{ title: 'Profile', tabBarIcon: ({ size, focused }) => <Ionicons name={focused ? 'person' : 'person-outline'} color={focused ? palette.green : palette.muted} size={size} /> }} />
     </Tabs>
+    // lfisusri
   );
 }
 
