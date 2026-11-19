@@ -10,7 +10,9 @@ import { palette } from '../../../theme';
 
 export default function CollectionsScreen() {
   const { decks, loading, error } = useDecks();
-  const collections = decks.map(deck => ({ id: deck.id, title: deck.title, detail: deck.description || 'Study deck', icon: 'albums-outline' as const, tint: palette.lilac, color: palette.green }));
+  const collections = decks.map(deck => ({ id: deck.id, 
+                                           title: deck.title,
+                                           detail: deck.description || 'Study deck', icon: 'albums-outline' as const, tint: palette.lilac, color: palette.green }));
   const router = useRouter();
 
   return (
@@ -39,7 +41,8 @@ export default function CollectionsScreen() {
         </View>
         
         {loading ? <Text>Loading decks...</Text> : error ? <Text>Could not load decks: {error}</Text> : collections.length === 0 ? <Text>No decks yet. Add your first deck.</Text> : null}
-        {collections.map((deck, index) => <CollectionCard key={deck.id} collection={deck} index={index} showActions />)}
+        {collections.map((deck, index) => 
+                <CollectionCard key={deck.id} collection={deck} index={index} showActions />)}
 
         <View style={styles.note}>
           <Text style={styles.noteText}>Open a deck to view its details.</Text>

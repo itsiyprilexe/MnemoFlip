@@ -11,8 +11,15 @@ function Navigation() {
   if (loading) return <View style={{ flex: 1, justifyContent: 'center' }}><ActivityIndicator size="large" /></View>;
   return <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: palette.background } }}>
     <Stack.Screen name="index" />
-    <Stack.Protected guard={!!user}><Stack.Screen name="(tabs)" /></Stack.Protected>
-    <Stack.Protected guard={!user}><Stack.Screen name="login" /><Stack.Screen name="signup" /></Stack.Protected>
+    
+    <Stack.Protected guard={!!user}>
+      <Stack.Screen name="(tabs)" />
+    </Stack.Protected>
+
+    <Stack.Protected guard={!user}>
+      <Stack.Screen name="login" />
+    <Stack.Screen name="signup" />
+    </Stack.Protected>
   </Stack>;
 }
 export default function RootLayout() {
