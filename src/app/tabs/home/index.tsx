@@ -15,8 +15,8 @@ export default function HomeScreen() {
   return <SafeAreaView style={styles.safe} edges={['top']}>
     <ScrollView 
       contentContainerStyle={styles.page} 
-      showsVerticalScrollIndicator={false} 
-      showsHorizontalScrollIndicator={false}
+       showsVerticalScrollIndicator={false} 
+       showsHorizontalScrollIndicator={false}
     >
     
     <BrandHeader />
@@ -40,19 +40,52 @@ export default function HomeScreen() {
         accessibilityRole="button" 
         accessibilityLabel="Add a deck" 
         onPress={() => router.push('/decks/create')} 
-        style={styles.add}>
-          <Ionicons name="add" size={21} color={palette.green} />
-        </Pressable>
+        style={styles.add}
+      >
+        <Ionicons 
+         name="add" 
+         size={21} 
+         color={palette.green} 
+        />
+      </Pressable>
+
     </View>
 
-    {loading ? <Text>Loading decks...</Text> : 
-        error ? <Text>Could not load decks: {error}</Text> :
-         decks.length === 0 ? <Text style={styles.empty}>No decks yet. Add your first deck.</Text> : 
+    {loading ? 
+       <Text>Loading decks...</Text> : 
+
+     error ? 
+        <Text>
+           Could not load decks: {error} 
+        </Text> :
+        
+      decks.length === 0 ? 
+        <Text style={styles.empty}>
+           No decks yet. Add your first deck.
+        </Text> : 
          null}
 
     {decks.map(deck => 
-      <Pressable key={deck.id} accessibilityRole="button" accessibilityLabel={`Open ${deck.title}`} onPress={() => router.push({ pathname: '/(tabs)/home/deck/[id]', params: { id: deck.id } })} style={styles.card}>
-      <View style={styles.cardTop}><View style={styles.icon}><Ionicons name="albums-outline" size={20} color={palette.green} /></View><View style={styles.cardText}><Text style={styles.cardTitle}>{deck.title}</Text><Text style={styles.note}>{deck.description || 'Study deck'}</Text></View></View>
+      <Pressable
+       key={deck.id} 
+       accessibilityRole="button" 
+       accessibilityLabel={`Open ${deck.title}`} 
+       onPress={() =>  router.push({ 
+        pathname: '/(tabs)/home/deck/[id]', 
+        params: { id: deck.id } })} style={styles.card}>
+
+      <View style={styles.cardTop}> 
+        
+       <View style={styles.icon}>
+        <Ionicons 
+          name="albums-outline"
+           size={20} 
+           color={palette.green} 
+        />
+      </View>
+          
+          <View style={styles.cardText}>
+            <Text style={styles.cardTitle}>{deck.title}</Text><Text style={styles.note}>{deck.description || 'Study deck'}</Text></View></View>
       <View style={styles.cardBottom}><Text style={styles.note}>{deck.itemCount} {deck.itemCount === 1 ? 'flashcard' : 'flashcards'}</Text><View style={styles.open}><Text style={styles.openText}>Open deck</Text><Ionicons name="arrow-forward" size={17} color={palette.green} /></View></View>
     
     </Pressable>)}
