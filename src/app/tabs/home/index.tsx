@@ -23,15 +23,11 @@ export default function HomeScreen() {
     
     <StudyCalendar />
 
-    <View style={styles.sectionHeader}>
-      <View style={styles.sectionText}>
+    <View style={styles.sectionHeader}><View style={styles.sectionText}>
+    <Text style={styles.sectionTitle}>Your collections</Text><Text style={styles.note}>A few places to begin</Text>
 
-        <Text style={styles.sectionTitle}>Your collections</Text>
-        <Text style={styles.note}>A few places to begin</Text>
-
-        </View>
-      <Pressable accessibilityRole="button" accessibilityLabel="Add a deck" onPress={() => router.push('/decks/create')} style={styles.add}>
-        <Ionicons name="add" size={21} color={palette.green} />
+    </View>
+    <Pressable accessibilityRole="button" accessibilityLabel="Add a deck" onPress={() => router.push('/decks/create')} style={styles.add}><Ionicons name="add" size={21} color={palette.green} />
         </Pressable>
     </View>
 
