@@ -18,7 +18,7 @@ type Props = { //gi lilist kun nano na information an need na ihatag sa "AppButt
 // an "Props" kinahanglan sumunod ini sa rules na needs sa igbaw.
 export function AppButton({ title, onPress, style }: Props) {
   return ( //nag e start ibalik or ipakita san component an button interface.
-    
+
     // mga element na pwede pinduton
     <Pressable
       accessibilityRole="button" // na ngangaro permission sa accessibility tools na button ini
@@ -32,9 +32,9 @@ export function AppButton({ title, onPress, style }: Props) {
       {/*gipapakita an white na arrow na nakatutok sa right. Icon la siya, 
       dire siya an naghihimo san navigation. An "onPress" function san 
       "Pressable" an nag memean kun nano an nahihinabo pag gipindot an button.*/}
-      <Ionicons 
-      name="arrow-forward" 
-      size={17} color="#FFFFFF"   
+      <Ionicons
+        name="arrow-forward"
+        size={17} color="#FFFFFF"
       />
     </Pressable>
   );
@@ -42,20 +42,20 @@ export function AppButton({ title, onPress, style }: Props) {
 
 const styles = StyleSheet.create({
 
-  button: { 
-    minHeight: 48, 
-    borderRadius: 15, 
-    backgroundColor: palette.green, 
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    gap: 10, 
-    paddingHorizontal: 18 
+  button: {
+    minHeight: 48,
+    borderRadius: 15,
+    backgroundColor: palette.green,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingHorizontal: 18
   },
 
-  label: { 
-    color: '#FFFFFF', 
-    fontWeight: '700', 
-    fontSize: 13 
+  label: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+    fontSize: 13
   },
 });

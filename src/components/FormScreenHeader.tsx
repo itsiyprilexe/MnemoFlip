@@ -19,16 +19,16 @@ export function FormScreenHeader({ fallbackHref }: Props) {
   return (
     <View style={styles.row}>
 
-      <Pressable 
-        accessibilityRole="button" 
-        accessibilityLabel="Go back" 
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Go back"
         onPress={goBack} style={styles.back}
-        >
+      >
 
-        <Ionicons 
-          name="arrow-back" 
-          size={19} 
-          color={palette.ink} 
+        <Ionicons
+          name="arrow-back"
+          size={19}
+          color={palette.ink}
         />
       </Pressable>
 
@@ -39,28 +39,28 @@ export function FormScreenHeader({ fallbackHref }: Props) {
 
 const styles = StyleSheet.create({
 
-  row: { 
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    gap: 13, 
-    marginBottom: 26 
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 13,
+    marginBottom: 26
   },
 
-  back: { 
-    width: 40, 
-    height: 40, 
+  back: {
+    width: 40,
+    height: 40,
     borderRadius: 14,
-    backgroundColor: palette.surface, 
-    borderWidth: 1, 
-    borderColor: palette.line, 
-    alignItems: 'center', 
-    justifyContent: 'center' 
+    backgroundColor: palette.surface,
+    borderWidth: 1,
+    borderColor: palette.line,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  
-  label: { 
-    color: palette.muted, 
-    fontSize: 10, 
-    letterSpacing: 1.4, 
+
+  label: {
+    color: palette.muted,
+    fontSize: 10,
+    letterSpacing: 1.4,
     fontWeight: '800'
   },
 });

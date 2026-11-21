@@ -25,19 +25,58 @@ export default function PlayQuiz() {
   const [finished, setFinished] = useState(false);
   useEffect(() => {
     let active = true;
-    setQuestions([]); setAnswers({}); setIndex(0); setFinished(false); setError(''); setLoading(true);
-    if (!uid || !id) { setLoading(false); return; }
-    Promise.all([getItem(uid, 'quiz', id), getQuizQuestions(uid, id)]).then(([quiz, list]) => {
-      if (!active) return;
-      if (!quiz) { setError('Quiz not found.'); return; }
-      if (list.some(q => !q.question.trim() || !q.answer.trim() || (q.type === 'multipleChoice' && (q.choices.length < 2 || !q.choices.includes(q.answer))))) { setError('Some questions are incomplete. Edit the quiz before starting.'); return; }
-      setTitle(quiz.title); setQuestions(list);
-    }).catch(e => { if (active) setError(e instanceof Error ? e.message : 'Could not load quiz.'); }).finally(() => { if (active) setLoading(false); });
+    setQuestions([]);
+    setAnswers({});
+    setIndex(0);
+    setFinished(false);
+    setError('');
+    setLoading(true);
+
+    if (!uid || !id) {
+      setLoading(false);
+      return;
+    }
+
+    // Load the quiz details and its questions together.
+    Promise.all([getItem(uid, 'quiz', id), getQuizQuestions(uid, id)])
+      .then(([quiz, list]) => {
+        if (!active) return;
+        if (!quiz) {
+          setError('Quiz not found.');
+          return;
+        }
+
+        const incomplete = list.some(question => {
+          const missingText = !question.question.trim() || !question.answer.trim();
+          const invalidChoices = question.type === 'multipleChoice'
+            && (question.choices.length < 2 || !question.choices.includes(question.answer));
+          return missingText || invalidChoices;
+        });
+        if (incomplete) {
+          setError('Some questions are incomplete. Edit the quiz before starting.');
+          return;
+        }
+
+        setTitle(quiz.title);
+        setQuestions(list);
+      })
+      .catch(error => {
+        if (active) setError(error instanceof Error ? error.message : 'Could not load quiz.');
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
     return () => { active = false; };
   }, [uid, id]);
+
   const question = questions[index];
   const currentAnswer = question ? answers[question.id] ?? '' : '';
-  const score = questions.reduce((total, item) => total + (normalize(answers[item.id] ?? '') === normalize(item.answer) ? 1 : 0), 0);
+  const score = questions.reduce((total, item) => {
+    const userAnswer = normalize(answers[item.id] ?? '');
+    const correctAnswer = normalize(item.answer);
+    return total + (userAnswer === correctAnswer ? 1 : 0);
+  }, 0);
   return <SafeAreaView style={styles.safe} edges={['top']}><ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
     <FormScreenHeader fallbackHref="/quiz" />
     <Text style={styles.eyebrow}>A LITTLE KNOWLEDGE CHECK</Text>

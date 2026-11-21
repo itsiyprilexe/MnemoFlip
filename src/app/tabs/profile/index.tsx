@@ -36,7 +36,7 @@ export default function ProfileScreen() {
 
           {/*The avatar displays the first letter of the user's name.*/}
           <View style={styles.avatar}>
-            <Text 
+            <Text
               style={styles.avatarLetter}>{Array.from(displayName)[0].toLocaleUpperCase()}</Text>
           </View>
 
@@ -59,10 +59,10 @@ export default function ProfileScreen() {
             {/*gi didisplays an deck or album icon. "name" selects the icon, "size" sets its size, 
             and "color" sets its color. Here, the color comes from the shared palette.*/}
             <View style={styles.statIcon}>
-              <Ionicons 
-                name="albums-outline" 
-                size={18} 
-                color={palette.green} 
+              <Ionicons
+                name="albums-outline"
+                size={18}
+                color={palette.green}
               />
             </View>
 
@@ -80,10 +80,10 @@ export default function ProfileScreen() {
             {/* gi display a help icon. "name" selects the icon, "size" sets its size, 
             and "color" sets its color. Here, the color comes from the shared palette.*/}
             <View style={styles.statIcon}>
-              <Ionicons 
-                name="help-circle-outline" 
-                size={18} 
-                color="#786798" 
+              <Ionicons
+                name="help-circle-outline"
+                size={18}
+                color="#786798"
               />
             </View>
 
@@ -100,10 +100,10 @@ export default function ProfileScreen() {
         
         {/* placeholder pala ini siya kay dire pa working that's why pag pinduton mo 
         may magawas na allert message which is the “Profile settings are coming soon.” */}
-        <AppButton 
-          title="Account settings" 
-          onPress={() => router.push('/(tabs)/profile/settings')} 
-          style={styles.button} 
+        <AppButton
+          title="Account settings"
+          onPress={() => router.push('/(tabs)/profile/settings')}
+          style={styles.button}
         />
 
         {/*kapag pinduton ini gi babalik siya sa welcome screen kun diin makikita an "Log in" ngan "Sign up"*/}
@@ -123,21 +123,21 @@ export default function ProfileScreen() {
 //
 const styles = StyleSheet.create({
 
-//Screen layout
-  safeArea: { 
+  //Screen layout
+  safeArea: {
     flex: 1, //makes the screen fill the available space.
     backgroundColor: palette.background //sets the screen background using the app’s shared theme color.
   },
 
   //Adds space around the screen content:
-  page: { 
+  page: {
     paddingHorizontal: 22, //adds space on the left and right.
     paddingTop: 8, //adds space above.
     paddingBottom: 126 //leaves extra room at the bottom, likely so content doesn’t sit behind the floating tab bar.
   },
 
   //Styles a small heading such as "YOUR SPACE"
-  eyebrow: { 
+  eyebrow: {
     fontSize: 10, //Sets the font size.
     color: palette.muted, //Sets the muted text color.
     letterSpacing: 1.5, //Spreads the letters apart
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
 
   //Styles the "Profile"
-  title: { 
+  title: {
     fontSize: 29, //sets the character size.
     lineHeight: 35, //sets the height of each text line.
     fontWeight: '700', //brings the letters slightly closer together.
@@ -156,18 +156,18 @@ const styles = StyleSheet.create({
   },
 
   //Styles the card containing the avatar, name, and profile details
-  profileCard: { 
+  profileCard: {
     backgroundColor: palette.surface, //Sets its background, border, and rounded corners.
     alignItems: 'center', //centers its children horizontally.
-    borderRadius: 22, 
+    borderRadius: 22,
     padding: 22, //adds space inside the card.
-    borderWidth: 1, 
-    borderColor: palette.line, 
+    borderWidth: 1,
+    borderColor: palette.line,
     marginBottom: 26 //adds space beneath the card.
   },
 
   //Styles the circular avatar
-  avatar: { 
+  avatar: {
     width: 74, //make it a 74-by-74 square.
     height: 74, //make it a 74-by-74 square.
     borderRadius: 37, //rounds it into a circle.
@@ -178,21 +178,21 @@ const styles = StyleSheet.create({
   },
 
   //Styles the letter shown in the avatar
-  avatarLetter: { 
+  avatarLetter: {
     color: palette.green, //sets the letter color green
     fontSize: 26, //sets the size
     fontWeight: '700' //sets as bold
   },
 
   //Styles the letter shown in the avatar
-  name: { 
+  name: {
     color: palette.ink, //sets the color
     fontSize: 18, //sets the size
     fontWeight: '700' //ses as bold
   },
 
   //Styles the profile name
-  subtitle: { 
+  subtitle: {
     color: palette.green, //sets the color into green
     fontSize: 11, //sets the size
     fontWeight: '700', //set as bold
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   },
 
   //Learning-space heading and statistics card
-  sectionTitle: { 
+  sectionTitle: {
     color: palette.ink, //sets the color
     fontSize: 17, //sets the size
     fontWeight: '700', //set as bold
@@ -208,24 +208,24 @@ const styles = StyleSheet.create({
   },
 
   //Styles the card that contains the "deck" and "quiz" counts
-  statsCard: { 
+  statsCard: {
     backgroundColor: palette.surface, //sets the background color.
-    borderRadius: 18, 
-    borderWidth: 1, 
+    borderRadius: 18,
+    borderWidth: 1,
     borderColor: palette.line, //sets the boder color.
     paddingHorizontal: 15, //adds left and right inner spacing.
     marginBottom: 20 //leaves space below the card.
   },
 
   //Rows and icons inside the statistics card
-  statRow: { 
+  statRow: {
     minHeight: 57, //Ensures the row is at least 57 points tall.
     flexDirection: 'row', //Places its children horizontally because
     alignItems: 'center' //Vertically centers them.
   },
 
   //Styles the small box behind each statistics icon
-  statIcon: { 
+  statIcon: {
     width: 33, //sets the width
     height: 33, //sets the height
     borderRadius: 11, //Sets its size, rounded corners, and background.
@@ -236,39 +236,39 @@ const styles = StyleSheet.create({
   },
 
   //Styles labels such as Study decks and Quizzes.
-  statLabel: { 
+  statLabel: {
     flex: 1, //makes the label take up available row space
     color: palette.ink, //sets the color
     fontSize: 12, //sets the size
     fontWeight: '600'//sets as bold
-   },
+  },
 
-   //Styles the count at the right of each row
-  statValue: { 
+  //Styles the count at the right of each row
+  statValue: {
     color: palette.green, //sets the color
     fontSize: 13, //sets the size
     fontWeight: '700' //sets as bold
   },
 
   //Creates a thin horizontal separator between the deck and quiz rows
-  divider: { 
+  divider: {
     height: StyleSheet.hairlineWidth, //uses a very thin line appropriate for the device
     backgroundColor: palette.line //sets the background color
   },
 
   //Buttons
-  button: { 
+  button: {
     marginBottom: 15 //
   },
 
-  
-  logoutButton: { 
+
+  logoutButton: {
     backgroundColor: '#A64E46', //sets the color
     marginBottom: 15 //Adds space below the regular Profile button.
   },
-  
+
   //notes
-  note: { 
+  note: {
     color: palette.muted, ////Sets the muted text color.
     textAlign: 'center', //centered on the screen.
     fontSize: 10 //sets the size

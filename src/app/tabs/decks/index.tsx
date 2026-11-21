@@ -54,72 +54,72 @@ export default function CollectionsScreen() {
 
 const styles = StyleSheet.create({
 
-  safeArea: { 
-    flex: 1, 
-    backgroundColor: palette.background 
+  safeArea: {
+    flex: 1,
+    backgroundColor: palette.background
   },
 
-  page: { 
-    paddingHorizontal: 22, 
-    paddingTop: 8, 
-    paddingBottom: 126 
+  page: {
+    paddingHorizontal: 22,
+    paddingTop: 8,
+    paddingBottom: 126
   },
 
-  eyebrow: { 
-    fontSize: 10, 
-    color: palette.muted, 
-    letterSpacing: 1.5, 
-    fontWeight: '700', 
-    marginBottom: 10 
+  eyebrow: {
+    fontSize: 10,
+    color: palette.muted,
+    letterSpacing: 1.5,
+    fontWeight: '700',
+    marginBottom: 10
   },
 
-  title: { 
-    fontSize: 29, 
-    lineHeight: 35, 
-    fontWeight: '700', 
-    letterSpacing: -1, 
-    color: palette.ink 
+  title: {
+    fontSize: 29,
+    lineHeight: 35,
+    fontWeight: '700',
+    letterSpacing: -1,
+    color: palette.ink
   },
 
-  description: { 
-    marginTop: 7, 
-    color: palette.muted, 
-    fontSize: 13, 
-    lineHeight: 19, 
-    marginBottom: 21 
+  description: {
+    marginTop: 7,
+    color: palette.muted,
+    fontSize: 13,
+    lineHeight: 19,
+    marginBottom: 21
   },
 
-  summary: { 
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    gap: 13, 
-    backgroundColor: palette.green, 
-    borderRadius: 20, 
+  summary: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 13,
+    backgroundColor: palette.green,
+    borderRadius: 20,
     padding: 17,
-    marginBottom: 28 
+    marginBottom: 28
   },
 
-  summaryValue: { 
-    color: '#FFFFFF', 
-    fontSize: 32, 
-    fontWeight: '700', 
-    letterSpacing: -1 
+  summaryValue: {
+    color: '#FFFFFF',
+    fontSize: 32,
+    fontWeight: '700',
+    letterSpacing: -1
   },
 
-  summaryText: { 
-    flex: 1 
+  summaryText: {
+    flex: 1
   },
 
-  summaryTitle: { 
-    color: '#FFFFFF', 
-    fontSize: 14, 
+  summaryTitle: {
+    color: '#FFFFFF',
+    fontSize: 14,
     fontWeight: '700'
   },
 
-  summaryNote: { 
-    color: '#E2E9DF', 
-    fontSize: 10, 
-    marginTop: 4 
+  summaryNote: {
+    color: '#E2E9DF',
+    fontSize: 10,
+    marginTop: 4
   },
 
   featuredRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 13 },
@@ -137,18 +137,18 @@ const styles = StyleSheet.create({
     borderColor: palette.line,
   },
 
-  note: { 
-    borderRadius: 16, 
-    borderWidth: 1, 
-    borderColor: palette.line, 
-    padding: 15, 
-    marginTop: 8 
+  note: {
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: palette.line,
+    padding: 15,
+    marginTop: 8
   },
 
-  noteText: { 
-    color: palette.muted, 
-    textAlign: 'center', 
-    fontSize: 11, 
-    lineHeight: 17 
+  noteText: {
+    color: palette.muted,
+    textAlign: 'center',
+    fontSize: 11,
+    lineHeight: 17
   },
 });
