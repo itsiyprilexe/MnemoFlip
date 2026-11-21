@@ -78,13 +78,13 @@ export default function PlayQuiz() {
     return total + (userAnswer === correctAnswer ? 1 : 0);
   }, 0);
   return <SafeAreaView style={styles.safe} edges={['top']}><ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-    <FormScreenHeader fallbackHref="/quiz" />
+    <FormScreenHeader fallbackHref="/tabs/quiz" />
     <Text style={styles.eyebrow}>A LITTLE KNOWLEDGE CHECK</Text>
     <Text style={styles.title}>{title}</Text>
-    {loading ? <ActivityIndicator style={styles.loading} color={palette.green} /> : error ? <Text style={styles.message}>{error}</Text> : questions.length === 0 ? <><Text style={styles.message}>This quiz has no questions yet. Add questions before starting.</Text><AppButton title="Edit quiz" onPress={() => router.replace({ pathname: '/(tabs)/quiz/[id]', params: { id } })} /></> : finished ? <>
+    {loading ? <ActivityIndicator style={styles.loading} color={palette.green} /> : error ? <Text style={styles.message}>{error}</Text> : questions.length === 0 ? <><Text style={styles.message}>This quiz has no questions yet. Add questions before starting.</Text><AppButton title="Edit quiz" onPress={() => router.replace({ pathname: '/tabs/quiz/[id]', params: { id } })} /></> : finished ? <>
       <View style={styles.resultCard}><View style={styles.resultIcon}><Ionicons name="checkmark-done-outline" size={29} color={palette.green} /></View><Text style={styles.resultTitle}>Quiz complete!</Text><Text style={styles.resultSubtitle}>A little progress adds up.</Text><Text style={styles.score}>{score} <Text style={styles.scoreTotal}>/ {questions.length}</Text></Text><Text style={styles.resultPercent}>{Math.round(score / questions.length * 100)}% correct</Text></View>
       <AppButton title="Try again" onPress={() => { setAnswers({}); setIndex(0); setFinished(false); }} style={{ marginBottom: 12 }} />
-      <Pressable accessibilityRole="button" onPress={() => router.replace('/quiz')} style={styles.secondaryButton}><Text style={styles.backText}>Back to quizzes</Text></Pressable>
+      <Pressable accessibilityRole="button" onPress={() => router.replace('/tabs/quiz')} style={styles.secondaryButton}><Text style={styles.backText}>Back to quizzes</Text></Pressable>
     </> : <>
       <View style={styles.progressHeader}><Text style={styles.progressLabel}>YOUR PROGRESS</Text><Text style={styles.progressCount}>{String(index + 1).padStart(2, '0')} / {String(questions.length).padStart(2, '0')}</Text></View>
       <View accessibilityRole="progressbar" accessibilityLabel="Quiz progress" accessibilityValue={{ min: 0, max: questions.length, now: index + 1 }} style={styles.progressTrack}><View style={[styles.progressFill, { width: `${((index + 1) / questions.length) * 100}%` }]} /></View>

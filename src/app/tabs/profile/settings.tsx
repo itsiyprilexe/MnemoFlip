@@ -1,13 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Platform, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
-import { router, useFocusEffect } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { updateProfile } from 'firebase/auth';
 import { useAuth } from '../../../contexts/AuthContext';
 import { FormScreenHeader } from '../../../components/FormScreenHeader';
 import { palette } from '../../../theme';
-import { getStudyReminderEnabled, setStudyReminderEnabled } from '../../../services/studyReminders';
 import { deleteAccount } from '../../../services/deleteAccount';
 export default function Settings() {
   const { user } = useAuth();
@@ -17,9 +16,6 @@ export default function Settings() {
     message: string;
     error: boolean;
   } | null>(null);
-  const [reminderEnabled, setReminderEnabled] = useState(false);
-  const [reminderBusy, setReminderBusy] = useState(false);
-  const [reminderError, setReminderError] = useState('');
   const [helpOpen, setHelpOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [password, setPassword] = useState('');
@@ -47,34 +43,6 @@ export default function Settings() {
       setBusy(false);
     }
   };
-  useFocusEffect(useCallback(() => {
-    let active = true;
-    if(Platform.OS !== 'web')
-      getStudyReminderEnabled().then(value => {
-        if(active)
-          setReminderEnabled(value);
-      }).catch(() => {
-        if(active)
-          setReminderError('Could not check reminders on this device.');
-      });
-    return () => { active = false; };
-  }, []));
-  const changeReminder = async (enabled: boolean) => {
-    if(reminderBusy)
-      return;
-    setReminderBusy(true);
-    setReminderError('');
-    try {
-      await setStudyReminderEnabled(enabled);
-      setReminderEnabled(enabled);
-    }
-    catch(error) {
-      setReminderError(error instanceof Error ? error.message : 'Could not update reminders.');
-    }
-    finally {
-      setReminderBusy(false);
-    }
-  };
   const removeAccount = async () => {
     if(!user || deleting)
       return;
@@ -98,7 +66,7 @@ export default function Settings() {
   };
   return <SafeAreaView style={styles.safe} edges={['top']}>
     <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-      <FormScreenHeader fallbackHref="/profile" />
+      <FormScreenHeader fallbackHref="/tabs/profile" />
 
       <Text style={styles.eyebrow}>MADE IT YOURS</Text>
       <Text style={styles.title}>Account settings</Text>
@@ -133,17 +101,7 @@ export default function Settings() {
       </View>
       <Text style={styles.sectionTitle}>Study preferences</Text>
       <View style={styles.group}>
-        <View style={[styles.groupRow, styles.rowDivider]}>
-          <View style={styles.infoIcon}>
-            <Ionicons name="notifications-outline" size={20} color={palette.green} />
-          </View>
-          <View style={styles.infoText}>
-            <Text style={styles.infoTitle}>Study reminders</Text>
-            <Text style={styles.infoSubtitle}>{Platform.OS === 'web' ? 'Available on mobile devices' : 'Daily at 7:00 PM on this device'}</Text>{!!reminderError && <Text accessibilityLiveRegion="polite" style={styles.deleteError}>{reminderError}</Text>}
-          </View>
-          <Switch accessibilityLabel="Study reminders" value={reminderEnabled} disabled={reminderBusy || Platform.OS === 'web'} onValueChange={changeReminder} trackColor={{ false: '#D9E1D7', true: '#315D48' }} thumbColor="#FFFFFF" />
-        </View>
-        <View style={[styles.groupRow, styles.rowDivider]}>
+<View style={[styles.groupRow, styles.rowDivider]}>
           <View style={styles.infoIcon}>
             <Ionicons name="sunny-outline" size={20} color={palette.green} />
           </View>
@@ -195,7 +153,7 @@ export default function Settings() {
             <Text style={styles.infoTitle}>Help &amp; support</Text>{helpOpen && <Text style={styles.infoSubtitle}>Open a deck, tap a card to reveal its answer, and swipe to view another. Open a quiz to start answering its questions.</Text>}</View>
           <Ionicons name={helpOpen ? 'chevron-up' : 'chevron-forward'} size={19} color={palette.muted} />
         </Pressable>
-        <Pressable accessibilityRole="button" onPress={() => router.push('/(tabs)/profile/privacy')} style={styles.groupRow}>
+        <Pressable accessibilityRole="button" onPress={() => router.push('/tabs/profile/privacy')} style={styles.groupRow}>
           <View style={styles.infoIcon}>
             <Ionicons name="document-text-outline" size={20} color={palette.green} />
           </View>

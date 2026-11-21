@@ -8,7 +8,7 @@ import { palette } from '../theme';
 
 export default function WelcomeScreen() {
   const { user } = useAuth();
-  if (user) return <Redirect href="/(tabs)/home" />;
+  if (user) return <Redirect href="/tabs/home" />;
   return (
 
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>

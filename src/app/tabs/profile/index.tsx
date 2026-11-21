@@ -54,7 +54,7 @@ export default function ProfileScreen() {
         <View style={styles.statsCard}>
 
           {/*naghihimo row para sa study deck information ngan another row for quizzes.*/}
-          <Pressable accessibilityRole="button" accessibilityLabel="Open study decks" onPress={() => router.navigate('/(tabs)/decks')} style={styles.statRow}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Open study decks" onPress={() => router.navigate('/tabs/decks')} style={styles.statRow}>
 
             {/*gi didisplays an deck or album icon. "name" selects the icon, "size" sets its size, 
             and "color" sets its color. Here, the color comes from the shared palette.*/}
@@ -75,7 +75,7 @@ export default function ProfileScreen() {
             <Text style={styles.statValue}>{loading ? '…' : error ? '—' : decks.length}</Text>
           </Pressable>
           <View style={styles.divider} />
-          <Pressable accessibilityRole="button" accessibilityLabel="Open quizzes" onPress={() => router.navigate('/(tabs)/quiz')} style={styles.statRow}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Open quizzes" onPress={() => router.navigate('/tabs/quiz')} style={styles.statRow}>
 
             {/* gi display a help icon. "name" selects the icon, "size" sets its size, 
             and "color" sets its color. Here, the color comes from the shared palette.*/}
@@ -102,7 +102,7 @@ export default function ProfileScreen() {
         may magawas na allert message which is the “Profile settings are coming soon.” */}
         <AppButton
           title="Account settings"
-          onPress={() => router.push('/(tabs)/profile/settings')}
+          onPress={() => router.push('/tabs/profile/settings')}
           style={styles.button}
         />
 

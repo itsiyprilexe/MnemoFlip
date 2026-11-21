@@ -37,9 +37,9 @@ export function CreateItemForm({ kind }: Props) {
     setSaving(true);
     try {
       const savedId = await saveItem(user.uid, kind, title, description, Number(maximum), id);
-      if (id) router.replace(kind === 'deck' ? '/decks' : '/quiz');
-      else if (kind === 'deck') router.replace({ pathname: '/(tabs)/decks/deck/[id]', params: { id: savedId, add: 'true' } });
-      else router.replace({ pathname: '/(tabs)/quiz/[id]', params: { id: savedId } });
+      if (id) router.replace(kind === 'deck' ? '/tabs/decks' : '/tabs/quiz');
+      else if (kind === 'deck') router.replace({ pathname: '/tabs/decks/deck/[id]', params: { id: savedId, add: 'true' } });
+      else router.replace({ pathname: '/tabs/quiz/[id]', params: { id: savedId } });
     }
     catch (error) { Alert.alert(`Could not save ${kind}`, error instanceof Error ? error.message : 'Please try again.'); }
     finally { setSaving(false); }
@@ -47,7 +47,7 @@ export function CreateItemForm({ kind }: Props) {
 
   return (
     <>
-      <FormScreenHeader fallbackHref={kind === 'deck' ? '/decks' : '/quiz'} />
+      <FormScreenHeader fallbackHref={kind === 'deck' ? '/tabs/decks' : '/tabs/quiz'} />
       <Text style={styles.eyebrow}>YOUR LIBRARY</Text>
       <Text style={styles.title}>{id ? `Edit ${kind}` : `Add a ${kind}`}</Text>
 

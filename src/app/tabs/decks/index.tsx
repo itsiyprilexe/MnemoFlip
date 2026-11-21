@@ -35,7 +35,7 @@ export default function CollectionsScreen() {
             <Text style={styles.featuredTitle}>Featured decks</Text>
             <Text style={styles.featuredCount}>{collections.length} sets</Text>
           </View>
-          <Pressable accessibilityRole="button" accessibilityLabel="Add a deck" onPress={() => router.push('/decks/create')} style={styles.addButton}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Add a deck" onPress={() => router.push('/tabs/decks/create')} style={styles.addButton}>
             <Ionicons name="add" size={21} color={palette.green} />
           </Pressable>
         </View>

@@ -7,7 +7,7 @@ import { palette } from '../../../theme';
 export default function PrivacyScreen() {
   return <SafeAreaView style={styles.safe} edges={['top']}><ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
     
-    <FormScreenHeader fallbackHref="/profile" />
+    <FormScreenHeader fallbackHref="/tabs/profile" />
     <Text style={styles.eyebrow}>YOUR INFORMATION</Text>
     <Text style={styles.title}>Privacy &amp; terms</Text>
 

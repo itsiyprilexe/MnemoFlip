@@ -13,27 +13,15 @@ function Navigation() {
   return <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: palette.background } }}>
     
     <Stack.Screen name="index" />
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 1151abb9 (Update MnemoFlip)
     <Stack.Protected guard={!!user}>
-      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="tabs" />
     </Stack.Protected>
 
     <Stack.Protected guard={!user}>
       <Stack.Screen name="login" />
-<<<<<<< HEAD
-    <Stack.Screen name="signup" />
-    </Stack.Protected>
-  </Stack>;
-=======
       <Stack.Screen name="signup" />
     </Stack.Protected>
-
-    </Stack>;
->>>>>>> 1151abb9 (Update MnemoFlip)
+  </Stack>;
 }
 export default function RootLayout() {
   useEffect(() => { cancelPreviousStudyReminder().catch(() => { }); }, []);

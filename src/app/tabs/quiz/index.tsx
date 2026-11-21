@@ -36,7 +36,7 @@ export default function QuizzesScreen() {
           <View style={styles.summaryText}><Text style={styles.summaryTitle}>Quizzes</Text><Text style={styles.summaryNote}>A few questions to explore</Text></View>
         </View>
 
-        <View style={styles.libraryRow}><View style={styles.libraryText}><Text style={styles.sectionTitle}>Quiz library</Text><Text style={styles.count}>{quizzes.length} {quizzes.length === 1 ? 'quiz' : 'quizzes'}</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Add a quiz" onPress={() => router.push('/quiz/create')} style={styles.addButton}><Ionicons name="add" size={21} color={palette.green} /></Pressable></View>
+        <View style={styles.libraryRow}><View style={styles.libraryText}><Text style={styles.sectionTitle}>Quiz library</Text><Text style={styles.count}>{quizzes.length} {quizzes.length === 1 ? 'quiz' : 'quizzes'}</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Add a quiz" onPress={() => router.push('/tabs/quiz/create')} style={styles.addButton}><Ionicons name="add" size={21} color={palette.green} /></Pressable></View>
         {loading ? <Text>Loading quizzes...</Text> : error ? <Text>Could not load quizzes: {error}</Text> : quizzes.length === 0 ? <Text>No quizzes yet. Add your first quiz.</Text> : null}
         {quizzes.map((quiz) => <QuizCard
           key={quiz.id}

@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { palette } from '../theme';
 
-type Props = { fallbackHref: '/' | '/decks' | '/quiz' | '/profile' };
+type Props = { fallbackHref: '/' | '/tabs/decks' | '/tabs/quiz' | '/tabs/profile' };
 
 export function FormScreenHeader({ fallbackHref }: Props) {
   const router = useRouter();

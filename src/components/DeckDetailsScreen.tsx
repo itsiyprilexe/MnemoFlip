@@ -18,7 +18,7 @@ export default function DeckScreen() {
 
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-        <FormScreenHeader fallbackHref="/decks" />
+        <FormScreenHeader fallbackHref="/tabs/decks" />
         {loading ? <Text>Loading deck...</Text> : error ? <Text>Could not load deck: {error}</Text> : deck ? (
           <>
             {add !== 'true' && <View style={styles.deckHeader}><View style={styles.deckHeaderTop}><View style={[styles.heroIcon, { backgroundColor: palette.greenLight }]}>

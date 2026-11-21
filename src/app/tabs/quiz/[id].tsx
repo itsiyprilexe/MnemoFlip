@@ -12,13 +12,13 @@ export default function QuizDetails() {
   const { items, loading, error } = useItems('quiz');
   const quiz = items.find(item => item.id === id);
   function openSettings() {
-    router.push({ pathname: '/(tabs)/quiz/edit/[id]', params: { id } });
+    router.push({ pathname: '/tabs/quiz/edit/[id]', params: { id } });
   }
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-        <FormScreenHeader fallbackHref="/quiz" />
+        <FormScreenHeader fallbackHref="/tabs/quiz" />
         {loading ? (
           <Text>Loading quiz...</Text>
         ) : error ? (

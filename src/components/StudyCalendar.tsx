@@ -6,48 +6,6 @@ import { palette } from '../theme';
 const weekdays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 export function StudyCalendar() {
-<<<<<<< HEAD
-  
-  const [month, setMonth] = useState(() => { 
-                            const now = new Date(); 
-                            return new Date(now.getFullYear(), now.getMonth(), 1); 
-                          });
-
-
-  const now = new Date();
-
-  const firstDay = new Date(month.getFullYear(), month.getMonth(), 1).getDay();
-
-  const daysInMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
-
-  const cells = Array.from({ length: Math.ceil((firstDay + daysInMonth) / 7) * 7 }, (_, i) => i - firstDay + 1);
-
-  const shift = (amount: number) => setMonth(current => new Date(current.getFullYear(), current.getMonth() + amount, 1));
-
-  return <View style={styles.calendar}>
-    <View style={styles.header}><View style={styles.headerText}><Text style={styles.title}>{month.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</Text><Text style={styles.subtitle}>Make a little space for learning.</Text></View><View style={styles.navigation}>
-      <Pressable accessibilityRole="button" accessibilityLabel="Previous month" onPress={() => shift(-1)} style={styles.arrow}><Ionicons name="chevron-back" size={18} color="#fff" /></Pressable>
-      <Pressable accessibilityRole="button" accessibilityLabel="Next month" onPress={() => shift(1)} style={styles.arrow}><Ionicons name="chevron-forward" size={18} color="#fff" /></Pressable>
-    </View>
-    </View>
-    
-    <View style={styles.body}>
-      <View style={styles.grid}>{weekdays.map((day, i) => <View style={styles.cell} key={`day-${i}`}>
-                                                             <Text style={styles.weekday}>{day}</Text>
-                                                          </View>)}
-      {cells.map((day, i) => { const valid = day >= 1 && day <= daysInMonth; const today = valid && day === now.getDate() && month.getMonth() === now.getMonth() && month.getFullYear() === now.getFullYear(); return <View key={i} style={styles.cell}><View style={[styles.date, today && styles.today]}>{valid && <Text accessibilityLabel={`${month.toLocaleDateString(undefined, { month: 'long' })} ${day}, ${month.getFullYear()}${today ? ', today' : ''}`} style={[styles.dateText, today && styles.todayText]}>{day}</Text>}</View></View>; })}
-    </View>
-    
-    <View style={styles.footer}>
-      <Ionicons name="calendar-outline" size={16} color={palette.green} />
-      <Text style={styles.todayLabel}>{now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}</Text>
-      <Pressable accessibilityRole="button" accessibilityLabel="Go to current month" onPress={() => setMonth(new Date(now.getFullYear(), now.getMonth(), 1))} style={styles.todayButton}>
-        <Text style={styles.todayButtonText}>Today</Text>
-        </Pressable>
-      </View>
-    </View>
-  </View>;
-=======
   // Start by displaying the current month.
   const [month, setMonth] = useState(() => {
     const today = new Date();
@@ -136,7 +94,6 @@ export function StudyCalendar() {
       </View>
     </View>
   );
->>>>>>> 1151abb9 (Update MnemoFlip)
 }
 
 const styles = StyleSheet.create({
