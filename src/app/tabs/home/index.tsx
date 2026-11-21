@@ -38,9 +38,9 @@ export default function HomeScreen() {
 
     <Pressable 
         accessibilityRole="button" 
-        accessibilityLabel="Add a deck" 
-        onPress={() => router.push('/decks/create')} 
-        style={styles.add}
+         accessibilityLabel="Add a deck" 
+         onPress={() => router.push('/decks/create')} 
+         style={styles.add}
       >
         <Ionicons 
          name="add" 
@@ -82,11 +82,41 @@ export default function HomeScreen() {
            size={20} 
            color={palette.green} 
         />
+      
       </View>
           
-          <View style={styles.cardText}>
-            <Text style={styles.cardTitle}>{deck.title}</Text><Text style={styles.note}>{deck.description || 'Study deck'}</Text></View></View>
-      <View style={styles.cardBottom}><Text style={styles.note}>{deck.itemCount} {deck.itemCount === 1 ? 'flashcard' : 'flashcards'}</Text><View style={styles.open}><Text style={styles.openText}>Open deck</Text><Ionicons name="arrow-forward" size={17} color={palette.green} /></View></View>
+        <View style={styles.cardText}>
+          <Text style={styles.cardTitle}>
+            {deck.title}
+          </Text>
+
+          <Text style={styles.note}>
+            {deck.description || 'Study deck'}
+          </Text>
+        </View>
+            
+      </View>
+
+      <View style={styles.cardBottom}>
+
+        <Text style={styles.note}>
+          {deck.itemCount}
+           {deck.itemCount === 1 ? 'flashcard' : 'flashcards'}
+        </Text>
+
+        <View style={styles.open}>
+          <Text style={styles.openText}>
+            Open deck
+          </Text>
+
+          <Ionicons
+            name="arrow-forward"
+            size={17} 
+            color={palette.green} 
+          />
+        </View>
+
+       </View>
     
     </Pressable>)}
     
