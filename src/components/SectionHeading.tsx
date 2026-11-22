@@ -13,22 +13,22 @@ export function SectionHeading({ title, note }: { title: string; note?: string }
 
 const styles = StyleSheet.create({
 
-  row: { 
-    flexDirection: 'row', 
-    alignItems: 'baseline', 
-    justifyContent: 'space-between', 
-    marginBottom: 13 
+  row: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    marginBottom: 13
   },
 
-  title: { 
-    color: palette.ink, 
-    fontSize: 19, 
-    letterSpacing: -0.5, 
-    fontWeight: '700' 
+  title: {
+    color: palette.ink,
+    fontSize: 19,
+    letterSpacing: -0.5,
+    fontWeight: '700'
   },
 
-  note: { 
-    color: palette.muted, 
-    fontSize: 10 
+  note: {
+    color: palette.muted,
+    fontSize: 10
   },
 });

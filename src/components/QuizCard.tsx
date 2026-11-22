@@ -17,12 +17,12 @@ export function QuizCard({ quiz }: { quiz: Quiz }) {
     });
   };
   return <View style={styles.card}>
-    <Pressable accessibilityRole="button" accessibilityLabel={`Start ${quiz.title}`} onPress={() => router.push({ pathname: '/(tabs)/quiz/play/[id]', params: { id: quiz.id } })} style={styles.main}>
+    <Pressable accessibilityRole="button" accessibilityLabel={`Start ${quiz.title}`} onPress={() => router.push({ pathname: '/tabs/quiz/play/[id]', params: { id: quiz.id } })} style={styles.main}>
       <View style={styles.icon}><Ionicons name="help-circle-outline" size={22} color={palette.green} /></View>
       <View style={styles.content}><Text style={styles.title}>{quiz.title}</Text><Text style={styles.description}>{quiz.description}</Text><Text style={styles.count}>{quiz.itemCount} {quiz.itemCount === 1 ? 'question' : 'questions'}</Text></View>
     </Pressable>
     <View style={styles.actions}>
-      <Pressable accessibilityRole="button" accessibilityLabel={`Edit ${quiz.title}`} onPress={() => router.push({ pathname: '/(tabs)/quiz/[id]', params: { id: quiz.id } })} style={styles.action}><Ionicons name="create-outline" size={21} color={palette.green} /></Pressable>
+      <Pressable accessibilityRole="button" accessibilityLabel={`Edit ${quiz.title}`} onPress={() => router.push({ pathname: '/tabs/quiz/[id]', params: { id: quiz.id } })} style={styles.action}><Ionicons name="create-outline" size={21} color={palette.green} /></Pressable>
       <Pressable accessibilityRole="button" accessibilityLabel={`Delete ${quiz.title}`} onPress={remove} style={styles.action}><Ionicons name="trash-outline" size={20} color="#A64E46" /></Pressable>
     </View>
   </View>;

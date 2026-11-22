@@ -15,10 +15,10 @@ export default function DeckScreen() {
   const deck = found ? { ...found, tint: palette.lilac, icon: 'albums-outline' as const, color: palette.green, detail: found.description } : null;
 
   return (
-    
+
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-        <FormScreenHeader fallbackHref="/decks" />
+        <FormScreenHeader fallbackHref="/tabs/decks" />
         {loading ? <Text>Loading deck...</Text> : error ? <Text>Could not load deck: {error}</Text> : deck ? (
           <>
             {add !== 'true' && <View style={styles.deckHeader}><View style={styles.deckHeaderTop}><View style={[styles.heroIcon, { backgroundColor: palette.greenLight }]}>
@@ -48,110 +48,110 @@ const styles = StyleSheet.create({
   deckCountText: { color: palette.green, fontSize: 11, fontWeight: '700' },
   deckDescription: { color: palette.muted, fontSize: 13, lineHeight: 19, marginTop: 7 },
 
-  safeArea: { 
-    flex: 1, 
-    backgroundColor: palette.background 
+  safeArea: {
+    flex: 1,
+    backgroundColor: palette.background
   },
 
-  page: { 
-    paddingHorizontal: 22, 
-    paddingTop: 8, 
-    paddingBottom: 126 
+  page: {
+    paddingHorizontal: 22,
+    paddingTop: 8,
+    paddingBottom: 126
   },
 
-  heroIcon: { 
-    width: 58, 
-    height: 58, 
-    borderRadius: 18, 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    marginBottom: 18 
+  heroIcon: {
+    width: 58,
+    height: 58,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 18
   },
 
-  eyebrow: { 
-    color: palette.muted, 
-    fontSize: 10, 
-    fontWeight: '700', 
+  eyebrow: {
+    color: palette.muted,
+    fontSize: 10,
+    fontWeight: '700',
     letterSpacing: 1.5,
-     marginBottom: 9 
+    marginBottom: 9
   },
 
-  title: { 
-    color: palette.ink, 
-    fontSize: 29, 
-    lineHeight: 35, 
-    fontWeight: '700', 
-    letterSpacing: -1 
+  title: {
+    color: palette.ink,
+    fontSize: 29,
+    lineHeight: 35,
+    fontWeight: '700',
+    letterSpacing: -1
   },
 
-  description: { 
-    color: palette.muted, 
-    fontSize: 13, 
-    lineHeight: 19, 
-    marginTop: 7, 
-    marginBottom: 20 
+  description: {
+    color: palette.muted,
+    fontSize: 13,
+    lineHeight: 19,
+    marginTop: 7,
+    marginBottom: 20
   },
 
-  studyButton: { 
-    marginBottom: 27 
+  studyButton: {
+    marginBottom: 27
   },
 
-  card: { 
-    backgroundColor: palette.surface, 
-    borderWidth: 1, 
-    borderColor: palette.line, 
-    borderRadius: 19, 
-    padding: 17, 
-    marginBottom: 11 
+  card: {
+    backgroundColor: palette.surface,
+    borderWidth: 1,
+    borderColor: palette.line,
+    borderRadius: 19,
+    padding: 17,
+    marginBottom: 11
   },
 
-  cardIndex: { 
-    alignSelf: 'flex-start', 
-    minWidth: 29, 
-    height: 27, 
+  cardIndex: {
+    alignSelf: 'flex-start',
+    minWidth: 29,
+    height: 27,
     borderRadius: 9,
-    backgroundColor: palette.background, 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    paddingHorizontal: 7, 
-    marginBottom: 13 
+    backgroundColor: palette.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 7,
+    marginBottom: 13
   },
 
-  cardIndexText: { 
-    color: palette.muted, 
-    fontSize: 9, 
-    fontWeight: '700' 
+  cardIndexText: {
+    color: palette.muted,
+    fontSize: 9,
+    fontWeight: '700'
   },
 
-  cardLabel: { 
-    color: palette.green, 
-    fontSize: 9, 
-    fontWeight: '800', 
-    letterSpacing: 1.1 
+  cardLabel: {
+    color: palette.green,
+    fontSize: 9,
+    fontWeight: '800',
+    letterSpacing: 1.1
   },
 
-  question: { 
-    color: palette.ink, 
-    fontSize: 15, 
-    fontWeight: '700', 
-    lineHeight: 22, 
-    marginTop: 6 
+  question: {
+    color: palette.ink,
+    fontSize: 15,
+    fontWeight: '700',
+    lineHeight: 22,
+    marginTop: 6
   },
 
-  divider: { 
-    height: StyleSheet.hairlineWidth, 
-    backgroundColor: palette.line, 
-    marginVertical: 14 
-  },
-  
-  answer: { 
-    color: palette.muted, 
-    fontSize: 13, 
-    lineHeight: 20, 
-    marginTop: 6 
+  divider: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: palette.line,
+    marginVertical: 14
   },
 
-  notFound: { 
-    paddingTop: 25 
+  answer: {
+    color: palette.muted,
+    fontSize: 13,
+    lineHeight: 20,
+    marginTop: 6
+  },
+
+  notFound: {
+    paddingTop: 25
   },
 });

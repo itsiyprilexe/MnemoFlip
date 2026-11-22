@@ -17,15 +17,15 @@ export default function SignupScreen() {
 
 const styles = StyleSheet.create({
 
-  safeArea: { 
-    flex: 1, 
-    backgroundColor: palette.background 
+  safeArea: {
+    flex: 1,
+    backgroundColor: palette.background
   },
-  
-  page: { 
-    flexGrow: 1, 
-    paddingHorizontal: 22, 
-    paddingTop: 12, 
-    paddingBottom: 30 
+
+  page: {
+    flexGrow: 1,
+    paddingHorizontal: 22,
+    paddingTop: 12,
+    paddingBottom: 30
   },
 });

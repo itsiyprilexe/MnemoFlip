@@ -8,7 +8,7 @@ import { palette } from '../theme';
 
 export default function WelcomeScreen() {
   const { user } = useAuth();
-  if (user) return <Redirect href="/(tabs)/home" />;
+  if (user) return <Redirect href="/tabs/home" />;
   return (
 
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
@@ -18,9 +18,12 @@ export default function WelcomeScreen() {
 
         {/* asya ine an sa butnga na content na gi display */}
         <View style={styles.hero}>
-          <View style={styles.art}><Ionicons name="albums-outline" size={48} color={palette.green} /></View>
+          <View style={styles.art}>
+            <Ionicons name="albums-outline" size={48} color={palette.green} />
+          </View>
+
           <Text style={styles.eyebrow}>A MINDFUL LEARNING SPACE</Text>
-          <Text style={styles.title}>Make room for{ '\n' }what you’ll learn.</Text>
+          <Text style={styles.title}>Make room for{'\n'}what you’ll learn.</Text>
           <Text style={styles.description}>Keep your ideas close and take one small step at a time.</Text>
         </View>
 
@@ -46,9 +49,13 @@ export default function WelcomeScreen() {
   );
 }
 
+
 const styles = StyleSheet.create({
 
-  safeArea: { flex: 1, backgroundColor: palette.background },
+  safeArea: {
+    flex: 1,
+    backgroundColor: palette.background
+  },
 
   page: { flexGrow: 1, paddingHorizontal: 26, paddingTop: 12, paddingBottom: 24, justifyContent: 'space-between' },
 

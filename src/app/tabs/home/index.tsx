@@ -38,9 +38,9 @@ export default function HomeScreen() {
 
     <Pressable 
         accessibilityRole="button" 
-         accessibilityLabel="Add a deck" 
-         onPress={() => router.push('/decks/create')} 
-         style={styles.add}
+        accessibilityLabel="Add a deck" 
+        onPress={() => router.push('/tabs/decks/create')} 
+        style={styles.add}
       >
         <Ionicons 
          name="add" 
@@ -71,7 +71,7 @@ export default function HomeScreen() {
        accessibilityRole="button" 
        accessibilityLabel={`Open ${deck.title}`} 
        onPress={() =>  router.push({ 
-        pathname: '/(tabs)/home/deck/[id]', 
+        pathname: '/tabs/home/deck/[id]', 
         params: { id: deck.id } })} style={styles.card}>
 
       <View style={styles.cardTop}> 
@@ -120,7 +120,7 @@ export default function HomeScreen() {
     
     </Pressable>)}
     
-      <AppButton title="Continue studying" onPress={() => router.navigate('/(tabs)/decks')} style={styles.continue} />
+      <AppButton title="Continue studying" onPress={() => router.navigate('/tabs/decks')} style={styles.continue} />
     </ScrollView>
   </SafeAreaView>;
 }

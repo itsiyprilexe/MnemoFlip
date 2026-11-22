@@ -9,7 +9,21 @@ import { palette } from '../theme';
 import { confirmDelete, showDeleteError } from './deleteConfirmation';
 import { FlashcardViewer } from './FlashcardViewer';
 
-export function ContentManager({ kind, itemId, maxItems, addMode = false, deckTitle = '' }: { kind: ItemKind; itemId: string; maxItems: number; addMode?: boolean; deckTitle?: string }) {
+type ContentManagerProps = {
+  kind: ItemKind;
+  itemId: string;
+  maxItems: number;
+  addMode?: boolean;
+  deckTitle?: string;
+};
+
+export function ContentManager({
+  kind,
+  itemId,
+  maxItems,
+  addMode = false,
+  deckTitle = '',
+}: ContentManagerProps) {
   const { user } = useAuth();
   const uid = user?.uid;
   const [items, setItems] = useState<StudyContent[]>([]);
@@ -26,25 +40,94 @@ export function ContentManager({ kind, itemId, maxItems, addMode = false, deckTi
   const [questionPage, setQuestionPage] = useState(0);
   const [questionsOpen, setQuestionsOpen] = useState(false);
   useEffect(() => {
-    setItems([]); setLoading(true); setError('');
-    if (!uid || !itemId) { setLoading(false); return; }
+    setItems([]);
+    setLoading(true);
+    setError('');
+
+    if (!uid || !itemId) {
+      setLoading(false);
+      return;
+    }
+
     let active = true;
-    const stop = listenContent(uid, kind, itemId, values => { if (active) { setItems(values); setLoading(false); } }, e => { if (active) { setError(e.message); setLoading(false); } });
-    return () => { active = false; stop(); };
+    const unsubscribe = listenContent(
+      uid,
+      kind,
+      itemId,
+      values => {
+        if (!active) return;
+        setItems(values);
+        setLoading(false);
+      },
+      error => {
+        if (!active) return;
+        setError(error.message);
+        setLoading(false);
+      }
+    );
+
+    return () => {
+      active = false;
+      unsubscribe();
+    };
   }, [uid, itemId, kind]);
-  useEffect(() => { setQuestionPage(page => Math.min(page, Math.max(0, Math.ceil(items.length / 4) - 1))); }, [items.length]);
-  const reset = () => { setEditing(undefined); setQuestion(''); setAnswer(''); setChoices(['', '', '', '']); setCorrectChoice(null); setType(kind === 'deck' ? 'flashcard' : 'multipleChoice'); };
-  const save = async () => {
+
+  useEffect(() => {
+    const lastPage = Math.max(0, Math.ceil(items.length / 4) - 1);
+    setQuestionPage(page => Math.min(page, lastPage));
+  }, [items.length]);
+
+  function reset() {
+    setEditing(undefined);
+    setQuestion('');
+    setAnswer('');
+    setChoices(['', '', '', '']);
+    setCorrectChoice(null);
+    setType(kind === 'deck' ? 'flashcard' : 'multipleChoice');
+  }
+
+  async function save() {
     if (!uid || busy) return;
     setBusy(true);
-    try { await saveContent(uid, kind, itemId, { question, answer: kind === 'quiz' && type === 'multipleChoice' ? (correctChoice === null ? '' : choices[correctChoice]) : answer, type, choices }, editing); reset(); }
-    catch (e) { showDeleteError('Could not save', e); }
-    finally { setBusy(false); }
-  };
-  const remove = (id: string) => confirmDelete('Delete this item?', 'This cannot be undone.', () => {
-    if (uid) deleteContent(uid, kind, itemId, id).catch(error => showDeleteError('Could not delete', error));
-  });
-  const edit = (item: StudyContent) => { setEditing(item.id); setQuestion(item.question); setAnswer(item.answer); setType(item.type); setChoices(item.choices.length === 4 ? item.choices : ['', '', '', '']); const selected = item.choices.indexOf(item.answer); setCorrectChoice(selected < 0 ? null : selected); };
+
+    // Multiple-choice answers come from the selected choice.
+    const savedAnswer = kind === 'quiz' && type === 'multipleChoice'
+      ? correctChoice === null ? '' : choices[correctChoice]
+      : answer;
+
+    try {
+      await saveContent(uid, kind, itemId, {
+        question,
+        answer: savedAnswer,
+        type,
+        choices,
+      }, editing);
+      reset();
+    } catch (error) {
+      showDeleteError('Could not save', error);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function remove(id: string) {
+    confirmDelete('Delete this item?', 'This cannot be undone.', () => {
+      if (uid) {
+        deleteContent(uid, kind, itemId, id)
+          .catch(error => showDeleteError('Could not delete', error));
+      }
+    });
+  }
+
+  function edit(item: StudyContent) {
+    setEditing(item.id);
+    setQuestion(item.question);
+    setAnswer(item.answer);
+    setType(item.type);
+    setChoices(item.choices.length === 4 ? item.choices : ['', '', '', '']);
+    const selected = item.choices.indexOf(item.answer);
+    setCorrectChoice(selected < 0 ? null : selected);
+  }
   if (kind === 'deck' && addMode) return <View style={formStyles.page}>
     <Text style={formStyles.eyebrow}>A LITTLE MORE KNOWLEDGE</Text>
     <Text style={formStyles.title}>Add flashcard</Text>

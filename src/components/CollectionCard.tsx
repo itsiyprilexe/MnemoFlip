@@ -11,7 +11,7 @@ import { confirmDelete, showDeleteError } from './deleteConfirmation';
 export function CollectionCard({ collection, index, showActions = false }: { collection: StudyCollection; index: number; showActions?: boolean }) {
   const { user } = useAuth();
   const pathname = usePathname();
-  const section = pathname.startsWith('/home') ? 'home' : 'decks';
+  const section = pathname.startsWith('/tabs/home') ? 'home' : 'decks';
   const remove = () => {
     if (!user) return;
     confirmDelete('Delete deck?', `Delete "${collection.title}"? Remove its flashcards first.`, () => {
@@ -25,8 +25,8 @@ export function CollectionCard({ collection, index, showActions = false }: { col
       {!showActions && <View style={styles.count}><Text style={styles.countText}>{String(index + 1).padStart(2, '0')}</Text></View>}
     </Pressable>
     {showActions && <View style={styles.actions}>
-      <Pressable accessibilityRole="button" accessibilityLabel={`Add flashcard to ${collection.title}`} onPress={() => router.push({ pathname: '/(tabs)/decks/deck/[id]', params: { id: collection.id, add: 'true' } })} style={styles.action}><Ionicons name="add-circle-outline" size={21} color={palette.green} /></Pressable>
-      <Pressable accessibilityRole="button" accessibilityLabel={`Edit ${collection.title}`} onPress={() => router.push({ pathname: '/(tabs)/decks/edit/[id]', params: { id: collection.id } })} style={styles.action}><Ionicons name="create-outline" size={21} color={palette.green} /></Pressable>
+      <Pressable accessibilityRole="button" accessibilityLabel={`Add flashcard to ${collection.title}`} onPress={() => router.push({ pathname: '/tabs/decks/deck/[id]', params: { id: collection.id, add: 'true' } })} style={styles.action}><Ionicons name="add-circle-outline" size={21} color={palette.green} /></Pressable>
+      <Pressable accessibilityRole="button" accessibilityLabel={`Edit ${collection.title}`} onPress={() => router.push({ pathname: '/tabs/decks/edit/[id]', params: { id: collection.id } })} style={styles.action}><Ionicons name="create-outline" size={21} color={palette.green} /></Pressable>
       <Pressable accessibilityRole="button" accessibilityLabel={`Delete ${collection.title}`} onPress={remove} style={styles.action}><Ionicons name="trash-outline" size={20} color="#A64E46" /></Pressable>
     </View>}
   </View>;
