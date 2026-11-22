@@ -109,27 +109,71 @@ export default function HomeScreen() {
             Open deck
           </Text>
 
-          <Ionicons
-            name="arrow-forward"
-            size={17} 
-            color={palette.green} 
-          />
-        </View>
+        <Ionicons
+          name="arrow-forward"
+          size={17} 
+          color={palette.green} 
+        />
+      </View>
 
-       </View>
+      </View>
     
     </Pressable>)}
     
-      <AppButton title="Continue studying" onPress={() => router.navigate('/tabs/decks')} style={styles.continue} />
+      <AppButton 
+       title="Continue studying"
+       onPress={() => router.navigate('/tabs/decks')} 
+       style={styles.continue} 
+      />
+
     </ScrollView>
+
   </SafeAreaView>;
 }
 const styles = StyleSheet.create({ 
-  safe: { flex: 1, backgroundColor: palette.background }, 
+  safe: {
+     flex: 1,
+      backgroundColor: palette.background }, 
 
   page: { 
     paddingHorizontal: 22,
     paddingTop: 8, 
     paddingBottom: 126 }, 
 
-  intro: { marginBottom: 14 }, eyebrow: { color: palette.muted, fontSize: 9, fontWeight: '700', letterSpacing: 1.5, marginBottom: 12 }, headline: { color: '#294638', fontSize: 29, lineHeight: 35, fontWeight: '700', letterSpacing: -0.8 }, headlineGreen: { color: '#315D48', fontSize: 29, lineHeight: 35, fontWeight: '700', letterSpacing: -0.8 }, description: { color: palette.muted, marginTop: 8, fontSize: 12 }, sectionHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 15 }, sectionText: { flex: 1 }, sectionTitle: { color: '#294638', fontSize: 18, fontWeight: '700' }, note: { color: palette.muted, fontSize: 11, marginTop: 4 }, add: { width: 38, height: 38, borderRadius: 19, backgroundColor: palette.surface, borderColor: palette.line, borderWidth: 1, alignItems: 'center', justifyContent: 'center' }, empty: { color: palette.muted, marginBottom: 16 }, card: { backgroundColor: palette.surface, borderWidth: 1, borderColor: palette.line, borderRadius: 20, padding: 15, marginBottom: 12 }, cardTop: { flexDirection: 'row', alignItems: 'center' }, icon: { width: 42, height: 42, borderRadius: 13, backgroundColor: palette.greenLight, alignItems: 'center', justifyContent: 'center', marginRight: 12 }, cardText: { flex: 1 }, cardTitle: { color: '#294638', fontSize: 16, fontWeight: '700' }, cardBottom: { borderTopWidth: 1, borderTopColor: palette.line, marginTop: 14, paddingTop: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }, open: { flexDirection: 'row', alignItems: 'center', gap: 10 }, openText: { color: palette.green, fontSize: 11, fontWeight: '700' }, continue: { marginTop: 10 } });
+  intro: { 
+    marginBottom: 14 }, 
+
+    eyebrow: { 
+      color: palette.muted, 
+      fontSize: 9, 
+      fontWeight: '700',
+      letterSpacing: 1.5,
+       marginBottom: 12 },
+
+    headline: { 
+      color: '#294638',
+      fontSize: 29, 
+      lineHeight: 35, fontWeight: '700', 
+      letterSpacing: -0.8 }, 
+
+    headlineGreen:  {
+       color: '#315D48',
+        fontSize: 29,
+        lineHeight: 35, 
+        fontWeight: '700',
+        letterSpacing: -0.8 }, 
+        
+    description: { 
+      color: palette.muted, 
+      marginTop: 8, 
+      fontSize: 12 },
+      
+    sectionHeader: {
+       flexDirection: 'row', 
+       alignItems: 'center',
+        marginBottom: 15 },
+        
+    sectionText: { 
+      flex: 1 },
+      
+    sectionTitle: { color: '#294638', fontSize: 18, fontWeight: '700' }, note: { color: palette.muted, fontSize: 11, marginTop: 4 }, add: { width: 38, height: 38, borderRadius: 19, backgroundColor: palette.surface, borderColor: palette.line, borderWidth: 1, alignItems: 'center', justifyContent: 'center' }, empty: { color: palette.muted, marginBottom: 16 }, card: { backgroundColor: palette.surface, borderWidth: 1, borderColor: palette.line, borderRadius: 20, padding: 15, marginBottom: 12 }, cardTop: { flexDirection: 'row', alignItems: 'center' }, icon: { width: 42, height: 42, borderRadius: 13, backgroundColor: palette.greenLight, alignItems: 'center', justifyContent: 'center', marginRight: 12 }, cardText: { flex: 1 }, cardTitle: { color: '#294638', fontSize: 16, fontWeight: '700' }, cardBottom: { borderTopWidth: 1, borderTopColor: palette.line, marginTop: 14, paddingTop: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }, open: { flexDirection: 'row', alignItems: 'center', gap: 10 }, openText: { color: palette.green, fontSize: 11, fontWeight: '700' }, continue: { marginTop: 10 } });
