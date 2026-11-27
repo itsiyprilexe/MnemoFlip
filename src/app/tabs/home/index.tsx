@@ -1,4 +1,4 @@
-// IMPORTS: Mga components ngan tools nga ginagamit ha HomeScreen
+// IMPORTS: Mga components ngan tools nga ginagamit sa HomeScreen
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
