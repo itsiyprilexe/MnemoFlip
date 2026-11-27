@@ -96,24 +96,128 @@ export function StudyCalendar() {
   );
 }
 
+
 const styles = StyleSheet.create({
-  calendar: { backgroundColor: palette.surface, borderRadius: 20, borderWidth: 1, borderColor: palette.line, overflow: 'hidden', marginBottom: 24 },
-  header: { backgroundColor: '#315D48', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 15 },
-  headerText: { flex: 1 },
-  title: { fontSize: 17, fontWeight: '700', color: '#fff' },
-  subtitle: { fontSize: 10, color: '#D8E6DA', marginTop: 3 },
-  navigation: { flexDirection: 'row', gap: 7 },
-  arrow: { width: 34, height: 34, borderRadius: 17, backgroundColor: '#47745B', alignItems: 'center', justifyContent: 'center' },
-  body: { paddingHorizontal: 14, paddingBottom: 10 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', paddingTop: 8 },
-  cell: { width: `${100 / 7}%`, height: 36, alignItems: 'center', justifyContent: 'center' },
-  weekday: { color: palette.muted, fontSize: 9, fontWeight: '700' },
-  date: { width: 32, height: 32, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
-  dateText: { color: '#294638', fontSize: 12 },
-  today: { backgroundColor: '#315D48' },
-  todayText: { color: '#fff', fontWeight: '700' },
-  footer: { borderTopWidth: 1, borderTopColor: palette.line, flexDirection: 'row', alignItems: 'center', gap: 8, paddingTop: 10, marginTop: 8 },
-  todayLabel: { flex: 1, color: '#294638', fontSize: 11 },
-  todayButton: { backgroundColor: palette.greenLight, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 5 },
-  todayButtonText: { color: palette.green, fontSize: 10, fontWeight: '700' },
+  calendar: {
+    backgroundColor: palette.surface,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: palette.line,
+    overflow: 'hidden',
+    marginBottom: 28,
+  },
+
+  header: {
+    backgroundColor: '#315D48',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 18,
+  },
+
+  headerText: {
+    flex: 1,
+  },
+
+  title: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#fff',
+  },
+
+  subtitle: {
+    fontSize: 11,
+    color: '#D8E6DA',
+    marginTop: 5,
+  },
+
+  navigation: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+
+  arrow: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: '#47745B',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  body: {
+    paddingHorizontal: 16,
+    paddingBottom: 14,
+  },
+
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingTop: 12,
+  },
+
+  cell: {
+    width: `${100 / 7}%`,
+    height: 42,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  weekday: {
+    color: palette.muted,
+    fontSize: 10,
+    fontWeight: '700',
+  },
+
+  date: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  dateText: {
+    color: '#294638',
+    fontSize: 13,
+  },
+
+  today: {
+    backgroundColor: '#315D48',
+  },
+
+  todayText: {
+    color: '#fff',
+    fontWeight: '700',
+  },
+
+  footer: {
+    borderTopWidth: 1,
+    borderTopColor: palette.line,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingTop: 14,
+    marginTop: 10,
+  },
+
+  todayLabel: {
+    flex: 1,
+    color: '#294638',
+    fontSize: 12,
+  },
+
+  todayButton: {
+    backgroundColor: palette.greenLight,
+    borderRadius: 20,
+    paddingHorizontal: 18,
+    paddingVertical: 7,
+  },
+
+  todayButtonText: {
+    color: palette.green,
+    fontSize: 11,
+    fontWeight: '700',
+  },
 });
+
