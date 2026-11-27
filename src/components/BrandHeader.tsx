@@ -12,7 +12,7 @@ export function BrandHeader() {
 
       <View style={styles.spacer} />
 
-      {/* para sa button or link para pag gin click an bagan prfile logo makadto sa profile  */}
+      {/* para sa button or link para pag gin click an bagan profile logo makadto sa profile  */}
       <Link href="/tabs/profile" asChild>
 
         <Pressable
