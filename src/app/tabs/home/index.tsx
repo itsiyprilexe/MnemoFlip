@@ -19,10 +19,10 @@ export default function HomeScreen() {
    // Pagkuha san study decks ngan status tikang sa useDecks hook
   const { decks, loading, error } = useDecks();   
 
-   // SafeAreaView: Para diri matabunan an content san status bar
+   // SafeAreaView: Para diri matahuban an content san status bar
   return <SafeAreaView style={styles.safe} edges={['top']}>     
 
-   // ScrollView: Para puydi mag-scroll an user ha sulod han screen
+   // ScrollView: Para puydi mag-scroll an user sa sulod san screen
     <ScrollView                                   
       contentContainerStyle={styles.page} 
        showsVerticalScrollIndicator={false} 
@@ -42,14 +42,14 @@ export default function HomeScreen() {
     //  Calendar para san study activities
     <StudyCalendar />
 
-    // Text san section
+    // Text san section 
     <View style={styles.sectionHeader}>
       <View style={styles.sectionText}>
        <Text style={styles.sectionTitle}>Your collections</Text>
        <Text style={styles.note}>A few places to begin</Text>
     </View>
 
-    // ADD BUTTON: Pag-click, mapakadto sa Create Deck screen
+    // ADD BUTTON: Pag-click, makadto sa Create Deck screen
     <Pressable 
         accessibilityRole="button" 
         accessibilityLabel="Add a deck" 
@@ -65,11 +65,12 @@ export default function HomeScreen() {
 
     </View>
 
-    // Checking kon loading, may error, waray decks, o may decks
+    //display true
+    // Checking kon loading, may error, waray decks, o may decks, Display niya nga flatlist
     {loading ? 
        <Text>Loading decks...</Text> : 
 
-     // Error state: Kon may problema ha pagkuha han decks
+     // Error state: Kon may problema sa pagkuha san decks
      error ? 
         <Text>
            Could not load decks: {error} 
@@ -84,7 +85,7 @@ export default function HomeScreen() {
     // Kon waray sini nga conditions, waray message nga ipapakita
          null}
 
-    // DISPLAY DECKS: ini na map() an nagpapakita san tagsa nga deck
+    // DISPLAY DECKS: ini na map() an nagpapakita san tagsa nga deck, nag gamit kita Map para ma display siya nga flatlist
     {decks.map(deck => 
 
     // DECK CARD: Clickable card para ma-open an deck
@@ -192,6 +193,7 @@ const styles = StyleSheet.create({
       fontSize: 29, 
       lineHeight: 35, fontWeight: '700', 
       letterSpacing: -0.8 }, 
+      
   // GREEN HEADLINE: Styling han second headline
     headlineGreen:  {
        color: '#315D48',
@@ -199,18 +201,108 @@ const styles = StyleSheet.create({
         lineHeight: 35, 
         fontWeight: '700',
         letterSpacing: -0.8 }, 
+
   // DESCRIPTION: Styling han small description
     description: { 
       color: palette.muted, 
       marginTop: 8, 
       fontSize: 12 },
+
   // SECTION HEADER: Horizontal layout han section title ngan add button
     sectionHeader: {
        flexDirection: 'row', 
        alignItems: 'center',
         marginBottom: 15 },
+
   // SECTION TEXT: Container han section title
     sectionText: { 
       flex: 1 },
       
-    sectionTitle: { color: '#294638', fontSize: 18, fontWeight: '700' }, note: { color: palette.muted, fontSize: 11, marginTop: 4 }, add: { width: 38, height: 38, borderRadius: 19, backgroundColor: palette.surface, borderColor: palette.line, borderWidth: 1, alignItems: 'center', justifyContent: 'center' }, empty: { color: palette.muted, marginBottom: 16 }, card: { backgroundColor: palette.surface, borderWidth: 1, borderColor: palette.line, borderRadius: 20, padding: 15, marginBottom: 12 }, cardTop: { flexDirection: 'row', alignItems: 'center' }, icon: { width: 42, height: 42, borderRadius: 13, backgroundColor: palette.greenLight, alignItems: 'center', justifyContent: 'center', marginRight: 12 }, cardText: { flex: 1 }, cardTitle: { color: '#294638', fontSize: 16, fontWeight: '700' }, cardBottom: { borderTopWidth: 1, borderTopColor: palette.line, marginTop: 14, paddingTop: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }, open: { flexDirection: 'row', alignItems: 'center', gap: 10 }, openText: { color: palette.green, fontSize: 11, fontWeight: '700' }, continue: { marginTop: 10 } });
+    sectionTitle: { 
+       color: '#294638',
+       fontSize: 18, 
+       fontWeight: '700' },
+
+     note: {
+       color: palette.muted, 
+       fontSize: 11, 
+       marginTop: 4 },
+
+     add: {
+      width: 38, 
+     height: 38,
+      borderRadius: 19,
+      backgroundColor: palette.surface, 
+      borderColor: palette.line, 
+      borderWidth: 1, 
+      alignItems: 'center', 
+      justifyContent: 'center'
+   },
+
+     empty: {
+       color: palette.muted,
+       marginBottom: 16
+  },
+
+      card: { 
+        backgroundColor: palette.surface,
+        borderWidth: 1,
+        borderColor: palette.line,
+        borderRadius: 20,
+        padding: 15,
+        marginBottom: 12
+   }, 
+   
+      cardTop: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    }, 
+    
+    icon: {
+       width: 42,
+       height: 42,
+       borderRadius: 13,
+       backgroundColor: palette.greenLight,
+       alignItems: 'center',
+       justifyContent: 'center',
+       marginRight: 12
+   }, 
+   
+    cardText: { 
+    flex: 1 
+  },
+    
+    cardTitle: {
+     color: '#294638',
+      fontSize: 16,
+       fontWeight: '700'
+      
+  }, 
+  
+   cardBottom: {
+     borderTopWidth: 1,
+     borderTopColor: palette.line,
+     marginTop: 14,
+     paddingTop: 12,
+     flexDirection: 'row',
+     alignItems: 'center',
+     justifyContent: 'space-between'
+        
+  }, 
+  
+   open: {
+     flexDirection: 'row',
+      alignItems: 'center',
+       gap: 10 
+      
+  }, 
+  
+   openText: {
+     color: palette.green,
+      fontSize: 11,
+       fontWeight: '700'
+      
+  }, 
+  
+  continue: {
+     marginTop: 10 } });
